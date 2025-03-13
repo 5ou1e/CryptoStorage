@@ -5,31 +5,16 @@ from functools import partial
 from pathlib import Path
 
 import pytz
-from flipside.errors.query_run_errors import (
-    QueryRunCancelledError,
-    QueryRunExecutionError,
-)
-from pydantic.error_wrappers import (
-    ValidationError,
-)
+from flipside.errors.query_run_errors import QueryRunCancelledError, QueryRunExecutionError
+from pydantic.error_wrappers import ValidationError
 from tortoise import Tortoise
 from tortoise.transactions import in_transaction
 
-from src.infra.db.models.tortoise import Wallet, Token, WalletToken
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.models.tortoise import Token, Wallet, WalletToken
+from src.infra.db.setup_tortoise import init_db_async
 
-from . import (
-    calculations,
-    db_utils,
-    mappers,
-    utils,
-)
-from .flipside_queries import (
-    get_swaps,
-    get_swaps_jupiter,
-)
+from . import calculations, db_utils, mappers, utils
+from .flipside_queries import get_swaps, get_swaps_jupiter
 from .logger import logger
 
 BASE_DIR = Path(__file__).parent
@@ -233,7 +218,7 @@ async def _process():
 
         current_time = start_time
         while current_time < end_time:
-            next_time = current_time + timedelta(minutes=10)  # Максимальный диапазон за запрос
+            next_time = current_time + timedelta(minutes=60)  # Максимальный диапазон за запрос
             if next_time > end_time:
                 next_time = end_time
 

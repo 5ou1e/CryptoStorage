@@ -1,12 +1,8 @@
 import logging
 import time
 
-from starlette.middleware.base import (
-    BaseHTTPMiddleware,
-)
-from starlette.middleware.cors import (
-    CORSMiddleware,
-)
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 
 from src.settings import config

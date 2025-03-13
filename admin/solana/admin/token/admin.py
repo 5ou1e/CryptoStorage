@@ -4,9 +4,7 @@ from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 from solana.models import Token, TokenPrice
 from unfold.admin import ModelAdmin
-from unfold.contrib.filters.admin import (
-    FieldTextFilter,
-)
+from unfold.contrib.filters.admin import FieldTextFilter
 from unfold.decorators import display
 
 from ..shared.misc import LargeTablePaginator

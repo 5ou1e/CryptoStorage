@@ -3,33 +3,14 @@ from typing import Any, Optional, TypeVar, Union
 
 import jwt
 from fastapi import Request, Response
-from fastapi.security import (
-    OAuth2PasswordRequestForm,
-)
-from fastapi_users import (
-    BaseUserManager,
-    models,
-)
-from fastapi_users.jwt import (
-    SecretType,
-    decode_jwt,
-    generate_jwt,
-)
-from fastapi_users.password import (
-    PasswordHelper,
-    PasswordHelperProtocol,
-)
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi_users import BaseUserManager, models
+from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
+from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
 
-from src.application.interfaces.repositories.user import (
-    BaseUserRepository,
-)
-from src.application.user.dto import (
-    UserCreateDTO,
-    UserUpdateDTO,
-)
-from src.domain.entities.base_entity import (
-    BaseEntity,
-)
+from src.application.interfaces.repositories.user import BaseUserRepository
+from src.application.user.dto import UserCreateDTO, UserUpdateDTO
+from src.domain.entities.base_entity import BaseEntity
 from src.domain.entities.user import UserEntity
 
 from .exceptions import (

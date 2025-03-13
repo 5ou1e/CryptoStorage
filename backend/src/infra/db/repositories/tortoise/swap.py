@@ -1,14 +1,10 @@
 from typing import List, Optional
 
-from src.application.interfaces.repositories.swap import (
-    BaseSwapRepository,
-)
+from src.application.interfaces.repositories.swap import BaseSwapRepository
 from src.domain.entities.swap import SwapEntity
 from src.infra.db.models.tortoise.swap import Swap
 
-from .generic_repository import (
-    TortoiseGenericRepository,
-)
+from .generic_repository import TortoiseGenericRepository
 
 
 class TortoiseSwapRepository(TortoiseGenericRepository, BaseSwapRepository):

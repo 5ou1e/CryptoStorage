@@ -2,17 +2,11 @@ from typing import Annotated
 
 from fastapi import Depends
 from fastapi_users import FastAPIUsers
-from fastapi_users.authentication import (
-    AuthenticationBackend,
-    BearerTransport,
-    JWTStrategy,
-)
+from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 
 from src.domain.entities.user import UserEntity
 from src.infra.db.models.tortoise import User
-from src.presentation.api.dependencies.services import (
-    get_user_service,
-)
+from src.presentation.api.dependencies.services import get_user_service
 from src.settings import config
 
 bearer_transport = BearerTransport(tokenUrl="v1/auth/jwt/login")

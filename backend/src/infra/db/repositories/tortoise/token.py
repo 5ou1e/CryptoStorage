@@ -1,16 +1,8 @@
-from src.application.interfaces.repositories.token import (
-    BaseTokenPriceRepository,
-    BaseTokenRepository,
-)
-from src.domain.entities.token import TokenPriceEntity, TokenEntity
-from src.infra.db.models.tortoise.token import (
-    Token,
-    TokenPrice,
-)
+from src.application.interfaces.repositories.token import BaseTokenPriceRepository, BaseTokenRepository
+from src.domain.entities.token import TokenEntity, TokenPriceEntity
+from src.infra.db.models.tortoise.token import Token, TokenPrice
 
-from .generic_repository import (
-    TortoiseGenericRepository,
-)
+from .generic_repository import TortoiseGenericRepository
 
 
 class TortoiseTokenRepository(TortoiseGenericRepository, BaseTokenRepository):

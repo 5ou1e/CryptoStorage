@@ -8,8 +8,8 @@ class RelatedWalletDTO(BaseModel):
     address: str
     last_activity_timestamp: Optional[datetime] = None
     last_intersected_tokens_trade_timestamp: Optional[datetime] = None
-    total_profit_usd_30d: Optional[float] = None,
-    total_profit_multiplier_30d: Optional[float] = None,
+    total_profit_usd_30d: Optional[float] = (None,)
+    total_profit_multiplier_30d: Optional[float] = (None,)
     total_token_count: Optional[int] = None
     intersected_tokens_count: Optional[int] = None
     intersected_tokens_percent: Optional[float] = None

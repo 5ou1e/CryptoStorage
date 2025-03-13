@@ -6,7 +6,8 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from solana.models import Wallet, WalletTokenStatistic
-from unfold.contrib.filters.admin import DropdownFilter, FieldTextFilter, RangeNumericFilter
+from unfold.contrib.filters.admin import (DropdownFilter, FieldTextFilter,
+                                          RangeNumericFilter)
 from unfold.views import UnfoldModelAdminViewMixin
 
 from ..shared import change_list

@@ -16,18 +16,9 @@ from sqlalchemy import (
     String,
     UniqueConstraint,
 )
-from sqlalchemy.orm import (
-    Mapped,
-    mapped_column,
-    relationship,
-)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infra.db.models.sqlalchemy.base import (
-    Base,
-    IntIDMixin,
-    TimestampsMixin,
-    UUIDIDMixin,
-)
+from src.infra.db.models.sqlalchemy.base import Base, IntIDMixin, TimestampsMixin, UUIDIDMixin
 
 
 class Wallet(Base, UUIDIDMixin, TimestampsMixin):
@@ -285,4 +276,3 @@ class TgSentWallet(Base, IntIDMixin, TimestampsMixin):
     )
 
     wallet = relationship("Wallet", backref="tg_sent")
-

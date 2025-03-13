@@ -1,12 +1,6 @@
 from src.application.common.dto import Pagination, PaginationResult
-from src.application.interfaces.repositories.wallet import (
-    BaseWalletRepository,
-)
-from src.application.wallet.dto import (
-    GetWalletsFilters,
-    WalletDetailedDTO,
-    WalletsPageDTO,
-)
+from src.application.interfaces.repositories.wallet import BaseWalletRepository
+from src.application.wallet.dto import GetWalletsFilters, WalletDetailedDTO, WalletsPageDTO
 
 
 class GetWalletsHandler:

@@ -28,7 +28,7 @@ from src.infra.db.repositories.tortoise import (
     TortoiseWalletTokenRepository,
 )
 
-from . import utils, calculations, mappers
+from . import calculations, mappers, utils
 from .config import *
 
 
@@ -71,7 +71,9 @@ async def get_sol_prices(
 async def import_wallets_data(wallets, mapped_data, chunks_count=10) -> list[Wallet]:
     """Создаем кошельки и все их связи в несколько тасков"""
     chunks = np.array_split(wallets, chunks_count)
-    results = await asyncio.gather(*[import_wallets_data_chunk(chunks[i].tolist(), mapped_data) for i in range(chunks_count)])
+    results = await asyncio.gather(
+        *[import_wallets_data_chunk(chunks[i].tolist(), mapped_data) for i in range(chunks_count)]
+    )
     created_wallets = [wallet for result in results for wallet in result]
     return created_wallets
 
@@ -84,11 +86,11 @@ async def import_wallets_data_chunk(
     repository = TortoiseWalletRepository()
 
     async with in_transaction() as conn:
-        # !!!Сортируем по адресу, чтобы избежать дедлоков при массовом апдейте
-        wallets_to_create.sort(key=lambda w: w.address)
-        existing_wallets = await Wallet.filter(
-            address__in=[wallet.address for wallet in wallets_to_create]
-        ).select_for_update().order_by("address").all()
+        existing_wallets = (
+            await Wallet.filter(
+                address__in=[wallet.address for wallet in wallets_to_create]
+            ).all()
+        )
         existing_wallets_map = mappers.map_objects_by_address(existing_wallets)
         # Если кошелек уже существует в БД , берем его
         wallets = [existing_wallets_map.get(wallet.address, wallet) for wallet in wallets_to_create]
@@ -97,14 +99,15 @@ async def import_wallets_data_chunk(
             wallets,
             mapped_data,
         )
-
         for wallet in wallets:
             wallet.updated_at = now()
+        # !!!Сортируем по адресу, чтобы избежать дедлоков при массовом апдейте
+        wallets.sort(key=lambda w: w.address)
         # В случае конфликта, обновляем метки активностей
         await repository.bulk_create(
             objects=wallets,
-            on_conflict=['address'],
-            update_fields=['first_activity_timestamp', 'last_activity_timestamp', 'updated_at'],
+            on_conflict=["address"],
+            update_fields=["first_activity_timestamp", "last_activity_timestamp", "updated_at"],
         )
         created_addresses = list({wallet.address for wallet in wallets})
         created_wallets: list[Wallet] = await repository.get_list(filter_by={"address__in": created_addresses})

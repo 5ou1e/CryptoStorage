@@ -2,15 +2,9 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from src.infra.db.setup_tortoise import register_db
-from src.presentation.api.exceptions import (
-    setup_exception_handlers,
-)
-from src.presentation.api.middlewares import (
-    setup_middlewares,
-)
-from src.presentation.api.routers import (
-    setup_routers,
-)
+from src.presentation.api.exceptions import setup_exception_handlers
+from src.presentation.api.middlewares import setup_middlewares
+from src.presentation.api.routers import setup_routers
 from src.settings import config
 from src.settings.logging import setup_logging
 

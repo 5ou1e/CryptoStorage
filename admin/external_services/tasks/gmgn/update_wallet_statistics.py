@@ -8,7 +8,9 @@ from celery import shared_task
 from django.utils.timezone import make_aware, now
 from external_services.models import GmgnAPIClientConfig
 from external_services.services.gmgn import GmgnAPIClient
-from solana.models.tortoise_models.models import Token, Wallet, WalletActivity, WalletTokenStatistic
+from solana.models.tortoise_models.models import (Token, Wallet,
+                                                  WalletActivity,
+                                                  WalletTokenStatistic)
 from tortoise import Tortoise
 
 logger = logging.getLogger('celery')

@@ -1,8 +1,5 @@
 from .swap import SQLAlchemySwapRepository
-from .token import (
-    SQLAlchemyTokenPriceRepository,
-    SQLAlchemyTokenRepository,
-)
+from .token import SQLAlchemyTokenPriceRepository, SQLAlchemyTokenRepository
 from .user import SQLAlchemyUserRepository
 from .wallet import (
     SQLAlchemyWalletDetailRepository,

@@ -2,9 +2,7 @@ from datetime import datetime, timezone
 
 import pytz
 
-from src.infra.db.models.tortoise import (
-    WalletToken,
-)
+from src.infra.db.models.tortoise import WalletToken
 
 from .logger import logger
 
@@ -122,4 +120,3 @@ def calculate_wallet_first_last_activity_timestamps(
             first_activity_timestamp_in_db is None or first_activity_timestamp < first_activity_timestamp_in_db
         ):
             wallet.first_activity_timestamp = first_activity_timestamp
-

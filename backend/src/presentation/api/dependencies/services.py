@@ -2,37 +2,17 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from src.application.token.queries.get_token_by_address import (
-    GetTokenByAddressHandler,
-)
-from src.application.token.queries.get_tokens import (
-    GetTokensHandler,
-)
-from src.application.user.service import (
-    UserService,
-)
-from src.application.wallet.queries.get_wallet_activities import (
-    GetWalletActivitiesHandler,
-)
-from src.application.wallet.queries.get_wallet_by_address import (
-    GetWalletByAddressHandler,
-)
-from src.application.wallet.queries.get_wallet_related_wallets import (
-    GetWalletRelatedWalletsHandler,
-)
-from src.application.wallet.queries.get_wallet_tokens import (
-    GetWalletTokensHandler,
-)
-from src.application.wallet.queries.get_wallets import (
-    GetWalletsHandler,
-)
+from src.application.token.queries.get_token_by_address import GetTokenByAddressHandler
+from src.application.token.queries.get_tokens import GetTokensHandler
+from src.application.user.service import UserService
+from src.application.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
+from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
+from src.application.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
+from src.application.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
+from src.application.wallet.queries.get_wallets import GetWalletsHandler
 from src.infra.db.setup import get_db_session
-from src.infra.db.uow.sqlachemy import (
-    SQLAlchemyUnitOfWork,
-)
-from src.infra.processors.password_hasher_argon import (
-    password_hasher_argon,
-)
+from src.infra.db.uow.sqlachemy import SQLAlchemyUnitOfWork
+from src.infra.processors.password_hasher_argon import password_hasher_argon
 
 from .repositories import (
     get_swap_repository,

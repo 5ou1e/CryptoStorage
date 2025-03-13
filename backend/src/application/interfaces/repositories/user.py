@@ -3,9 +3,7 @@ from typing import Any, Dict, Optional
 
 from tortoise.models import Model
 
-from src.application.interfaces.repositories.generic_repository import (
-    BaseGenericRepository,
-)
+from src.application.interfaces.repositories.generic_repository import BaseGenericRepository
 from src.domain.entities.user import UserEntity
 
 

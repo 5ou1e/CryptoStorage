@@ -1,10 +1,6 @@
-from src.application.interfaces.repositories import (
-    BaseTokenRepository,
-)
+from src.application.interfaces.repositories import BaseTokenRepository
 from src.application.token.dto import TokenDTO
-from src.application.token.exceptions import (
-    TokenNotFoundException,
-)
+from src.application.token.exceptions import TokenNotFoundException
 
 
 class GetTokenByAddressHandler:

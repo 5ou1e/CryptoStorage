@@ -1,5 +1,6 @@
 from django.contrib import admin
-from solana.models import WalletPeriodStatistic7d, WalletPeriodStatistic30d, WalletPeriodStatisticAll
+from solana.models import (WalletPeriodStatistic7d, WalletPeriodStatistic30d,
+                           WalletPeriodStatisticAll)
 from unfold.admin import ModelAdmin
 
 

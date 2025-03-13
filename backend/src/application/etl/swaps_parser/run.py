@@ -1,6 +1,13 @@
 import asyncio
-
 from src.settings import logging
+
+import warnings
+warnings.filterwarnings(
+    "ignore",
+    message=".*pydantic.error_wrappers:ValidationError.*",
+    category=UserWarning
+)
+
 from .parser import process
 
 

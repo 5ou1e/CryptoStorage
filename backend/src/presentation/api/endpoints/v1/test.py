@@ -1,26 +1,13 @@
 from typing import Any, Optional
 
 from fastapi import APIRouter
-from fastapi_filter.contrib.sqlalchemy import (
-    Filter,
-)
+from fastapi_filter.contrib.sqlalchemy import Filter
 
-from src.application.wallet.queries.get_wallet_by_address import (
-    GetWalletByAddressHandler,
-)
-from src.infra.db.models.sqlalchemy import (
-    Wallet,
-    WalletDetail,
-)
-from src.infra.db.repositories.sqlalchemy import (
-    SQLAlchemyWalletRepository,
-)
-from src.infra.db.setup import (
-    get_db_session,
-)
-from src.presentation.api.schemas.response import (
-    ApiResponse,
-)
+from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
+from src.infra.db.models.sqlalchemy import Wallet, WalletDetail
+from src.infra.db.repositories.sqlalchemy import SQLAlchemyWalletRepository
+from src.infra.db.setup import get_db_session
+from src.presentation.api.schemas.response import ApiResponse
 
 router = APIRouter(prefix="/test", tags=["Test endpoints"])
 

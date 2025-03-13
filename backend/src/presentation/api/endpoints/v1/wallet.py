@@ -21,9 +21,7 @@ from src.presentation.api.dependencies.services import (
     GetWalletsHandlerDep,
     GetWalletTokensHandlerDep,
 )
-from src.presentation.api.schemas.response import (
-    ApiResponse,
-)
+from src.presentation.api.schemas.response import ApiResponse
 
 logger = logging.getLogger(__name__)
 

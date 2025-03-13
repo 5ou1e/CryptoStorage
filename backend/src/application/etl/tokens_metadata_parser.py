@@ -9,9 +9,7 @@ from solders.pubkey import Pubkey
 from tortoise import Tortoise
 
 from src.infra.db.models.tortoise import Token
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.setup_tortoise import init_db_async
 
 logger = logging.getLogger("tasks.parse_tokens_metadata")
 

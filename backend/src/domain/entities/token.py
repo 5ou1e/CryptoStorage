@@ -3,10 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 from uuid import UUID
 
-from src.domain.entities.base_entity import (
-    BaseEntity,
-    TimestampMixinEntity,
-)
+from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 
 @dataclass(kw_only=True)

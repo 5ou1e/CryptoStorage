@@ -1,16 +1,10 @@
 from typing import List, Optional
 
-from src.application.interfaces.repositories.swap import (
-    BaseSwapRepository,
-)
+from src.application.interfaces.repositories.swap import BaseSwapRepository
 from src.domain.entities.swap import SwapEntity
-from src.infra.db.models.sqlalchemy.swap import (
-    Swap,
-)
+from src.infra.db.models.sqlalchemy.swap import Swap
 
-from .generic_repository import (
-    SQLAlchemyGenericRepository,
-)
+from .generic_repository import SQLAlchemyGenericRepository
 
 
 class SQLAlchemySwapRepository(

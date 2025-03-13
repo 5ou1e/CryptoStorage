@@ -1,27 +1,10 @@
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import (
-    DECIMAL,
-    Boolean,
-    DateTime,
-    ForeignKey,
-    String,
-    Text,
-    UniqueConstraint,
-)
-from sqlalchemy.orm import (
-    Mapped,
-    mapped_column,
-    relationship,
-)
+from sqlalchemy import DECIMAL, Boolean, DateTime, ForeignKey, String, Text, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .base import (
-    Base,
-    IntIDMixin,
-    TimestampsMixin,
-    UUIDIDMixin,
-)
+from .base import Base, IntIDMixin, TimestampsMixin, UUIDIDMixin
 
 
 class Token(Base, UUIDIDMixin, TimestampsMixin):

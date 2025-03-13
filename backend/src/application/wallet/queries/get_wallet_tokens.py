@@ -1,16 +1,7 @@
 from src.application.common.dto import Pagination, PaginationResult
-from src.application.interfaces.repositories.wallet import (
-    BaseWalletRepository,
-    BaseWalletTokenRepository,
-)
-from src.application.wallet.dto import (
-    GetWalletTokensFilters,
-    WalletTokenDTO,
-    WalletTokensPageDTO,
-)
-from src.application.wallet.exceptions import (
-    WalletNotFoundException,
-)
+from src.application.interfaces.repositories.wallet import BaseWalletRepository, BaseWalletTokenRepository
+from src.application.wallet.dto import GetWalletTokensFilters, WalletTokenDTO, WalletTokensPageDTO
+from src.application.wallet.exceptions import WalletNotFoundException
 
 
 class GetWalletTokensHandler:

@@ -1,12 +1,6 @@
 from src.application.common.dto import Pagination, PaginationResult
-from src.application.interfaces.repositories.token import (
-    BaseTokenRepository,
-)
-from src.application.token.dto import (
-    GetTokensFilters,
-    TokenDTO,
-    TokensPageDTO,
-)
+from src.application.interfaces.repositories.token import BaseTokenRepository
+from src.application.token.dto import GetTokensFilters, TokenDTO, TokensPageDTO
 
 
 class GetTokensHandler:

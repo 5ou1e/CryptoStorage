@@ -36,12 +36,9 @@ class Wallet(models.Model):
         is_new = self.pk is None
         super().save(*args, **kwargs)
         if is_new:
-            from solana.models import (
-                WalletDetail,
-                WalletPeriodStatistic7d,
-                WalletPeriodStatistic30d,
-                WalletPeriodStatisticAll,
-            )
+            from solana.models import (WalletDetail, WalletPeriodStatistic7d,
+                                       WalletPeriodStatistic30d,
+                                       WalletPeriodStatisticAll)
 
             # Создаем связанные объекты WalletDetail и WalletStatistic
             WalletDetail.objects.create(wallet=self)

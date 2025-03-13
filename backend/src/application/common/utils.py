@@ -1,4 +1,3 @@
-
 def classify_block_relation(event_block: int, reference_block: int) -> str:
     if event_block < reference_block:
         return "before"
@@ -60,5 +59,5 @@ def classify_related_wallet_status(
     if status in ["copied_by", "copying"]:
         if total_token_count and intersected_tokens_count / total_token_count >= 0.4:
             status = "similar"
-            color = 'rgba(248, 113, 113, 0.1)'
+            color = "rgba(248, 113, 113, 0.1)"
     return status, color

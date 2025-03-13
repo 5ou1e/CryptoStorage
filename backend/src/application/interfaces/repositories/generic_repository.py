@@ -1,14 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import (
-    Any,
-    Generic,
-    TypeVar,
-)
+from typing import Any, Generic, TypeVar
 
 from src.application.common.dto import Pagination
-from src.domain.entities.base_entity import (
-    BaseEntity,
-)
+from src.domain.entities.base_entity import BaseEntity
 
 Entity = TypeVar("Entity", bound=BaseEntity)
 

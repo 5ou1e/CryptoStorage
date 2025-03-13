@@ -1,20 +1,14 @@
 from typing import Optional
 
-from tortoise import (
-    BackwardOneToOneRelation,
-    Model,
-    fields,
-)
-from tortoise.fields.relational import (
-    BackwardOneToOneRelation,
-)
+from tortoise import BackwardOneToOneRelation, Model, fields
+from tortoise.fields.relational import BackwardOneToOneRelation
 
 from .common import (
     IntIDMixin,
     TimestampsMixin,
     UUIDIDMixin,
+    CorrectedDecimalField
 )
-from .utils import MyDecimalField
 
 
 class Wallet(Model, UUIDIDMixin, TimestampsMixin):
@@ -28,10 +22,7 @@ class Wallet(Model, UUIDIDMixin, TimestampsMixin):
         null=True,
         description="Время последней Defi-активности",
     )
-    first_activity_timestamp = fields.DatetimeField(
-        null=True,
-        description='Время первой Defi-активности'
-    )
+    first_activity_timestamp = fields.DatetimeField(null=True, description="Время первой Defi-активности")
 
     class Meta:
         table = "wallet"
@@ -54,7 +45,7 @@ class WalletDetail(Model, IntIDMixin, TimestampsMixin):
         related_name="details",
         on_delete=fields.CASCADE,
     )
-    sol_balance = MyDecimalField(
+    sol_balance = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
@@ -85,26 +76,26 @@ class AbstractWalletStatistic(Model, IntIDMixin, TimestampsMixin):
         related_name="wallet_statistic_period_abstract",
         on_delete=fields.CASCADE,
     )
-    winrate = MyDecimalField(
+    winrate = CorrectedDecimalField(
         max_digits=40,
         decimal_places=5,
         null=True,
         blank=True,
         index=True,
     )
-    total_token_buy_amount_usd = MyDecimalField(
+    total_token_buy_amount_usd = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    total_token_sell_amount_usd = MyDecimalField(
+    total_token_sell_amount_usd = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    total_profit_usd = MyDecimalField(
+    total_profit_usd = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
@@ -120,33 +111,33 @@ class AbstractWalletStatistic(Model, IntIDMixin, TimestampsMixin):
     token_sell_without_buy = fields.IntField(null=True, blank=True)
     token_buy_without_sell = fields.IntField(null=True, blank=True)
     token_with_sell_amount_gt_buy_amount = fields.IntField(null=True, blank=True)
-    token_avg_buy_amount = MyDecimalField(
+    token_avg_buy_amount = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
         blank=True,
         index=True,
     )
-    token_median_buy_amount = MyDecimalField(
+    token_median_buy_amount = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    token_first_buy_avg_price_usd = MyDecimalField(
+    token_first_buy_avg_price_usd = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    token_first_buy_median_price_usd = MyDecimalField(
+    token_first_buy_median_price_usd = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
         blank=True,
         index=True,
     )
-    token_avg_profit_usd = MyDecimalField(
+    token_avg_profit_usd = CorrectedDecimalField(
         max_digits=50,
         decimal_places=20,
         null=True,
@@ -269,19 +260,19 @@ class WalletStatisticBuyPriceGt15kAll(AbstractWalletStatistic):
 
 class WalletToken(Model, UUIDIDMixin, TimestampsMixin):
     total_buys_count = fields.IntField(default=0, description="Всего покупок")
-    total_buy_amount_usd = MyDecimalField(
+    total_buy_amount_usd = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         default=0,
         description="Общая сумма покупок USD",
     )
-    total_buy_amount_token = MyDecimalField(
+    total_buy_amount_token = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         default=0,
         description="Общая сумма покупок token-amount",
     )
-    first_buy_price_usd = MyDecimalField(
+    first_buy_price_usd = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         null=True,
@@ -289,19 +280,19 @@ class WalletToken(Model, UUIDIDMixin, TimestampsMixin):
     )
     first_buy_timestamp = fields.BigIntField(null=True, description="Время 1-й покупки")
     total_sales_count = fields.IntField(default=0, description="Всего продаж")
-    total_sell_amount_usd = MyDecimalField(
+    total_sell_amount_usd = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         default=0,
         description="Общая сумма продаж USD",
     )
-    total_sell_amount_token = MyDecimalField(
+    total_sell_amount_token = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         default=0,
         description="Общая сумма продаж token-amount",
     )
-    first_sell_price_usd = MyDecimalField(
+    first_sell_price_usd = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         null=True,
@@ -312,7 +303,7 @@ class WalletToken(Model, UUIDIDMixin, TimestampsMixin):
         null=True,
         description="Последняя активность",
     )
-    total_profit_usd = MyDecimalField(
+    total_profit_usd = CorrectedDecimalField(
         default=0,
         max_digits=40,
         decimal_places=20,

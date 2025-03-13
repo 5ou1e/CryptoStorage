@@ -1,15 +1,7 @@
 from fastapi import APIRouter
 
-from src.presentation.api.endpoints.common import (
-    docs_router,
-    root_router,
-)
-from src.presentation.api.endpoints.v1 import (
-    auth_router,
-    test_router,
-    token_router,
-    wallet_router,
-)
+from src.presentation.api.endpoints.common import docs_router, root_router
+from src.presentation.api.endpoints.v1 import auth_router, test_router, token_router, wallet_router
 from src.settings import config
 
 

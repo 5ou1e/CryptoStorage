@@ -1,11 +1,6 @@
-
 from tortoise import Model, fields
 
-from .common import (
-    IntIDMixin,
-    TimestampsMixin,
-    UUIDIDMixin,
-)
+from .common import IntIDMixin, TimestampsMixin, UUIDIDMixin
 
 
 class Token(Model, UUIDIDMixin, TimestampsMixin):

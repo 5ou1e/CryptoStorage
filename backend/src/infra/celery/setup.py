@@ -2,9 +2,7 @@ from celery import Celery
 
 from src.infra.celery.tasks import *
 from src.settings import config
-from src.settings.logging import (
-    setup_celery_logging,
-)
+from src.settings.logging import setup_celery_logging
 
 setup_celery_logging()
 

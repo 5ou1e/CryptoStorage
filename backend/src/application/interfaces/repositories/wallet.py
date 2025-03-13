@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from src.application.interfaces.repositories.generic_repository import (
-    BaseGenericRepository,
-)
+from src.application.interfaces.repositories.generic_repository import BaseGenericRepository
 from src.domain.entities.wallet import (
     WalletDetailEntity,
     WalletEntity,

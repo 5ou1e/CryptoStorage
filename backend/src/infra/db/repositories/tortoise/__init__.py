@@ -1,8 +1,5 @@
 from .swap import TortoiseSwapRepository
-from .token import (
-    TortoiseTokenPriceRepository,
-    TortoiseTokenRepository,
-)
+from .token import TortoiseTokenPriceRepository, TortoiseTokenRepository
 from .user import TortoiseUserRepository
 from .wallet import (
     TortoiseWalletDetailRepository,

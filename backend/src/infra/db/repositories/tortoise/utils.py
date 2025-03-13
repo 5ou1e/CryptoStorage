@@ -2,13 +2,13 @@ import logging
 import textwrap
 from datetime import datetime
 from typing import Any
-
-from tortoise import Model, Tortoise
+from pypika.functions import Cast
+from tortoise import Model
 
 logger = logging.getLogger(__name__)
 
 
-async def bulk_update_records_query(
+async def get_bulk_update_records_query(
     model_cls: Model,
     objects: list,
     fields_to_update: list,
@@ -22,6 +22,8 @@ async def bulk_update_records_query(
     table_name = model_cls._meta.db_table
     if id_column is None:
         id_column = model_cls._meta.db_pk_column
+    if not id_column:
+        raise ValueError(f"Ошибка - у модели {model_cls} не задан PK")
     if id_column not in fields_to_update:
         fields_to_update.append(id_column)
 
@@ -29,7 +31,6 @@ async def bulk_update_records_query(
     updates = []
 
     for obj in objects:
-        print(type(obj))
         d = {}
         for field in fields_to_update:
             # Получаем тип поля из модели через _meta.fields_map
@@ -37,9 +38,9 @@ async def bulk_update_records_query(
             if field_info:
                 field_type = field_info.__class__.__name__.lower()
             else:
-                raise ValueError(f"Ошибка: В модели {model_cls} не задано поле {field}")
+                raise ValueError(f"Ошибка - у модели {model_cls} не задано поле {field}")
             value = getattr(obj, field)
-            d[field] = convert_to_db_value(value, field_type, field_info)
+            d[field] = cast_value(value, field_type, field_info)
         updates.append(d)
 
     # Вычисляем все уникальные столбцы
@@ -55,7 +56,6 @@ async def bulk_update_records_query(
         row = [update.get(id_column)] + [update.get(col, None) for col in all_columns]
         values.append(f"({', '.join(row)})")
     values_str = ", ".join(values)
-
     # Формируем строку SET для SQL
     set_clause = ", ".join([f"{col} = v.{col}" for col in all_columns])
 
@@ -69,15 +69,16 @@ async def bulk_update_records_query(
     """
     )
     # logger.error(query[:2000])
-    return await Tortoise.get_connection("default").execute_query(query)
+    return query
 
 
-def convert_to_db_value(value, field_type=None, field_info=None):
+def cast_value(value, field_type=None, field_info=None):
     if value is None:
         value = "NULL"
+
     if field_type in [
         "decimalfield",
-        "mydecimalfield",
+        "correcteddecimalfield",
     ]:
         return f"CAST({value} AS DECIMAL({field_info.max_digits},{field_info.decimal_places}))"
     elif field_type == "floatfield":
@@ -98,4 +99,6 @@ def convert_to_db_value(value, field_type=None, field_info=None):
         return f"CAST('{value}' AS uuid)"
     elif field_type == "charfield":
         return f"'{value}'"
-    return str(value)  # Если не указан тип поля, просто возвращаем строку
+
+    raise ValueError(f"Ошибка при попытке кастинга - Неизвестный тип {field_type} поля {field_info}")
+

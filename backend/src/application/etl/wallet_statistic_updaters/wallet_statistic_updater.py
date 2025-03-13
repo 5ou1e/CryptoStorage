@@ -16,10 +16,7 @@ from src.domain.entities.wallet import (
     WalletStatisticAllEntity,
     WalletTokenEntity,
 )
-from src.infra.db.models.tortoise import (
-    Wallet,
-    WalletToken,
-)
+from src.infra.db.models.tortoise import Wallet, WalletToken
 from src.infra.db.repositories.tortoise import (
     TortoiseWalletDetailRepository,
     TortoiseWalletRepository,
@@ -27,14 +24,9 @@ from src.infra.db.repositories.tortoise import (
     TortoiseWalletStatistic30dRepository,
     TortoiseWalletStatisticAllRepository,
 )
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.setup_tortoise import init_db_async
 
-from .utils import (
-    filter_period_tokens,
-    recalculate_wallet_period_stats,
-)
+from .utils import filter_period_tokens, recalculate_wallet_period_stats
 
 logger = logging.getLogger("tasks.update_wallet_statistics")
 
@@ -148,7 +140,7 @@ async def _fetch_tokens(
     wallet_tokens = await WalletToken.filter(wallet_id__in=[wallet.id for wallet in wallets]).all().values()
     end = datetime.now()
     wt_count = len(wallet_tokens)
-    logger.info(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
+    logger.debug(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
     start = datetime.now()
     wallet_dict = {wallet.id: wallet for wallet in wallets}
     # Мапим токены по кошелькам
@@ -232,14 +224,14 @@ async def update_wallets(
 
 
 async def _update_wallets_data(wallets):
-    logger.info(f"Начинаем обновление кошельков")
+    logger.debug(f"Начинаем обновление кошельков")
     start = now()
     wallet_stats_7d = [wallet.stats_7d for wallet in wallets]
     wallet_stats_30d = [wallet.stats_30d for wallet in wallets]
     # Обновляем статистику "за все время" только нужным кошелькам
     wallet_stats_all = [wallet.stats_all for wallet in wallets]  # if wallet.is_need_update_stats_all
     wallets_details = [wallet.details for wallet in wallets]  # if wallet.is_need_update_stats_all
-    logger.info(f"{len(wallet_stats_all)}, {len(wallets_details)}")
+    logger.debug(f"{len(wallet_stats_all)}, {len(wallets_details)}")
     exclude = [
         "id",
         "wallet_id",
@@ -250,7 +242,8 @@ async def _update_wallets_data(wallets):
     last_check = now()
     for wallet in wallets:
         wallet.last_stats_check = last_check
-
+    # !!!Сортируем по адресу, чтобы избежать дедлоков при массовом апдейте
+    wallets.sort(key=lambda w: w.address)
     await asyncio.gather(
         TortoiseWalletStatistic7dRepository().bulk_update(
             wallet_stats_7d,
@@ -273,35 +266,14 @@ async def _update_wallets_data(wallets):
             excluded_fields=["id", "updated_at"],
             id_column="wallet_id",
         ),
-        # Wallet.filter(
-        #     id__in=[wallet.id for wallet in wallets]
-        # ).update(
-        #     last_stats_check=now()
-        # ),
-        # TODO: убрать обновление поля first_activity_timestamp
-        _update_wallets(wallets),
+        TortoiseWalletRepository().bulk_update(
+            wallets,
+            fields=["last_stats_check",],
+        )
     )
 
     elapsed_time = now() - start
-    logger.info(f"Обновили {len(wallets)} кошельков в базе! | Время: {elapsed_time}")
-
-
-async def _update_wallets(wallets):
-    async with in_transaction() as conn:
-        # !!!Сортируем по адресу, чтобы избежать дедлоков при массовом апдейте
-        # wallets.sort(key=lambda w: w.address)
-        # q = Wallet.filter(
-        #     id__in=[wallet.id for wallet in wallets]
-        # ).select_for_update().order_by("address").all()
-        # # logger.error(q.sql())
-        # await q
-        await TortoiseWalletRepository().bulk_update(
-            wallets,
-            fields=[
-                "first_activity_timestamp",
-                "last_stats_check",
-            ],
-        )
+    logger.debug(f"Обновили {len(wallets)} кошельков в базе! | Время: {elapsed_time}")
 
 
 async def calculate_wallet(wallet):

@@ -5,9 +5,7 @@ from typing import List, Optional
 from fastapi import Query
 from pydantic import BaseModel
 
-from src.application.common.dto import (
-    PaginationResult,
-)
+from src.application.common.dto import PaginationResult
 from src.application.token.dto import TokenDTO
 
 

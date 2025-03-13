@@ -4,11 +4,7 @@ from decimal import Decimal
 from typing import Optional
 from uuid import UUID
 
-
-from src.domain.entities.base_entity import (
-    BaseEntity,
-    TimestampMixinEntity,
-)
+from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 
 @dataclass

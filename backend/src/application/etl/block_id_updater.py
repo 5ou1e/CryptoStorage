@@ -5,9 +5,7 @@ import aiohttp
 from tortoise import Tortoise
 
 from src.infra.db.models.tortoise import Swap
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.setup_tortoise import init_db_async
 from src.settings import config
 
 logger = logging.getLogger()

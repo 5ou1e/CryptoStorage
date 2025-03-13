@@ -38,9 +38,7 @@ from src.infra.db.models.sqlalchemy import (
     WalletToken,
 )
 
-from .generic_repository import (
-    SQLAlchemyGenericRepository,
-)
+from .generic_repository import SQLAlchemyGenericRepository
 
 logger = logging.getLogger(__name__)
 

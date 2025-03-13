@@ -6,13 +6,8 @@ import pytz
 import requests
 from tortoise import Tortoise
 
-from src.infra.db.models.tortoise import (
-    Token,
-    TokenPrice,
-)
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.models.tortoise import Token, TokenPrice
+from src.infra.db.setup_tortoise import init_db_async
 from src.settings import config
 
 logger = logging.getLogger("tasks.collect_sol_prices")

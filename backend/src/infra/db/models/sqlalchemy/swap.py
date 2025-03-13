@@ -1,26 +1,10 @@
 import uuid
 from decimal import Decimal
 
-from sqlalchemy import (
-    DECIMAL,
-    UUID,
-    BigInteger,
-    Boolean,
-    ForeignKey,
-    Index,
-    String,
-)
-from sqlalchemy.orm import (
-    Mapped,
-    mapped_column,
-    relationship,
-)
+from sqlalchemy import DECIMAL, UUID, BigInteger, Boolean, ForeignKey, Index, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infra.db.models.sqlalchemy.base import (
-    Base,
-    TimestampsMixin,
-    UUIDIDMixin,
-)
+from src.infra.db.models.sqlalchemy.base import Base, TimestampsMixin, UUIDIDMixin
 
 
 class Swap(Base, UUIDIDMixin, TimestampsMixin):

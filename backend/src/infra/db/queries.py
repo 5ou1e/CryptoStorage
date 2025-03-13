@@ -14,19 +14,7 @@ GET_WALLETS_FOR_UPDATE_STATS = textwrap.dedent(
     LIMIT {count};
 """
 )
-# """\
-# SELECT
-#   w.*,
-#   wai.last_activity_timestamp
-# FROM
-#   wallet w
-# INNER JOIN
-#   wallet_activities_info wai ON wai.wallet_id = w.id
-# WHERE
-#   wai.last_activity_timestamp > now() - '31 days'::interval
-# ORDER BY
-#   w.last_stats_check NULLS FIRST
-# LIMIT {count};
+
 
 GET_WALLETS_FOR_UPDATE_STATS_ALL = textwrap.dedent(
     """\

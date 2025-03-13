@@ -3,9 +3,7 @@ from typing import List, Optional
 
 from src.domain.entities.swap import SwapEntity
 
-from .generic_repository import (
-    BaseGenericRepository,
-)
+from .generic_repository import BaseGenericRepository
 
 
 class BaseSwapRepository(BaseGenericRepository[SwapEntity], ABC):

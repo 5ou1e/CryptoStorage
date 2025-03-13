@@ -3,18 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.application.common.dto import Pagination
-from src.application.token.dto import (
-    GetTokensFilters,
-    TokenDTO,
-    TokensPageDTO,
-)
-from src.presentation.api.dependencies.services import (
-    GetTokenByAddressHandlerDep,
-    GetTokensHandlerDep,
-)
-from src.presentation.api.schemas.response import (
-    ApiResponse,
-)
+from src.application.token.dto import GetTokensFilters, TokenDTO, TokensPageDTO
+from src.presentation.api.dependencies.services import GetTokenByAddressHandlerDep, GetTokensHandlerDep
+from src.presentation.api.schemas.response import ApiResponse
 
 router = APIRouter(
     prefix="/tokens",

@@ -1,21 +1,10 @@
 from sqlalchemy import select
 
-from src.application.interfaces.repositories.token import (
-    BaseTokenPriceRepository,
-    BaseTokenRepository,
-)
-from src.domain.entities.token import (
-    TokenEntity,
-    TokenPriceEntity,
-)
-from src.infra.db.models.sqlalchemy.token import (
-    Token,
-    TokenPrice,
-)
+from src.application.interfaces.repositories.token import BaseTokenPriceRepository, BaseTokenRepository
+from src.domain.entities.token import TokenEntity, TokenPriceEntity
+from src.infra.db.models.sqlalchemy.token import Token, TokenPrice
 
-from .generic_repository import (
-    SQLAlchemyGenericRepository,
-)
+from .generic_repository import SQLAlchemyGenericRepository
 
 
 class SQLAlchemyTokenRepository(

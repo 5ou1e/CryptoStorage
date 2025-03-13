@@ -3,16 +3,10 @@ from typing import List, Optional
 from fastapi import Query
 from pydantic import BaseModel, Field
 
-from src.application.common.dto import (
-    PaginationResult,
-)
+from src.application.common.dto import PaginationResult
 
 from .wallet_details import WalletDetailsDTO
-from .wallet_stats import (
-    WalletStats7dDTO,
-    WalletStats30dDTO,
-    WalletStatsAllDTO,
-)
+from .wallet_stats import WalletStats7dDTO, WalletStats30dDTO, WalletStatsAllDTO
 
 
 class WalletDTO(BaseModel):

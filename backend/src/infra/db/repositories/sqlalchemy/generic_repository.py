@@ -1,11 +1,5 @@
 from dataclasses import asdict
-from typing import (
-    Any,
-    Iterable,
-    List,
-    Optional,
-    TypeVar,
-)
+from typing import Any, Iterable, List, Optional, TypeVar
 
 from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert
@@ -13,12 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import class_mapper
 
 from src.application.common.dto import Pagination
-from src.application.interfaces.repositories.generic_repository import (
-    BaseGenericRepository,
-)
-from src.domain.entities.base_entity import (
-    BaseEntity,
-)
+from src.application.interfaces.repositories.generic_repository import BaseGenericRepository
+from src.domain.entities.base_entity import BaseEntity
 from src.infra.db.models.sqlalchemy import Base
 
 Entity = TypeVar("Entity", bound=BaseEntity)

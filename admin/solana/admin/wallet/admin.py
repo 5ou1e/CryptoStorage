@@ -8,10 +8,7 @@ from django.utils.html import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
-from unfold.contrib.filters.admin import (
-    FieldTextFilter,
-    RangeDateTimeFilter,
-)
+from unfold.contrib.filters.admin import FieldTextFilter, RangeDateTimeFilter
 from unfold.decorators import action, display
 from users.models import UserWallet
 from utils.number_utils import formatted_number, round_to_first_non_zero
@@ -19,23 +16,13 @@ from utils.time_utils import formatted_duration
 
 from ...models import Wallet, WalletBuyPriceGt15k, WalletProxy
 from ..shared.misc import LargeTablePaginator
-from .filters import (
-    CustomRangeFilter,
-    IsBlacklistedFilter,
-    IsBotFilter,
-    IsFavoriteFilter,
-    IsScammerFilter,
-    IsWatchLaterFilter,
-    PeriodFilter,
-    TokensIntersectionFilter,
-)
-from .inlines import (
-    WalletDetailInline,
-    WalletPeriodStatistic7dInline,
-    WalletPeriodStatistic30dInline,
-    WalletPeriodStatisticAllInline,
-    WalletTokenStatisticInline,
-)
+from .filters import (CustomRangeFilter, IsBlacklistedFilter, IsBotFilter,
+                      IsFavoriteFilter, IsScammerFilter, IsWatchLaterFilter,
+                      PeriodFilter, TokensIntersectionFilter)
+from .inlines import (WalletDetailInline, WalletPeriodStatistic7dInline,
+                      WalletPeriodStatistic30dInline,
+                      WalletPeriodStatisticAllInline,
+                      WalletTokenStatisticInline)
 from .views import WalletStatisticBuyPriceGt15kView, WalletStatisticView
 
 PERIODS = {

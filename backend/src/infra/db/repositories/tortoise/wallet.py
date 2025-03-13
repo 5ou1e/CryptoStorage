@@ -39,9 +39,7 @@ from src.infra.db.models.tortoise import (
     WalletToken,
 )
 
-from .generic_repository import (
-    TortoiseGenericRepository,
-)
+from .generic_repository import TortoiseGenericRepository
 
 logger = logging.getLogger(__name__)
 

@@ -1,9 +1,7 @@
 from django.contrib import admin
 from solana.models import WalletTokenStatistic
 from unfold.admin import ModelAdmin
-from unfold.contrib.filters.admin import (
-    FieldTextFilter,
-)
+from unfold.contrib.filters.admin import FieldTextFilter
 
 from ..shared.misc import LargeTablePaginator
 

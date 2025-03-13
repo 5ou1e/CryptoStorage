@@ -1,14 +1,6 @@
 import logging
 from dataclasses import asdict
-from typing import (
-    Any,
-    Dict,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    TypeVar,
-)
+from typing import Any, Dict, Iterable, List, Optional, Sequence, TypeVar
 
 from tortoise import BaseDBAsyncClient, Tortoise
 from tortoise.models import Model
@@ -16,16 +8,10 @@ from tortoise.queryset import QuerySet
 from tortoise.transactions import in_transaction
 
 from src.application.common.dto import Pagination
-from src.application.interfaces.repositories import (
-    BaseGenericRepository,
-)
-from src.domain.entities.base_entity import (
-    BaseEntity,
-)
+from src.application.interfaces.repositories import BaseGenericRepository
+from src.domain.entities.base_entity import BaseEntity
 from src.infra.db import queries
-from src.infra.db.utils import (
-    bulk_update_records_query,
-)
+from src.infra.db.repositories.tortoise.utils import get_bulk_update_records_query
 
 logger = logging.getLogger(__name__)
 
@@ -208,12 +194,13 @@ class TortoiseGenericRepository(BaseGenericRepository[BaseEntity]):
             fields = set(self.model_class._meta.db_fields)
         fields = set(fields)
         fields_to_update = list(fields - excluded_fields)  # Поля для обновления
-        await bulk_update_records_query(
+        query = await get_bulk_update_records_query(
             self.model_class,
             objects,
             fields_to_update,
             id_column=id_column,
         )
+        return await Tortoise.get_connection("default").execute_query(query)
 
     async def bulk_create(
         self,

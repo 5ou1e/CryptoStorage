@@ -3,13 +3,8 @@ import logging
 
 from tortoise import Tortoise
 
-from src.infra.db.models.tortoise import (
-    Swap,
-    WalletToken,
-)
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.models.tortoise import Swap, WalletToken
+from src.infra.db.setup_tortoise import init_db_async
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

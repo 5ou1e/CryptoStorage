@@ -1,9 +1,7 @@
 import secrets
 from typing import Optional, Union
 
-from fastapi_users.password import (
-    PasswordHelperProtocol,
-)
+from fastapi_users.password import PasswordHelperProtocol
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 

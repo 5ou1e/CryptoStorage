@@ -1,18 +1,8 @@
 from src.application.common.dto import Pagination, PaginationResult
-from src.application.interfaces.repositories.swap import (
-    BaseSwapRepository,
-)
-from src.application.interfaces.repositories.wallet import (
-    BaseWalletRepository,
-)
-from src.application.wallet.dto import (
-    GetWalletActivitiesFilters,
-    WalletActivitiesPageDTO,
-    WalletActivityDTO,
-)
-from src.application.wallet.exceptions import (
-    WalletNotFoundException,
-)
+from src.application.interfaces.repositories.swap import BaseSwapRepository
+from src.application.interfaces.repositories.wallet import BaseWalletRepository
+from src.application.wallet.dto import GetWalletActivitiesFilters, WalletActivitiesPageDTO, WalletActivityDTO
+from src.application.wallet.exceptions import WalletNotFoundException
 
 
 class GetWalletActivitiesHandler:

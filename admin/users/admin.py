@@ -4,17 +4,11 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.urls import path
 from unfold.admin import ModelAdmin
-from unfold.contrib.filters.admin import (
-    FieldTextFilter,
-    RangeDateTimeFilter,
-)
+from unfold.contrib.filters.admin import FieldTextFilter, RangeDateTimeFilter
 
-from .admin_views import (
-    toggle_wallet_status,
-    update_remark,
-    update_wallet_stats_task_status_view,
-    update_wallet_stats_view,
-)
+from .admin_views import (toggle_wallet_status, update_remark,
+                          update_wallet_stats_task_status_view,
+                          update_wallet_stats_view)
 from .models import User, UserWallet
 
 admin.site.unregister(Group)

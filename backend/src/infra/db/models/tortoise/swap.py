@@ -1,7 +1,10 @@
 from tortoise import Model, fields
 
-from .common import TimestampsMixin, UUIDIDMixin
-from .utils import MyDecimalField
+from .common import (
+    TimestampsMixin,
+    UUIDIDMixin,
+    CorrectedDecimalField
+)
 
 
 class Swap(Model, UUIDIDMixin, TimestampsMixin):
@@ -19,25 +22,25 @@ class Swap(Model, UUIDIDMixin, TimestampsMixin):
     block_id = fields.BigIntField(null=True)
     timestamp = fields.BigIntField(null=True, blank=True)
     event_type = fields.CharField(max_length=15, null=True, blank=True)
-    quote_amount = MyDecimalField(
+    quote_amount = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    token_amount = MyDecimalField(
+    token_amount = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    cost_usd = MyDecimalField(
+    cost_usd = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         null=True,
         blank=True,
     )
-    price_usd = MyDecimalField(
+    price_usd = CorrectedDecimalField(
         max_digits=40,
         decimal_places=20,
         null=True,

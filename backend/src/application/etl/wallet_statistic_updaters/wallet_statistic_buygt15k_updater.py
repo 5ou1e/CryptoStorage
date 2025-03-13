@@ -18,14 +18,9 @@ from src.infra.db.repositories.tortoise import (
     TortoiseWalletStatisticBuyPriceGt15k30dRepository,
     TortoiseWalletStatisticBuyPriceGt15kAllRepository,
 )
-from src.infra.db.setup_tortoise import (
-    init_db_async,
-)
+from src.infra.db.setup_tortoise import init_db_async
 
-from .utils import (
-    filter_period_tokens,
-    recalculate_wallet_period_stats,
-)
+from .utils import filter_period_tokens, recalculate_wallet_period_stats
 
 logger = logging.getLogger("tasks.update_wallet_statistics")
 

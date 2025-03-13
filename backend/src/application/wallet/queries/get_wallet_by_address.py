@@ -1,13 +1,6 @@
-from src.application.interfaces.repositories.wallet import (
-    BaseWalletRepository,
-)
-from src.application.wallet.dto import (
-    WalletDetailedDTO,
-    WalletDTO,
-)
-from src.application.wallet.exceptions import (
-    WalletNotFoundException,
-)
+from src.application.interfaces.repositories.wallet import BaseWalletRepository
+from src.application.wallet.dto import WalletDetailedDTO, WalletDTO
+from src.application.wallet.exceptions import WalletNotFoundException
 
 
 class GetWalletByAddressHandler:

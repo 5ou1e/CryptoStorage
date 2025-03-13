@@ -6,23 +6,11 @@ from src.application.common.utils import (
     classify_related_wallet_status,
     classify_token_trade_status,
 )
-from src.application.interfaces.repositories.swap import (
-    BaseSwapRepository,
-)
-from src.application.interfaces.repositories.wallet import (
-    BaseWalletRepository,
-    BaseWalletTokenRepository,
-)
-from src.application.wallet.dto import (
-    CopiedByWalletDTO,
-    CopyingWalletDTO,
-    SimilarWalletDTO,
-    WalletRelatedWalletsDTO,
-)
+from src.application.interfaces.repositories.swap import BaseSwapRepository
+from src.application.interfaces.repositories.wallet import BaseWalletRepository, BaseWalletTokenRepository
+from src.application.wallet.dto import CopiedByWalletDTO, CopyingWalletDTO, SimilarWalletDTO, WalletRelatedWalletsDTO
 from src.application.wallet.dto.wallet_related_wallet import UndeterminedRelatedWalletDTO
-from src.application.wallet.exceptions import (
-    WalletNotFoundException,
-)
+from src.application.wallet.exceptions import WalletNotFoundException
 
 
 class GetWalletRelatedWalletsHandler:
