@@ -5,7 +5,7 @@ from sqlalchemy import func, select
 from src.application.interfaces.repositories.user import BaseUserRepository
 from src.domain.entities.user import UserEntity
 from src.infra.db.models.sqlalchemy import User
-from src.infra.db.models.sqlalchemy.base import Base
+from src.infra.db.models.sqlalchemy.common import Base
 from src.infra.db.repositories.sqlalchemy.generic_repository import SQLAlchemyGenericRepository
 
 

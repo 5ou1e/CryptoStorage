@@ -18,7 +18,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infra.db.models.sqlalchemy.base import Base, IntIDMixin, TimestampsMixin, UUIDIDMixin
+from src.infra.db.models.sqlalchemy.common import Base, IntIDMixin, TimestampsMixin, UUIDIDMixin
 
 
 class Wallet(Base, UUIDIDMixin, TimestampsMixin):

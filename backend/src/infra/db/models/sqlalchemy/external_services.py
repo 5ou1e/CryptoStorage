@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Boolean, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.infra.db.models.sqlalchemy.base import Base, IntIDMixin
+from src.infra.db.models.sqlalchemy.common import Base, IntIDMixin
 
 
 class FlipsideCryptoConfig(Base, IntIDMixin):
