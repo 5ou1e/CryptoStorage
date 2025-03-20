@@ -1,0 +1,18 @@
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+{{ value|safe }}
+<a href="#" onclick="copyToClipboard('{{ copy_value }}'); return false;">
+    <i class='bx bxs-copy' style="font-size: {{ size }};"></i>
+</a>
+<input type="text" value="{{ copy_value }}" id="copy-{{ copy_value }}" readonly style="display:none;">
+
+<script>
+    function copyToClipboard(id) {
+        var copyText = document.getElementById('copy-' + id);
+        navigator.clipboard.writeText(copyText.value).then(function() {
+            // Здесь можно добавить уведомление, если нужно
+        }, function(err) {
+            console.error('Ошибка при копировании: ', err);
+        });
+    }
+</script>

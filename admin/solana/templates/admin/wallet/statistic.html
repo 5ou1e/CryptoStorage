@@ -1,0 +1,812 @@
+{% extends "admin/base_site.html" %}
+{% load unfold %}
+{% load i18n admin_urls static admin_list unfold_list %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <div id="notification-container"></div>
+    <div class="wallet-statistics mb-6 flex gap-6 justify-between items-center">
+        <div class="flex-row items-center gap-2 mr-2 ml-2 text-font-default-light dark:text-font-default-dark" >
+            <div class="flex gap-2">
+                <h2 class="text-lg font-semibold" >{{ wallet.address }}</h2>
+                <span class="text-font-subtle-light dark:text-font-subtle-dark">
+                {% include "admin/copy_button.html" with copy_value=wallet.address size='22px' %}
+                </span>
+                <button
+                    class="text-font-subtle-light dark:text-font-subtle-dark"
+                    onclick="window.open('https://solscan.io/account/{{ wallet.address }}#defiactivities', '_blank')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" fill="currentColor" >
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 20c5.523 0 10-4.477 10-10S15.523 0 10 0 0 4.477 0 10s4.477 10 10 10zM6.465 5.501a.386.386 0 00-.266.11L4.39 7.42a.188.188 0 00.133.32h9.164c.101 0 .197-.04.266-.109l1.81-1.81a.188.188 0 00-.133-.32H6.465zm0 6.758a.376.376 0 00-.266.11l-1.81 1.81a.188.188 0 00.133.32h9.164c.101 0 .197-.04.266-.11l1.81-1.81a.188.188 0 00-.133-.32H6.465zm7.487-3.289a.376.376 0 00-.266-.11H4.522a.188.188 0 00-.133.321l1.81 1.81c.07.07.165.11.266.11h9.164a.188.188 0 00.133-.32l-1.81-1.81z"></path>
+                    </svg>
+                </button>
+                <button id="favorite-btn" class="favorite-btn text-font-subtle-light dark:text-font-subtle-dark" onclick="toggleStatus('favorite', '{{ wallet.wallet_id }}')">
+                    <!-- Контурная звезда (не в избранном) -->
+                    <i id="favorite-icon-outline" class="bx bxs-star favorite-outline-icon"
+                       {% if not wallet.favorite %} style="display: inline;" {% else %} style="display: none;" {% endif %}>
+
+                    </i>
+                    <!-- Заполненная звезда (в избранном) -->
+                    <i id="favorite-icon-filled" class="bx bxs-star favorite-filled-icon"
+                       {% if wallet.favorite %} style="display: inline;" {% else %} style="display: none;" {% endif %}>
+                    </i>
+                </button>
+                <button id="watch-later-btn" class="watch-later-btn text-font-subtle-light dark:text-font-subtle-dark" onclick="toggleStatus('watch_later', '{{ wallet.wallet_id }}')">
+                    <!-- Контурная иконка (не в списке "Посмотреть позже") -->
+                    <i id="watch-later-icon-outline" class="bx bx-time watch-later-outline-icon"
+                       {% if not wallet.watch_later %} style="display: inline;" {% else %} style="display: none;" {% endif %}>
+                    </i>
+
+                    <!-- Заполненная иконка (в списке "Посмотреть позже") -->
+                    <i id="watch-later-icon-filled" class="bx bxs-time watch-later-filled-icon"
+                       {% if wallet.watch_later %} style="display: inline;" {% else %} style="display: none;" {% endif %}>
+                    </i>
+                </button>
+                <button id="blacklist-btn" class="blacklist-btn text-font-subtle-light dark:text-font-subtle-dark" onclick="toggleStatus('blacklist', '{{ wallet.wallet_id }}')">
+                    <!-- Контурная иконка (когда не в черном списке) -->
+                    <i id="blacklist-icon-outline" class="bx bx-trash blacklist-outline-icon"
+                       {% if not wallet.blacklisted %} style="display: inline;" {% else %} style="display: none;" {% endif %}>
+                    </i>
+
+                    <!-- Заполненная иконка (когда в черном списке) -->
+                    <i id="blacklist-icon-filled" class="bx bxs-trash blacklist-filled-icon"
+                       {% if wallet.blacklisted %} style="display: inline;" {% else %} style="display: none;" {% endif %}>
+                    </i>
+                </button>
+            </div>
+            <div class="flex items-center gap-1 mt-2 text-font-default-light dark:text-font-default-dark">
+                <button>
+                    <i class='bx bx-refresh bx-flip-horizontal text-font-subtle-light dark:text-font-subtle-dark' style="font-size:30px" onclick="updateWalletStats()"></i>
+                </button>
+                <div>
+                    <h1 title="{{ wallet.last_stats_updated_time_ago.value }}" class="text-base text-font-subtle-light dark:text-font-subtle-dark">Обновлен: {{ wallet.last_stats_updated_time_ago.display_value }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="time-filter border border-base-200 dark:bg-base-900 dark:border-base-700 p-2 rounded flex gap-0" style="overflow: hidden;">
+            <button class="time-btn text-font-default-light dark:text-font-default-dark px-4 py-2 btn-period"
+                style="transition: background-color 0.3s ease;"
+                onmouseover="this.style.backgroundColor='rgba(129, 199, 132, 0.5)'" onmouseout="this.style.backgroundColor=''"
+                id="btn-7d" onclick="selectPeriod('7d')">
+                7d
+            </button>
+            <button class="time-btn text-font-default-light dark:text-font-default-dark px-4 py-2 btn-period active"
+                style="transition: background-color 0.3s ease;"
+                onmouseover="this.style.backgroundColor='rgba(129, 199, 132, 0.5)'" onmouseout="this.style.backgroundColor=''"
+                id="btn-30d" onclick="selectPeriod('30d')">
+                30d
+            </button>
+            <button class="time-btn text-font-default-light dark:text-font-default-dark px-4 py-2 btn-period"
+                style="transition: background-color 0.3s ease;"
+                onmouseover="this.style.backgroundColor='rgba(129, 199, 132, 0.5)'" onmouseout="this.style.backgroundColor=''"
+                id="btn-all" onclick="selectPeriod('all')">
+                All
+            </button>
+        </div>
+    </div>
+    {% for period, data in wallet.periods_data.items %}
+        <div class="period-block mb-4" id="period-{{ period }}" style="display: {% if period == '30d' %}block{% else %}none{% endif %};">
+        {% component "unfold/components/flex.html" with class="lg:flex-row flex-col gap-4" %}
+            <!-- Левая колонка с карточками -->
+            <div class="lg:w-2/6 flex w-full">
+                {% component "unfold/components/card.html" %}
+    <!--                <h2 class="text-xl font-bold mb-6">Статистика за все время</h2>-->
+                    <!-- Верхний ряд с метриками -->
+                    <div class="flex justify-between mb-5">
+                        <div class="flex-1 text-left">
+                            <h3 class="text-2xl font-bold" style="font-weight: 700; font-size: 32px;">{{ data.winrate.display_value }}</h3>
+                            <p class="text-sm text-gray-600">Винрейт</p>
+                        </div>
+                        <div class="flex-1 text-center">
+                            <h3 class="text-2xl font-bold" style="font-weight: 700; font-size: 32px; {% if data.total_profit.value <= 0 %}color: rgb(248 113 113);{% else %}color: #81C784;{% endif %}">{{ data.total_profit.display_value }}</h3>
+                            <p class="text-sm text-gray-600">Профит</p>
+                        </div>
+                        <div class="flex-1 text-right">
+                            <h3 class="text-2xl font-bold" style="font-weight: 700; font-size: 32px; {% if data.total_profit_multiplier.value <= 0 %}color: rgb(248 113 113);{% else %}color: #81C784;{% endif %}">{{ data.total_profit_multiplier.display_value }}</h3>
+                            <p class="text-sm text-gray-600">Профит в %</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="text-left">
+                            <h3 >Баланс</h3>
+                        </div>
+                        <div class="text-right text-font-important-light dark:text-font-important-dark">
+                            <h3>{{ wallet.sol_balance }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <div style="display: flex; width: 18px; height: 18px; background: #81C784; border-radius: 16px; margin-right: 6px;"></div>
+                            <h3 > >500% </h3>
+                        </div>
+                        <div class="text-right">
+                            <h3 style="color: #81C784;">{{ data.pnl_gt_5x_num }} </h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <div style="display: flex; width: 18px; height: 18px; background: #81C784; border-radius: 16px; margin-right: 6px;"></div>
+                            <h3> 200% ~ 500% </h3>
+                        </div>
+                        <div class="text-right">
+                            <h3 style="color: #81C784;">{{ data.pnl_2x_5x_num }} </h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <div style="display: flex; width: 18px; height: 18px; background: #81C784; border-radius: 16px; margin-right: 6px;"></div>
+                            <h3 > 0% ~ 200% </h3>
+                        </div>
+                        <div class="text-right">
+                            <h3 style="color: #81C784;">{{ data.pnl_lt_2x_num }} </h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <div style="display: flex; width: 18px; height: 18px; background: rgb(248 113 113); border-radius: 16px; margin-right: 6px;"></div>
+                            <h3> 0% ~ -50% </h3>
+                        </div>
+                        <div class="text-right">
+                            <h3 style="color: rgb(248 113 113);">{{ data.pnl_minus_dot5_0x_num }} </h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center " style="font-size:16px;">
+                        <div class="flex text-left">
+                            <div style="display: flex; width: 18px; height: 18px; background: rgb(248 113 113); border-radius: 16px; margin-right: 6px;"></div>
+                            <h3> <-50% </h3>
+                        </div>
+                        <div class="text-right">
+                            <h3 style="color: rgb(248 113 113);">{{ data.pnl_lt_minus_dot5_num }} </h3>
+                        </div>
+                    </div>
+                {% endcomponent %}
+            </div>
+            <!-- Вторая карточка -->
+            <div class="lg:w-2/6 gap-6 flex w-full">
+                {% component "unfold/components/card.html" %}
+    <!--            <h2 class="text-xl font-bold mb-6">Статистика за все время</h2>-->
+                    <div class="flex justify-between items-center mb-3 mt-2" style="font-size:16px;">
+                        <div class="text-left">
+                            <h3 >Всего токенов</h3>
+                        </div>
+                        <div class="text-right text-font-important-light dark:text-font-important-dark">
+                            <h3 >{{ data.total_token }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3 mt-2" style="font-size:16px;">
+                        <div class="text-left">
+                            <h3 >Без продаж / без покупок / продано>куплено</h3>
+                        </div>
+                        <div class="text-right text-font-important-light dark:text-font-important-dark">
+                            <h3 >{{ data.token_buy_without_sell.display_value }} / {{ data.token_sell_without_buy.display_value }} / {{ data.token_with_sell_amount_gt_buy_amount.display_value }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <h3>Всего транзакций / покупок / продаж</h3>
+                        </div>
+                        <div class="flex text-right text-font-important-light dark:text-font-important-dark">
+                            <h3 >{{ data.total_token_transactions }}</h3>
+                            <p>/</p>
+                            <h3 style="color: #81C784;">{{ data.total_token_buys }}</h3>
+                            <p>/</p>
+                            <h3 style="color: rgb(248 113 113);">{{ data.total_token_sales }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <h3>Сумма покупок / продаж</h3>
+                        </div>
+                        <div class="flex text-right text-font-important-light dark:text-font-important-dark">
+                            <h3 style="color: #81C784;">{{ data.total_token_buy_amount_usd.display_value }}</h3>
+                            <p>/</p>
+                            <h3 style="color: rgb(248 113 113);">{{ data.total_token_sell_amount_usd.display_value }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <h3>Ср. / мед. сумма покупки</h3>
+                        </div>
+                        <div class="text-right text-font-important-light dark:text-font-important-dark">
+                            <h3>{{ data.token_avg_buy_amount }} ({{ data.token_median_buy_amount.display_value }})</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <h3>Ср. профит</h3>
+                        </div>
+                        <div class="text-right text-font-important-light dark:text-font-important-dark">
+                            <h3>{{ data.token_avg_profit_usd.display_value }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <h3>Ср. цена 1й покупки</h3>
+                        </div>
+                        <div class="flex text-right text-font-important-light dark:text-font-important-dark">
+<!--                            <h3>{{ data.token_first_buy_avg_price_usd.display_value}}</h3>-->
+                            <h3>{{ data.token_first_buy_median_price_usd.display_value }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mb-3" style="font-size:16px;">
+                        <div class="flex text-left">
+                            <h3>Мед. время покупки-продажи</h3>
+                        </div>
+                        <div class="flex text-right text-font-important-light dark:text-font-important-dark">
+<!--                            <h3 style="{% if data.token_buy_sell_duration_avg.value <= 60 %}color: rgb(255, 153, 0);{% else %}{% endif %}">{{ data.token_buy_sell_duration_avg.display_value}}</h3>-->
+                            <h3 style="{% if data.token_buy_sell_duration_median.value <= 60 %}color: rgb(255, 153, 0);{% else %}{% endif %}">{{ data.token_buy_sell_duration_median.display_value }}</h3>
+                        </div>
+                    </div>
+
+                {% endcomponent %}
+            </div>
+
+        {% endcomponent %}
+        </div>
+    {% endfor %}
+    <div class="border flex flex-col flex-grow overflow-hidden p-4 mb-6 relative rounded shadow-sm dark:border-base-800">
+<!--                {% component "unfold/components/card.html" %}-->
+        <div class="flex w-full text-font-important-light dark:text-font-important-dark gap-3" style="font-size:16px;">
+            <div class="items-center flex text-left gap-3 w-full">
+                <h3 class="text-font-default-light dark:text-font-default-dark">Примечание</h3>
+                <input class="border border-base-200 bg-white font-medium min-w-20 placeholder-base-400 rounded shadow-sm text-font-default-light text-sm focus:ring focus:ring-primary-300 focus:border-primary-600 focus:outline-none group-[.errors]:border-red-600 group-[.errors]:focus:ring-red-200 dark:bg-base-900 dark:border-base-700 dark:text-font-default-dark dark:focus:border-primary-600 dark:focus:ring-primary-700 dark:focus:ring-opacity-50 dark:group-[.errors]:border-red-500 dark:group-[.errors]:focus:ring-red-600/40 px-3 py-2 w-full" type="text" id="wallet_remark" placeholder="" value="{{ wallet.remark }}">
+            </div>
+            <!-- Кнопка для отправки текста -->
+            <button class="bg-white border-base-200 dark:bg-base-900 dark:border-base-700 border cursor-pointer flex font-medium group items-center px-3 py-2 rounded shadow-sm text-sm lg:ml-auto md:mt-0" id="save_remark_button" onclick="updateWalletRemark()">Сохранить</button>
+        </div>
+<!--                {% endcomponent %}-->
+    </div>
+<div class="tab-buttons">
+    <div class="tab-button active border border-base-200 dark:bg-base-900 dark:border-base-700 hover:bg-base-200 focus:bg-base-200 dark:hover:bg-base-700 dark:focus:bg-base-700 p-2 rounded flex" data-tab="tab1">Токены</div>
+    <div class="tab-button border border-base-200 dark:bg-base-900 dark:border-base-700 hover:bg-base-200 focus:bg-base-200 dark:hover:bg-base-700 dark:focus:bg-base-700 p-2 rounded flex" data-tab="tab2">Связанные кошельки</div>
+</div>
+
+<div class="mt-3">
+    <div id="tab1" class="tab-content">
+        {% include "admin/custom_change_list.html" with cl=cl actions_on_top=actions_on_top %}
+    </div>
+
+    <div id="tab2" class="tab-content hidden">
+        <div class="tab-buttons">
+            <div class="tab-button sub-tab-button active border border-base-200 dark:bg-base-900 dark:border-base-700 hover:bg-base-200 focus:bg-base-200 dark:hover:bg-base-700 dark:focus:bg-base-700 p-2 rounded flex" data-sub-tab="similar-wallets">Кошельки из связки</div>
+            <div class="tab-button sub-tab-button border border-base-200 dark:bg-base-900 dark:border-base-700 hover:bg-base-200 focus:bg-base-200 dark:hover:bg-base-700 dark:focus:bg-base-700 p-2 rounded flex" data-sub-tab="copying-wallets">Копируемые кошельки</div>
+            <div class="tab-button sub-tab-button border border-base-200 dark:bg-base-900 dark:border-base-700 hover:bg-base-200 focus:bg-base-200 dark:hover:bg-base-700 dark:focus:bg-base-700 p-2 rounded flex" data-sub-tab="copied-by-wallets">Кошельки, которые копируют</div>
+            <div class="tab-button sub-tab-button border border-base-200 dark:bg-base-900 dark:border-base-700 hover:bg-base-200 focus:bg-base-200 dark:hover:bg-base-700 dark:focus:bg-base-700 p-2 rounded flex" data-sub-tab="undetermined-wallets">Неизвестно</div>
+        </div>
+
+        <!-- Спиннер -->
+        <div class="mt-6" id="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+        <div class="mt-4" id="related-wallets-content">
+            <div id="similar-wallets" class="sub-tab-content hidden">
+                {% component "unfold/components/card.html" with title="Кошельки из связки" class="mb-4" %}
+                    <table id="similar-wallets-table">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-3">Кошелек</th>
+                                <th class="py-2 px-3">Всего токенов</th>
+                                <th class="py-2 px-3">Пересечений</th>
+                                <th class="py-2 px-3">%</th>
+                                <th class="py-2 px-3">Микс</th>
+                                <th class="py-2 px-3">В одном блоке</th>
+                                <th class="py-2 px-3">До</th>
+                                <th class="py-2 px-3">После</th>
+                                <th class="py-2 px-3">Профит 30д</th>
+                                <th class="py-2 px-3">ROI 30д</th>
+                                <th class="py-2 px-3">Посл. трейд</th>
+                                <th class="py-2 px-3">Посл. пересекающийся</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                {% endcomponent %}
+            </div>
+
+            <div id="copying-wallets" class="sub-tab-content hidden">
+                {% component "unfold/components/card.html" with title="Копируемые кошельки" class="mb-4" %}
+                    <table id="copying-wallets-table">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-3">Кошелек</th>
+                                <th class="py-2 px-3">Всего токенов</th>
+                                <th class="py-2 px-3">Пересечений</th>
+                                <th class="py-2 px-3">%</th>
+                                <th class="py-2 px-3">Микс</th>
+                                <th class="py-2 px-3">В одном блоке</th>
+                                <th class="py-2 px-3">До</th>
+                                <th class="py-2 px-3">После</th>
+                                <th class="py-2 px-3">Профит 30д</th>
+                                <th class="py-2 px-3">ROI 30д</th>
+                                <th class="py-2 px-3">Посл. трейд</th>
+                                <th class="py-2 px-3">Посл. пересекающийся</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                {% endcomponent %}
+            </div>
+
+            <div id="copied-by-wallets" class="sub-tab-content hidden">
+                {% component "unfold/components/card.html" with title="Кошельки, которые копируют" class="mb-4" %}
+                    <table id="copied-by-wallets-table">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-3">Кошелек</th>
+                                <th class="py-2 px-3">Всего токенов</th>
+                                <th class="py-2 px-3">Пересечений</th>
+                                <th class="py-2 px-3">%</th>
+                                <th class="py-2 px-3">Микс</th>
+                                <th class="py-2 px-3">В одном блоке</th>
+                                <th class="py-2 px-3">До</th>
+                                <th class="py-2 px-3">После</th>
+                                <th class="py-2 px-3">Профит 30д</th>
+                                <th class="py-2 px-3">ROI 30д</th>
+                                <th class="py-2 px-3">Посл. трейд</th>
+                                <th class="py-2 px-3">Посл. пересекающийся</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                {% endcomponent %}
+            </div>
+
+            <div id="undetermined-wallets" class="sub-tab-content hidden">
+                {% component "unfold/components/card.html" with title="Неизвестно" class="mb-4" %}
+                    <table id="undetermined-wallets-table">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-3">Кошелек</th>
+                                <th class="py-2 px-3">Всего токенов</th>
+                                <th class="py-2 px-3">Пересечений</th>
+                                <th class="py-2 px-3">%</th>
+                                <th class="py-2 px-3">Микс</th>
+                                <th class="py-2 px-3">В одном блоке</th>
+                                <th class="py-2 px-3">До</th>
+                                <th class="py-2 px-3">После</th>
+                                <th class="py-2 px-3">Профит 30д</th>
+                                <th class="py-2 px-3">ROI 30д</th>
+                                <th class="py-2 px-3">Посл. трейд</th>
+                                <th class="py-2 px-3">Посл. пересекающийся</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                {% endcomponent %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Стили для вкладок */
+    .tab {
+        display: none;
+    }
+    .tab-buttons {
+        margin-bottom: 10px;
+    }
+    .tab-button {
+        padding: 10px 20px;
+        cursor: pointer;
+        display: inline-block;
+    }
+    .tab-button.active {
+        background-color: #ffffff0f; /* Темно-серый */
+
+    }
+    .favorite-outline-icon {
+        font-size: 22px;
+    }
+
+    .favorite-filled-icon {
+        font-size: 22px;
+        color:#e2ae23; /* Цвет для заполненной иконки */
+    }
+
+    .blacklist-outline-icon {
+        font-size: 22px;
+    }
+
+    .blacklist-filled-icon {
+        font-size: 22px;
+        color: #f73d3d; /* Цвет для заполненной иконки */
+    }
+
+    .watch-later-outline-icon {
+        font-size: 22px;
+    }
+
+    .watch-later-filled-icon {
+        font-size: 22px;
+        color:#2055d6; /* Цвет для заполненной иконки */
+    }
+
+    .notification {
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        animation: fadeIn 0.5s, fadeOut 0.5s 2.5s; /* Анимация появления и исчезновения */
+        opacity: 1;
+    }
+
+    #notification-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        width: 300px;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+    } /* ✅ Закрыл @keyframes fadeOut */
+
+    /* Стили для спиннера */
+    #loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        margin: 20px 0;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(0, 0, 0, 0.2);
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<!--    <script>-->
+<!--        function selectPeriod(period) {-->
+<!--            // Получаем текущий URL-->
+<!--            const currentUrl = new URL(window.location.href);-->
+
+<!--            // Обновляем или добавляем параметр period-->
+<!--            currentUrl.searchParams.set('period', period);-->
+
+<!--            // Редирект на обновленный URL-->
+<!--            window.location.href = currentUrl.toString();-->
+<!--        }-->
+<!--    </script>-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const walletId = '{{ wallet.address }}';
+    const url = `https://cryptostorage.space/api/v1/wallets/${walletId}/related_wallets`;
+
+    const spinner = document.getElementById("loading-spinner");
+    const relatedWalletsContent = document.getElementById("related-wallets-content");
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка сети');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const similarTable = document.querySelector("#similar-wallets-table tbody");
+            const copyingTable = document.querySelector("#copying-wallets-table tbody");
+            const copiedByTable = document.querySelector("#copied-by-wallets-table tbody");
+            const undeterminedTable = document.querySelector("#undetermined-wallets-table tbody");
+
+            similarTable.innerHTML = "";
+            copyingTable.innerHTML = "";
+            copiedByTable.innerHTML = "";
+            undeterminedTable.innerHTML = "";
+
+            const addRow = (table, wallet) => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td class="py-2 px-3">
+                        <a href="https://cryptostorage.space/ru/solana/wallet/${wallet.address}/statistics/" target="_blank" rel="noopener noreferrer">
+                            ${wallet.address.slice(0, 5)}...${wallet.address.slice(-2)}
+                        </a>
+                    </td>
+                    <td class="py-2 px-3">${wallet.total_token_count}</td>
+                    <td class="py-2 px-3">${wallet.intersected_tokens_count}</td>
+                    <td class="py-2 px-3">${wallet.intersected_tokens_percent} %</td>
+                    <td class="py-2 px-3">${wallet.mixed_count}</td>
+                    <td class="py-2 px-3">${wallet.same_count}</td>
+                    <td class="py-2 px-3">${wallet.before_count}</td>
+                    <td class="py-2 px-3">${wallet.after_count}</td>
+                    <td class="py-2 px-3">
+                      ${wallet.total_profit_usd_30d !== null ? wallet.total_profit_usd_30d.toFixed(2) : ''} $
+                    </td>
+                    <td class="py-2 px-3">
+                      ${wallet.total_profit_multiplier_30d !== null ? wallet.total_profit_multiplier_30d.toFixed(2) : ''} %
+                    </td>
+                    <td class="py-2 px-3">
+                      ${new Date(wallet.last_activity_timestamp).toLocaleString('ru-RU', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </td>
+                    <td class="py-2 px-3">
+                      ${new Date(wallet.last_intersected_tokens_trade_timestamp).toLocaleString('ru-RU', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </td>
+                `;
+
+                // Если есть цвет, применяем его к строке
+                if (wallet.color) {
+                    row.style.backgroundColor = wallet.color;
+                }
+
+                table.appendChild(row);
+            };
+
+            data.result.similar_wallets.forEach(wallet => addRow(similarTable, wallet));
+            data.result.copying_wallets.forEach(wallet => addRow(copyingTable, wallet));
+            data.result.copied_by_wallets.forEach(wallet => addRow(copiedByTable, wallet));
+            data.result.undetermined_wallets.forEach(wallet => addRow(undeterminedTable, wallet));
+
+
+            // Обновляем кнопку вкладки
+            const similarCount = data.result.similar_wallets?.length ?? 0;
+            const copyingCount = data.result.copying_wallets?.length ?? 0;
+            const copiedByCount = data.result.copied_by_wallets?.length ?? 0;
+            const undeterminedCount = data.result.undetermined_wallets?.length ?? 0;
+
+
+            const tabButton = document.querySelector('.tab-button[data-tab="tab2"]');
+            if (tabButton) {
+                const walletCount = similarCount + copyingCount + copiedByCount + undeterminedCount;
+                tabButton.textContent = `Связанные кошельки (${walletCount})`;
+            }
+            const similarButton = document.querySelector('.sub-tab-button[data-sub-tab="similar-wallets"]');
+            if (similarButton) {
+                similarButton.textContent = `Кошельки из связки (${similarCount})`;
+            }
+            const copyingButton = document.querySelector('.sub-tab-button[data-sub-tab="copying-wallets"]');
+            if (copyingButton) {
+                copyingButton.textContent = `Копируемые (${copyingCount})`;
+            }
+            const copiedByButton = document.querySelector('.sub-tab-button[data-sub-tab="copied-by-wallets"]');
+            if (copiedByButton) {
+                copiedByButton.textContent = `Кошельки, которые копируют (${copiedByCount})`;
+            }
+            const undeterminedButton = document.querySelector('.sub-tab-button[data-sub-tab="undetermined-wallets"]');
+            if (undeterminedButton) {
+                undeterminedButton.textContent = `Неизвестно (${undeterminedCount})`;
+            }
+            // Скрываем спиннер, показываем таблицы
+            spinner.style.display = "none";
+            relatedWalletsContent.style.display = "block";
+
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            spinner.textContent = "Ошибка загрузки данных";
+        });
+});
+</script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const mainTabs = document.querySelectorAll(".tab-button:not(.sub-tab-button)");
+    const mainTabContents = document.querySelectorAll(".tab-content");
+    const subTabs = document.querySelectorAll(".sub-tab-button");
+    const subTabContents = document.querySelectorAll(".sub-tab-content");
+
+    // Функция скрытия всех вкладок
+    function hideTabs(tabs) {
+        tabs.forEach(tab => tab.classList.add("hidden"));
+    }
+
+    // Функция сброса активности кнопок
+    function resetActiveButtons(buttons) {
+        buttons.forEach(btn => btn.classList.remove("active"));
+    }
+
+    // Инициализация первой вкладки
+    hideTabs(mainTabContents);
+    resetActiveButtons(mainTabs);
+    document.getElementById("tab1").classList.remove("hidden");
+    mainTabs[0].classList.add("active");
+
+    hideTabs(subTabContents);
+    resetActiveButtons(subTabs);
+    document.getElementById("similar-wallets").classList.remove("hidden");
+    subTabs[0].classList.add("active");
+
+    // Обработчик переключения главных вкладок
+    mainTabs.forEach(button => {
+        button.addEventListener("click", function () {
+            const targetId = this.getAttribute("data-tab");
+
+            hideTabs(mainTabContents);
+            resetActiveButtons(mainTabs);
+
+            this.classList.add("active");
+            document.getElementById(targetId).classList.remove("hidden");
+        });
+    });
+
+    // Обработчик переключения вложенных вкладок
+    subTabs.forEach(button => {
+        button.addEventListener("click", function () {
+            const targetId = this.getAttribute("data-sub-tab");
+
+            hideTabs(subTabContents);
+            resetActiveButtons(subTabs);
+
+            this.classList.add("active");
+            document.getElementById(targetId).classList.remove("hidden");
+        });
+    });
+});
+
+    </script>
+    <script>
+        function selectPeriod(period) {
+            // Скрываем все блоки
+            const blocks = document.querySelectorAll('.period-block');
+            blocks.forEach(block => {
+                block.style.display = 'none';
+            });
+
+            // Показываем выбранный блок
+            const selectedBlock = document.getElementById('period-' + period);
+            selectedBlock.style.display = 'block';
+
+            // Обновляем стиль кнопок (для выделения активной)
+            const buttons = document.querySelectorAll('.btn-period');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                button.style.backgroundColor = ''; // Сбрасываем фон
+            });
+
+            const selectedButton = document.getElementById('btn-' + period);
+            selectedButton.classList.add('active');
+        }
+    </script>
+
+<script>
+    // Универсальная функция обработки переключений статусов
+    function toggleStatus(actionType, walletId) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Получение CSRF токена
+        const toggleUrl = "{% url 'admin:user_wallet_toggle_status' wallet_id=wallet.wallet_id %}"; // Подставляем walletId
+
+        fetch(toggleUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                action: actionType // Тип действия: favorite, blacklist, watch_later
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Обновляем интерфейс на основе всех статусов
+                updateUI(data.is_favorite, data.is_blacklisted, data.is_watch_later);
+                showNotification(data.message, 'success');
+            } else {
+                showNotification('Ошибка! Попробуйте снова.', 'error');
+            }
+        })
+        .catch(error => {
+            alert('Ошибка при выполнении действия: ' + error);
+        });
+    }
+
+    // Функция обновления интерфейса
+    function updateUI(isFavorite, isBlacklisted, isWatchLater) {
+        // Для каждого статуса проверяем, нужно ли сделать его активным
+        updateIcon('favorite', isFavorite);
+        updateIcon('blacklist', isBlacklisted);
+        updateIcon('watch-later', isWatchLater);
+    }
+
+    // Функция обновления иконок для каждого статуса
+    function updateIcon(action, isActive) {
+        console.error(`Элементы с id ${action}-icon-outline или ${action}-icon-filled.`);
+        document.getElementById(`${action}-icon-outline`).style.display = isActive ? 'none' : 'inline'; // Скрыть контур, если активен
+        document.getElementById(`${action}-icon-filled`).style.display = isActive ? 'inline' : 'none'; // Показать заполненную, если активен
+    }
+</script>
+    <script>
+        // Логика сохранения описания кошелька
+        function updateWalletRemark() {
+            // Получаем значение из текстового поля
+            const remark = document.getElementById('wallet_remark').value;
+            console.log('Значение описания:', remark);  // Логируем значение
+            // Получаем CSRF токен
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            // URL для отправки запроса
+            const saveRemarkUrl = "{% url 'admin:user_wallet_update_remark' wallet_id=wallet.wallet_id %}";
+
+            // Отправляем запрос через fetch
+            fetch(saveRemarkUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ remark: remark })  // Отправляем описание в теле запроса
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showNotification('Описание успешно сохранено!', 'success');
+                } else {
+                    showNotification('Ошибка! Попробуйте снова.', 'error');
+                }
+            })
+            .catch(error => {
+                alert('Произошла ошибка при сохранении: ' + error);
+            });
+        }
+
+    </script>
+    <script>
+        function showNotification(message, type = 'success') {
+            // Создаем элемент уведомления
+
+            const notification = document.createElement('div');
+            let notificationClass = '';
+            if (type === 'success') {
+                notificationClass = 'bg-green-500 text-white';
+
+            } else if (type === 'error') {
+                notificationClass = 'bg-red-100 text-red-700';
+            }
+            notification.className = `notification ${notificationClass}`;
+            notification.textContent = message;
+
+            // Добавляем уведомление в контейнер
+            const container = document.getElementById('notification-container');
+            container.appendChild(notification);
+
+            // Удаляем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Пример вызова: showNotification('Кошелек обновлен!', 'success');
+    </script>
+{% endblock %}
+

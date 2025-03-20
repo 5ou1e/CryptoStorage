@@ -1,0 +1,132 @@
+networks:
+  dev:
+
+services:
+  db:
+    image: "postgres:16-alpine"
+    shm_size: 4g
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - crypto_storage.postgres.data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin", "-d", "crypto_storage"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    command: -c config_file=/etc/postgresql/postgresql.conf
+    networks:
+      - dev
+
+  redis:
+    image: redis:7.0
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    networks:
+      - dev
+
+  celery:
+    build:
+      context: ./backend  # Путь к Dockerfile
+    container_name: celery_worker
+    env_file:
+      - ./backend/.env
+    command: sh -c "celery -A src.infra.celery.setup worker --concurrency=10 -l info"
+    volumes:
+      - ./backend:/app
+      - ./backend/logs:/app/logs
+    depends_on:
+      - redis
+    networks:
+      - dev
+
+#  celery-beat:
+#    build:
+#      context: ./backend  # Путь к Dockerfile
+#    container_name: celery_beat
+#    env_file:
+#      - ./backend/.env
+#    command: sh -c "sleep 5 && celery -A src.infra.celery.setup beat -l info"
+#    volumes:
+#      - ./backend:/app
+#      - ./backend/logs:/app/logs
+#    depends_on:
+#      - redis
+#      - celery
+#    networks:
+#      - dev
+
+  api:
+    build:
+      context: ./backend
+    container_name: api
+    env_file:
+      - ./backend/.env
+    command: uvicorn src.presentation.api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - dev
+
+  admin:
+    container_name: admin
+    build:
+      context: ./admin
+    command: sh -c "python manage.py collectstatic --noinput && gunicorn --workers 3 --bind 0.0.0.0:8000 core.wsgi:application --capture-output --enable-stdio-inheritance"
+    env_file:
+      - ./admin/.env
+    ports:
+      - "8001:8000"  # Порт для Django admin
+    volumes:
+      - ./admin:/app
+      - ./admin/static:/app/static
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - dev
+
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/certbot/conf:/etc/letsencrypt/live
+      - ./nginx/certbot/www:/var/www/certbot
+      - ./admin/static:/app/static
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+      - admin
+    networks:
+      - dev
+
+volumes:
+  crypto_storage.postgres.data: {}
