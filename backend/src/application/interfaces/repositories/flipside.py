@@ -1,17 +1,28 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
-from src.domain.entities.flipside import FlipsideAccountEntity, FlipsideConfigEntity
+from src.domain.entities.flipside import FlipsideAccount, FlipsideConfig
 
-from .generic_repository import BaseGenericRepository
+from .generic_repository import GenericRepositoryInterface
 
 
-class BaseFlipsideAccountRepository(BaseGenericRepository[FlipsideAccountEntity], ABC):
+class FlipsideAccountRepositoryInterface(GenericRepositoryInterface[FlipsideAccount], ABC):
     """Интерфейс репозитория FlipsdeAccount"""
 
-    pass
+    @abstractmethod
+    async def get_first_active(self) -> FlipsideAccount:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def set_flipside_account_inactive(
+        self,
+        flipside_account: FlipsideAccount,
+    ) -> None:
+        raise NotImplementedError
 
 
-class BaseFlipsideConfigRepository(BaseGenericRepository[FlipsideConfigEntity], ABC):
+class FlipsideConfigRepositoryInterface(GenericRepositoryInterface[FlipsideConfig], ABC):
     """Интерфейс репозитория FlipsdeConfig"""
 
-    pass
+    @abstractmethod
+    async def update_swaps_parsed_untill_timestamp(self, entity: FlipsideConfig) -> None:
+        raise NotImplementedError

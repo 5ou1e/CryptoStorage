@@ -7,11 +7,17 @@ from src.domain.entities.base_entity import BaseEntity
 Entity = TypeVar("Entity", bound=BaseEntity)
 
 
-class BaseGenericRepository(Generic[Entity], ABC):
+class GenericRepositoryInterface(Generic[Entity], ABC):
     """Интерфейс универсального репозитория"""
 
     @abstractmethod
     async def get_by_id(self, id_: Any) -> Entity | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def get_first(
+        self,
+    ) -> list[Entity]:
         raise NotImplementedError
 
     @abstractmethod
@@ -20,17 +26,6 @@ class BaseGenericRepository(Generic[Entity], ABC):
         limit: int = None,
         offset: int = None,
     ) -> list[Entity]:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def get_page(
-        self,
-        pagination: Pagination,
-    ) -> list[Entity]:
-        raise NotImplementedError
-
-    @abstractmethod
-    async def get_count(self) -> int:
         raise NotImplementedError
 
     @abstractmethod
@@ -46,12 +41,13 @@ class BaseGenericRepository(Generic[Entity], ABC):
         raise NotImplementedError
 
     @abstractmethod
+    async def delete_all(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     async def bulk_create(self, entities: list[Entity]) -> list[Entity]:
         raise NotImplementedError
 
     @abstractmethod
     async def bulk_update(self, entities: list[Entity]) -> list[Entity]:
         raise NotImplementedError
-
-    # def __getitem__(self, index) -> Entity:
-    #     return self.get_by_id(index)

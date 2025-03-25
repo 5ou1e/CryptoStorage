@@ -7515,3 +7515,855 @@ error.message
 2025-03-19 20:19:18 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 0
 2025-03-19 20:19:18 - src.application.etl.swaps_loader.common.logger - INFO - Данные импротированы за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:30:00+00:00
 2025-03-19 20:19:18 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:00.001999
+2025-03-22 17:26:28 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:26:28 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:26:28 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - ERROR - Ошибка Flipside: Flipside Error 4 validation errors for CreateQueryRunRpcResponse
+jsonrpc
+  Field required [type=missing, input_value={'error': {'errorType': '...None, 'status': 'error'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+id
+  Field required [type=missing, input_value={'error': {'errorType': '...None, 'status': 'error'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+error.code
+  Field required [type=missing, input_value={'errorType': 'BILLING_ER...ipsidecrypto.xyz/api).'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+error.message
+  Field required [type=missing, input_value={'errorType': 'BILLING_ER...ipsidecrypto.xyz/api).'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - INFO - Меняем учетку Flipside
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-22 17:26:29 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-22 17:26:49 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:26:49 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:26:49 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:27:01 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 6, 8
+2025-03-22 17:27:01 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:11.835930
+2025-03-22 17:27:01 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:27:01 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-22 17:27:14 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:27:14 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:27:14 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:27:42 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 6, 7
+2025-03-22 17:27:42 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:28.167843
+2025-03-22 17:27:42 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:27:43 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:01.081990
+2025-03-22 17:27:43 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-22 17:27:43 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:27:43 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:01:00+00:00 - 2025-01-12 07:02:00+00:00
+2025-03-22 17:27:43 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-22 17:27:43 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 14047
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 6146
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 1190
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 7537
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:27:46 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:02.724296
+2025-03-22 17:28:02 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 13487 | Время запроса: 4, 5
+2025-03-22 17:28:06 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:28:06 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:28:06 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:30:00+00:00
+2025-03-22 17:28:28 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 69040 | Время запроса: 8, 11
+2025-03-22 17:28:31 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 62589 | Время запроса: 9, 12
+2025-03-22 17:28:31 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 69762 | Время запроса: 8, 12
+2025-03-22 17:28:32 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 64508 | Время запроса: 8, 11
+2025-03-22 17:28:34 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 66075 | Время запроса: 8, 10
+2025-03-22 17:28:46 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 75892 | Время запроса: 8, 11
+2025-03-22 17:28:46 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:30:00+00:00 | Кол-во: 407866 | Время 0:00:39.583586
+2025-03-22 17:28:46 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:28:57 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:11.612275
+2025-03-22 17:28:57 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-22 17:28:57 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:28:58 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:30:00+00:00 - 2025-01-12 08:00:00+00:00
+2025-03-22 17:29:00 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-22 17:29:00 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-22 17:29:24 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 84866 | Время запроса: 6, 11
+2025-03-22 17:29:25 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 78871 | Время запроса: 6, 10
+2025-03-22 17:29:32 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 86961 | Время запроса: 10, 16
+2025-03-22 17:29:36 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 79176 | Время запроса: 10, 13
+2025-03-22 17:29:38 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 84788 | Время запроса: 7, 10
+2025-03-22 17:29:48 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 83809 | Время запроса: 11, 14
+2025-03-22 17:32:26 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:32:26 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:32:26 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:30:00+00:00
+2025-03-22 17:32:48 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 62589 | Время запроса: 8, 11
+2025-03-22 17:32:49 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 66075 | Время запроса: 8, 11
+2025-03-22 17:32:50 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 64508 | Время запроса: 7, 10
+2025-03-22 17:32:52 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 75892 | Время запроса: 8, 11
+2025-03-22 17:32:59 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 69040 | Время запроса: 7, 9
+2025-03-22 17:32:59 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 69762 | Время запроса: 7, 10
+2025-03-22 17:32:59 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:30:00+00:00 | Кол-во: 407866 | Время 0:00:33.056208
+2025-03-22 17:32:59 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:33:11 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:11.662564
+2025-03-22 17:33:11 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-22 17:33:11 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:33:11 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:30:00+00:00 - 2025-01-12 08:00:00+00:00
+2025-03-22 17:33:12 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-22 17:33:13 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-22 17:33:36 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 83809 | Время запроса: 5, 10
+2025-03-22 17:33:37 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 84788 | Время запроса: 6, 10
+2025-03-22 17:33:40 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 79176 | Время запроса: 7, 11
+2025-03-22 17:33:41 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 86961 | Время запроса: 7, 10
+2025-03-22 17:33:42 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 78871 | Время запроса: 6, 9
+2025-03-22 17:33:46 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 84866 | Время запроса: 8, 12
+2025-03-22 17:37:28 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:37:28 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:37:28 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:37:40 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 4, 6
+2025-03-22 17:37:40 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:11.926829
+2025-03-22 17:37:40 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:37:40 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-22 17:37:49 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:37:49 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:37:49 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:38:01 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 4, 6
+2025-03-22 17:38:01 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:11.896258
+2025-03-22 17:38:01 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:38:01 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-22 17:38:15 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:38:15 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:38:15 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:38:27 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 4, 5
+2025-03-22 17:38:27 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:12.318519
+2025-03-22 17:38:27 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:38:27 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-22 17:39:11 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:39:11 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:39:11 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:39:19 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 3, 4
+2025-03-22 17:39:19 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:08.106485
+2025-03-22 17:39:19 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:39:19 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-22 17:42:15 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:42:15 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:42:15 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:42:27 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 5, 6
+2025-03-22 17:42:27 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:12.796168
+2025-03-22 17:42:27 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:42:27 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-22 17:42:39 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-22 17:42:39 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-22 17:42:39 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-22 17:42:47 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 14047 | Время запроса: 2, 3
+2025-03-22 17:42:47 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 14047 | Время 0:00:08.196789
+2025-03-22 17:42:47 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-22 17:42:47 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 18:14:36 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:14:36 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:14:40 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 18:14:58 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:14:58 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:14:58 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 18:15:04 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:15:04 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:15:04 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 18:15:39 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:15:39 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:15:39 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - ERROR - Ошибка - Нету данных о цене соланы в 2025-03-18 16:20:00+00:00!
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 18:16:05 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00 завершен!
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - ERROR - Ошибка - Нету данных о цене соланы в 2025-03-18 16:20:00+00:00!
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 18:17:24 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00 завершен!
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - ERROR - Ошибка - Нету данных о цене соланы в 2025-03-18 16:20:00+00:00!
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 18:21:12 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00 завершен!
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - ERROR - Ошибка - Нету данных о цене соланы в 2025-03-18 16:20:00+00:00!
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 18:27:12 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00 завершен!
+2025-03-24 18:31:23 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:31:23 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:31:23 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 16:00:00+00:00 - 2025-03-18 16:20:00+00:00
+2025-03-24 18:31:52 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 87221 | Время запроса: 9, 12
+2025-03-24 18:31:55 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 93675 | Время запроса: 8, 12
+2025-03-24 18:31:59 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 92605 | Время запроса: 9, 13
+2025-03-24 18:31:59 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-03-18 16:00:00+00:00 - 2025-03-18 16:20:00+00:00 | Кол-во: 273501 | Время 0:00:35.458769
+2025-03-24 18:31:59 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 18:31:59 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 18:32:04 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:05.210073
+2025-03-24 18:32:04 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 18:32:04 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 18:32:07 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-24 18:32:08 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-24 18:32:09 - src.application.etl.swaps_loader.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 18:33:05 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00
+2025-03-24 18:33:05 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 18:33:05 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 16:00:00+00:00 - 2025-03-18 16:20:00+00:00
+2025-03-24 18:33:37 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 87221 | Время запроса: 11, 15
+2025-03-24 18:33:58 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 93675 | Время запроса: 19, 23
+2025-03-24 18:33:59 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 92605 | Время запроса: 18, 22
+2025-03-24 18:33:59 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-03-18 16:00:00+00:00 - 2025-03-18 16:20:00+00:00 | Кол-во: 273501 | Время 0:00:53.793638
+2025-03-24 18:33:59 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 18:33:59 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 18:34:03 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:04.648022
+2025-03-24 18:34:03 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 18:34:03 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 18:34:04 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-24 18:34:07 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 273501
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 43644
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 5263
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 63271
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-03-18 16:00:00+00:00 - 2025-03-18 16:20:00+00:00
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:21.424335
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 18:34:25 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 16:00:00+00:00 до 2025-03-18 16:20:00+00:00 завершен!
+2025-03-24 20:02:22 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:20:00+00:00
+2025-03-24 20:02:22 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 20:02:22 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:20:00+00:00
+2025-03-24 20:02:57 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 12, 16
+2025-03-24 20:02:58 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 8, 13
+2025-03-24 20:03:13 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 33290 | Время запроса: 5, 8
+2025-03-24 20:03:20 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 36, 39
+2025-03-24 20:03:28 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 31149 | Время запроса: 5, 7
+2025-03-24 20:03:32 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 11559 | Время запроса: 4, 5
+2025-03-24 20:03:32 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-03-18 19:00:00+00:00 - 2025-03-18 19:20:00+00:00 | Кол-во: 375998 | Время 0:01:10.043657
+2025-03-24 20:03:32 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 20:03:32 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 20:03:40 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:07.935746
+2025-03-24 20:03:40 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 20:03:40 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 20:03:41 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-24 20:03:46 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 375998
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 56860
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 4107
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 81552
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:20:00+00:00
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:31.889471
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 20:04:12 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:20:00+00:00 завершен!
+2025-03-24 22:03:34 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:03:34 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:03:34 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - ERROR - Ошибка Flipside: QUERY_RUN_EXECUTION_ERROR: an error has occured while executing your query. errorName=OperationFailedError, errorMessage=SQL compilation error: error line 13 at position 17
+invalid identifier 'ROW_ID', errorData={'code': '000904', 'data': {'age': 0, 'pos': -1, 'line': -1, 'type': 'COMPILATION', 'queryId': '01bb3a57-0514-7b32-3d4f-830310a70397', 'sqlState': '42000', 'errorCode': '000904', 'internalError': False, 'unredactedFromSecureObject': False}, 'name': 'OperationFailedError', 'message': "SQL compilation error: error line 13 at position 17\ninvalid identifier 'ROW_ID'", 'sqlState': '42000'}
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - INFO - Меняем учетку Flipside
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:03:36 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:04:15 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:04:35 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-24 22:04:44 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:04:44 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:04:44 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - ERROR - Ошибка Flipside: Flipside Error 4 validation errors for CreateQueryRunRpcResponse
+jsonrpc
+  Field required [type=missing, input_value={'error': {'errorType': '...None, 'status': 'error'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+id
+  Field required [type=missing, input_value={'error': {'errorType': '...None, 'status': 'error'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+error.code
+  Field required [type=missing, input_value={'errorType': 'BILLING_ER...ipsidecrypto.xyz/api).'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+error.message
+  Field required [type=missing, input_value={'errorType': 'BILLING_ER...ipsidecrypto.xyz/api).'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - INFO - Меняем учетку Flipside
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:04:45 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-24 22:05:16 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:05:16 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:05:16 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - ERROR - Ошибка Flipside: Flipside Error 4 validation errors for CreateQueryRunRpcResponse
+jsonrpc
+  Field required [type=missing, input_value={'error': {'errorType': '...None, 'status': 'error'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+id
+  Field required [type=missing, input_value={'error': {'errorType': '...None, 'status': 'error'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+error.code
+  Field required [type=missing, input_value={'errorType': 'BILLING_ER...ipsidecrypto.xyz/api).'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+error.message
+  Field required [type=missing, input_value={'errorType': 'BILLING_ER...ipsidecrypto.xyz/api).'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - INFO - Меняем учетку Flipside
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:05:17 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - ERROR - Нету активных аккаунтов FlipsideCrypto в БД
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:05:34 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00 завершен!
+2025-03-24 22:05:49 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-12 07:00:00+00:00 до 2025-03-01 20:20:00+00:00
+2025-03-24 22:05:49 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:05:49 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 552 | Время запроса: 2, 2
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00 | Кол-во: 552 | Время 0:00:05.925338
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037210
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-01-12 07:01:00+00:00 - 2025-01-12 07:02:00+00:00
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 307
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-01-12 07:00:00+00:00 - 2025-01-12 07:01:00+00:00
+2025-03-24 22:05:55 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.251051
+2025-03-24 22:05:58 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 1293 | Время запроса: 1, 1
+2025-03-24 22:07:22 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00
+2025-03-24 22:07:22 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:07:22 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 467 | Время запроса: 1, 2
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00 | Кол-во: 467 | Время 0:00:05.910128
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037192
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 333
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.101632
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:07:28 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00 завершен!
+2025-03-24 22:08:45 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00
+2025-03-24 22:08:45 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:08:45 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 467 | Время запроса: 1, 2
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20455
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00 | Кол-во: 467 | Время 0:00:01.934062
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 396
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037268
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 333
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.058052
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:08:47 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00 завершен!
+2025-03-24 22:09:45 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00
+2025-03-24 22:09:45 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:09:45 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:09:47 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 467 | Время запроса: 1, 2
+2025-03-24 22:09:51 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00
+2025-03-24 22:09:51 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:09:51 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 467 | Время запроса: 1, 2
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20455
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00 | Кол-во: 467 | Время 0:00:01.759138
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 396
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.034201
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 333
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.053472
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:09:53 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00 завершен!
+2025-03-24 22:10:35 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00
+2025-03-24 22:10:35 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:10:35 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:10:36 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 467 | Время запроса: 1, 2
+2025-03-24 22:10:36 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20455
+2025-03-24 22:10:36 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00 | Кол-во: 467 | Время 0:00:01.758660
+2025-03-24 22:10:36 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 396
+2025-03-24 22:10:36 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:10:36 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037540
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 396
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 333
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.100159
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:10:37 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00 завершен!
+2025-03-24 22:15:55 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00
+2025-03-24 22:15:55 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:15:55 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 467 | Время запроса: 1, 1
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20059
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00 | Кол-во: 467 | Время 0:00:03.398075
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:14:00+00:00 - 2025-03-18 19:15:00+00:00
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.003510
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:15:58 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:14:00+00:00 до 2025-03-18 19:15:00+00:00 завершен!
+2025-03-24 22:16:56 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:16:56 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:16:56 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:17:00 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 2, 2
+2025-03-24 22:17:00 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20035
+2025-03-24 22:17:00 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00 | Кол-во: 396 | Время 0:00:03.375979
+2025-03-24 22:17:00 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 359
+2025-03-24 22:17:00 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:17:10 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:17:10 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:17:10 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 2, 2
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20035
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00 | Кол-во: 396 | Время 0:00:01.733447
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 359
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037537
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 359
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 309
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.094639
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:17:12 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00 завершен!
+2025-03-24 22:18:04 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:16:00+00:00 до 2025-03-18 19:17:00+00:00
+2025-03-24 22:18:04 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:18:04 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:16:00+00:00 - 2025-03-18 19:17:00+00:00
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 499 | Время запроса: 2, 2
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20860
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:16:00+00:00 - 2025-03-18 19:17:00+00:00 | Кол-во: 499 | Время 0:00:03.452675
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 301
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037316
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 301
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 276
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:16:00+00:00 - 2025-03-18 19:17:00+00:00
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.074996
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:18:08 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:16:00+00:00 до 2025-03-18 19:17:00+00:00 завершен!
+2025-03-24 22:20:57 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:16:00+00:00 до 2025-03-18 19:17:00+00:00
+2025-03-24 22:20:57 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:20:57 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:16:00+00:00 - 2025-03-18 19:17:00+00:00
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 198 | Время запроса: 1, 1
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 20559
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:16:00+00:00 - 2025-03-18 19:17:00+00:00 | Кол-во: 198 | Время 0:00:03.303147
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 198
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.044064
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 198
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 95
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:16:00+00:00 - 2025-03-18 19:17:00+00:00
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.080587
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:21:00 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:16:00+00:00 до 2025-03-18 19:17:00+00:00 завершен!
+2025-03-24 22:30:17 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:30:17 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:30:17 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 127 | Время запроса: 2, 2
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 19676
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00 | Кол-во: 127 | Время 0:00:05.751976
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 127
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.035160
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 127
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 65
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.068111
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:30:22 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00 завершен!
+2025-03-24 22:53:01 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:53:01 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:53:01 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:53:01 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:53:05 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:54:51 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:54:51 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:54:51 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:54:51 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:54:53 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:55:17 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:55:17 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:55:17 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:55:17 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:55:19 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:55:49 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:20:00+00:00
+2025-03-24 22:55:49 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:55:49 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:20:00+00:00
+2025-03-24 22:56:25 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 10, 14
+2025-03-24 22:56:25 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 9, 14
+2025-03-24 22:56:26 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 8, 13
+2025-03-24 22:56:38 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 11559 | Время запроса: 5, 6
+2025-03-24 22:56:43 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 31149 | Время запроса: 6, 8
+2025-03-24 22:56:46 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 33290 | Время запроса: 7, 9
+2025-03-24 22:56:57 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:56:57 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:56:57 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:57:07 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:58:25 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:25 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:58:25 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:25 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:58:28 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:58:40 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:40 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:58:40 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:40 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:58:41 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:58:47 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:47 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:58:47 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:47 - src.application.etl.swaps_rollback.common.logger - CRITICAL - Неизвестная ошибка, завершаем работу: unhandled errors in a TaskGroup (1 sub-exception)
+2025-03-24 22:58:49 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:58:54 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:54 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 22:58:55 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 0
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00 | Кол-во: 396 | Время 0:00:01.761185
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.004001
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 22:58:56 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00 завершен!
+2025-03-24 23:00:36 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 23:00:36 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:00:36 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 0
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00 | Кол-во: 396 | Время 0:00:05.868621
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.003001
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:00:42 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00 завершен!
+2025-03-24 23:01:03 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00
+2025-03-24 23:01:03 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:01:03 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 396 | Время запроса: 1, 1
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 19549
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00 | Кол-во: 396 | Время 0:00:01.733656
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:15:00+00:00 - 2025-03-18 19:16:00+00:00
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.004169
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:01:05 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:15:00+00:00 до 2025-03-18 19:16:00+00:00 завершен!
+2025-03-24 23:02:27 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:13:00+00:00 до 2025-03-18 19:14:00+00:00
+2025-03-24 23:02:27 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:02:27 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 418 | Время запроса: 1, 1
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 17067
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00 | Кол-во: 418 | Время 0:00:03.349571
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 364
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.042115
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 364
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 322
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.134902
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:02:30 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:13:00+00:00 до 2025-03-18 19:14:00+00:00 завершен!
+2025-03-24 23:02:51 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:13:00+00:00 до 2025-03-18 19:14:00+00:00
+2025-03-24 23:02:51 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:02:51 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 418 | Время запроса: 1, 1
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 16703
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00 | Кол-во: 418 | Время 0:00:01.730628
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.003560
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:02:52 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:13:00+00:00 до 2025-03-18 19:14:00+00:00 завершен!
+2025-03-24 23:05:44 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:13:00+00:00 до 2025-03-18 19:14:00+00:00
+2025-03-24 23:05:44 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:05:44 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 418 | Время запроса: 1, 1
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 16703
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00 | Кол-во: 418 | Время 0:00:01.943705
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:13:00+00:00 - 2025-03-18 19:14:00+00:00
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.004006
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:05:46 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:13:00+00:00 до 2025-03-18 19:14:00+00:00 завершен!
+2025-03-24 23:06:02 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:12:00+00:00 до 2025-03-18 19:13:00+00:00
+2025-03-24 23:06:02 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:06:02 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:12:00+00:00 - 2025-03-18 19:13:00+00:00
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 461 | Время запроса: 2, 2
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 16829
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:12:00+00:00 - 2025-03-18 19:13:00+00:00 | Кол-во: 461 | Время 0:00:05.855520
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 420
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037032
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 420
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 355
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:12:00+00:00 - 2025-03-18 19:13:00+00:00
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.121814
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:06:08 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:12:00+00:00 до 2025-03-18 19:13:00+00:00 завершен!
+2025-03-24 23:12:57 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:12:00+00:00 до 2025-03-18 19:13:00+00:00
+2025-03-24 23:12:57 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:12:57 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:12:00+00:00 - 2025-03-18 19:13:00+00:00
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 461 | Время запроса: 1, 1
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 16409
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:12:00+00:00 - 2025-03-18 19:13:00+00:00 | Кол-во: 461 | Время 0:00:07.587302
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:12:00+00:00 - 2025-03-18 19:13:00+00:00
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.000510
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:13:05 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:12:00+00:00 до 2025-03-18 19:13:00+00:00 завершен!
+2025-03-24 23:13:07 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:11:00+00:00 до 2025-03-18 19:12:00+00:00
+2025-03-24 23:13:07 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-24 23:13:07 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:11:00+00:00 - 2025-03-18 19:12:00+00:00
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 466 | Время запроса: 2, 3
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 18947
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:11:00+00:00 - 2025-03-18 19:12:00+00:00 | Кол-во: 466 | Время 0:00:05.780338
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 384
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.036616
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-24 23:13:12 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 384
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 337
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:11:00+00:00 - 2025-03-18 19:12:00+00:00
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.107052
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-24 23:13:13 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:11:00+00:00 до 2025-03-18 19:12:00+00:00 завершен!
+2025-03-25 00:14:01 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:01 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-25 00:14:01 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:19 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 19328 | Время запроса: 9, 11
+2025-03-25 00:14:19 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00 | Кол-во: 19328 | Время 0:00:17.884198
+2025-03-25 00:14:19 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-25 00:14:19 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-25 00:14:20 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:00.393984
+2025-03-25 00:14:20 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-25 00:14:20 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-25 00:14:20 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-25 00:14:21 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 19328
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 6730
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 800
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 7574
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:03.078235
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-25 00:14:23 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00 завершен!
+2025-03-25 00:14:29 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:29 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-25 00:14:29 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 518 | Время запроса: 2, 2
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 39448
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00 | Кол-во: 518 | Время 0:00:03.330478
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 395
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.037523
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 395
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 350
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.075681
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-25 00:14:32 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00 завершен!
+2025-03-25 00:14:47 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00
+2025-03-25 00:14:47 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-25 00:14:47 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 19328 | Время запроса: 24, 26
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00 | Кол-во: 19328 | Время 0:00:37.261069
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:00.405121
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-25 00:15:25 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-25 00:15:26 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 19328
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 6730
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 800
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 7574
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:02.831868
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-25 00:15:28 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00 завершен!
+2025-03-25 00:19:05 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00
+2025-03-25 00:19:05 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-25 00:19:05 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 518 | Время запроса: 2, 2
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 58381
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00 | Кол-во: 518 | Время 0:00:01.996757
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00.000510
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-03-18 19:00:00+00:00 - 2025-03-18 19:01:00+00:00
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.000515
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-25 00:19:07 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-03-18 19:00:00+00:00 до 2025-03-18 19:01:00+00:00 завершен!
+2025-03-25 00:19:33 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-01-18 19:00:00+00:00 до 2025-01-18 19:01:00+00:00
+2025-03-25 00:19:33 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-25 00:19:33 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-01-18 19:00:00+00:00 - 2025-01-18 19:01:00+00:00
+2025-03-25 00:19:54 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 15188 | Время запроса: 11, 13
+2025-03-25 00:19:54 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-01-18 19:00:00+00:00 - 2025-01-18 19:01:00+00:00 | Кол-во: 15188 | Время 0:00:21.815874
+2025-03-25 00:19:54 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-25 00:19:54 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-25 00:19:55 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:00.407468
+2025-03-25 00:19:55 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-25 00:19:55 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-25 00:19:55 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-25 00:19:56 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 15188
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 7569
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 1557
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 9354
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-01-18 19:00:00+00:00 - 2025-01-18 19:01:00+00:00
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:00:02.827563
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-25 00:19:58 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-01-18 19:00:00+00:00 до 2025-01-18 19:01:00+00:00 завершен!
+2025-03-25 00:23:32 - src.application.etl.swaps_rollback.common.logger - INFO - Запущен процесс для периода c 2025-01-18 19:00:00+00:00 до 2025-01-18 19:01:00+00:00
+2025-03-25 00:23:32 - src.application.etl.swaps_rollback.common.logger - INFO - Получили сигнал NEXT
+2025-03-25 00:23:32 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем сбор свапов за 2025-01-18 19:00:00+00:00 - 2025-01-18 19:01:00+00:00
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Кол-во записей: 2065 | Время запроса: 2, 2
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов из бд: 15188
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Собраны свапы за период 2025-01-18 19:00:00+00:00 - 2025-01-18 19:01:00+00:00 | Кол-во: 2065 | Время 0:00:06.721351
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов к удалению - 0
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем преобразование данных
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Время преобразования: 0:00:00
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Преобразователь завершил работу!
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Свапов: 0
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Кошелек-токен: 0
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Данные импортированы за 2025-01-18 19:00:00+00:00 - 2025-01-18 19:01:00+00:00
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Время импорта: 0:00:00.001000
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Загрузчик завершил работу!
+2025-03-25 00:23:38 - src.application.etl.swaps_rollback.common.logger - INFO - Процесс для периода c 2025-01-18 19:00:00+00:00 до 2025-01-18 19:01:00+00:00 завершен!

@@ -12,11 +12,11 @@ from src.application.etl.swaps_loader.loader import (
     import_activities_and_wallet_tokens,
     import_wallets_data_chunk,
 )
-from src.domain.entities.swap import SwapEntity
-from src.domain.entities.wallet import WalletEntity, WalletTokenEntity
-from src.infra.db.models.sqlalchemy import Wallet, WalletToken
-from src.infra.db.repositories.sqlalchemy import SQLAlchemyWalletRepository, SQLAlchemyWalletTokenRepository
-from src.infra.db.setup import engine, get_db_session
+from src.domain.entities.swap import Swap
+from src.domain.entities.wallet import Wallet, WalletToken
+from src.infra.db.sqlalchemy.models import Wallet, WalletToken
+from src.infra.db.sqlalchemy.repositories import SQLAlchemyWalletRepository, SQLAlchemyWalletTokenRepository
+from src.infra.db.sqlalchemy.setup import engine, get_db_session
 
 wallet_token = WalletToken
 
@@ -30,7 +30,7 @@ async def main():
         created_at = datetime.now()
 
         wallets = [
-            WalletEntity(
+            Wallet(
                 id=uuid6.uuid7(),
                 address=str(uuid6.uuid7()),
                 created_at=created_at,
@@ -59,7 +59,7 @@ async def main1():
     async for session in get_db_session():
         created_at = datetime.now()
         activities = [
-            SwapEntity(
+            Swap(
                 id=uuid6.uuid7(),
                 wallet_id="00006364-feec-11ef-91ea-00155d80116b",
                 token_id="0000c588-feec-11ef-841f-00155d80116b",
@@ -78,7 +78,7 @@ async def main2():
         # wallet_tokens = await repo.get_list(limit=10000)
 
         wallet_tokens = [
-            WalletTokenEntity(
+            WalletToken(
                 wallet_id="01959bad-4d11-7d9d-b6e1-0f31e48b92a5",
                 token_id="01959b91-01f2-75cb-837f-f88b8be51f69",
                 created_at=datetime.now(),

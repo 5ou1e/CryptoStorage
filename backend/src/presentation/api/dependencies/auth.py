@@ -5,8 +5,8 @@ from fastapi import Depends
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 
-from src.domain.entities.user import UserEntity
-from src.infra.db.models.tortoise import User
+from src.domain.entities.user import User
+from src.infra.db.tortoise.models import User
 from src.presentation.api.dependencies.services import get_user_service
 from src.settings import config
 
@@ -34,4 +34,4 @@ fastapi_users = FastAPIUsers[User, UUID](
 
 
 get_current_user = fastapi_users.current_user()
-CurrentUserDep = Annotated[UserEntity, Depends(get_current_user)]
+CurrentUserDep = Annotated[User, Depends(get_current_user)]

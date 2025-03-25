@@ -861,3 +861,973 @@ INFO 2025-03-15 20:44:07,917 sol_prices_collector Собираем цены с  
 INFO 2025-03-15 20:44:08,369 sol_prices_collector Собираем цены с  2025-03-15 20:40:00+00:00 до 2025-03-15 20:42:56.945188+00:00...
 INFO 2025-03-15 20:44:17,901 sol_prices_collector Цены собраны!
 INFO 2025-03-15 20:44:17,936 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:17:50,681 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:17:50,681 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:17:50,795 sol_prices_collector Собираем цены с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:17:50.795889+00:00...
+INFO 2025-03-24 15:17:50,801 sol_prices_collector Собираем цены с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:17:50.801899+00:00...
+DEBUG 2025-03-24 15:17:51,219 sol_prices_collector Собираем за период 2024-12-01 00:00:00+00:00 - 2025-03-24 15:17:50.795889+00:00
+DEBUG 2025-03-24 15:17:51,224 sol_prices_collector Собираем за период 2024-12-01 00:00:00+00:00 - 2025-03-24 15:17:50.801899+00:00
+ERROR 2025-03-24 15:17:51,381 task_logger Ошибка при выполнении задачи collect_sol_prices_task: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-465c-7aca-b945-31e82a84a262, 2025-03-24 15:17:51.324676+00, 2025-03-24 15:17:51.324676+00, f, null, null, null, null, null, null).
+[SQL: INSERT INTO token (id, created_at, updated_at, is_metadata_parsed) VALUES ($1::UUID, $2::TIMESTAMP WITH TIME ZONE, $3::TIMESTAMP WITH TIME ZONE, $4::BOOLEAN) ON CONFLICT DO NOTHING]
+[parameters: [('0195c8bb-465c-7aca-b945-31e82a84a262', datetime.datetime(2025, 3, 24, 15, 17, 51, 324676), datetime.datetime(2025, 3, 24, 15, 17, 51, 324676), False), ('0195c8bb-465d-79c1-9535-b4d19e0c7354', datetime.datetime(2025, 3, 24, 15, 17, 51, 324736), datetime.datetime(2025, 3, 24, 15, 17, 51, 324736), False), ('0195c8bb-465e-796d-8570-9a68e43317ac', datetime.datetime(2025, 3, 24, 15, 17, 51, 324749), datetime.datetime(2025, 3, 24, 15, 17, 51, 324749), False), ('0195c8bb-465f-764b-82fb-a82585356348', datetime.datetime(2025, 3, 24, 15, 17, 51, 324759), datetime.datetime(2025, 3, 24, 15, 17, 51, 324759), False), ('0195c8bb-4660-7f70-a282-892ec8f426d8', datetime.datetime(2025, 3, 24, 15, 17, 51, 324769), datetime.datetime(2025, 3, 24, 15, 17, 51, 324769), False), ('0195c8bb-4661-737f-af61-09e0f176ea83', datetime.datetime(2025, 3, 24, 15, 17, 51, 324781), datetime.datetime(2025, 3, 24, 15, 17, 51, 324781), False), ('0195c8bb-4662-7ac2-802a-e6750f3bd4ca', datetime.datetime(2025, 3, 24, 15, 17, 51, 324788), datetime.datetime(2025, 3, 24, 15, 17, 51, 324788), False), ('0195c8bb-4663-7eba-a641-e3a7a574aca0', datetime.datetime(2025, 3, 24, 15, 17, 51, 324796), datetime.datetime(2025, 3, 24, 15, 17, 51, 324796), False)  ... displaying 10 of 1000 total bound parameter sets ...  ('0195c8bb-4a42-7067-b6d7-3adbde3ce43b', datetime.datetime(2025, 3, 24, 15, 17, 51, 330534), datetime.datetime(2025, 3, 24, 15, 17, 51, 330534), False), ('0195c8bb-4a43-70e6-94d8-5fdfb8345e65', datetime.datetime(2025, 3, 24, 15, 17, 51, 330541), datetime.datetime(2025, 3, 24, 15, 17, 51, 330541), False)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj) | Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 561, in _executemany
+    return await self._connection.executemany(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 390, in executemany
+    return await self._executemany(command, args, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 1988, in _executemany
+    result, _ = await self._do_execute(
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 2024, in _do_execute
+    result = await executor(stmt, None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 268, in bind_execute_many
+asyncpg.exceptions.NotNullViolationError: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-465c-7aca-b945-31e82a84a262, 2025-03-24 15:17:51.324676+00, 2025-03-24 15:17:51.324676+00, f, null, null, null, null, null, null).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1936, in _exec_single_context
+    self.dialect.do_executemany(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 938, in do_executemany
+    cursor.executemany(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 573, in executemany
+    return self._adapt_connection.await_(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 565, in _executemany
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-465c-7aca-b945-31e82a84a262, 2025-03-24 15:17:51.324676+00, 2025-03-24 15:17:51.324676+00, f, null, null, null, null, null, null).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 47, in collect_prices_async
+    await load_prices_to_db(prices_to_load)
+  File "/app/src/application/etl/sol_prices_collector.py", line 113, in load_prices_to_db
+    await SQLAlchemyTokenRepository(session).bulk_create(
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 97, in bulk_create
+    await connection.execute(stmt, values)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 657, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1936, in _exec_single_context
+    self.dialect.do_executemany(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 938, in do_executemany
+    cursor.executemany(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 573, in executemany
+    return self._adapt_connection.await_(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 565, in _executemany
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-465c-7aca-b945-31e82a84a262, 2025-03-24 15:17:51.324676+00, 2025-03-24 15:17:51.324676+00, f, null, null, null, null, null, null).
+[SQL: INSERT INTO token (id, created_at, updated_at, is_metadata_parsed) VALUES ($1::UUID, $2::TIMESTAMP WITH TIME ZONE, $3::TIMESTAMP WITH TIME ZONE, $4::BOOLEAN) ON CONFLICT DO NOTHING]
+[parameters: [('0195c8bb-465c-7aca-b945-31e82a84a262', datetime.datetime(2025, 3, 24, 15, 17, 51, 324676), datetime.datetime(2025, 3, 24, 15, 17, 51, 324676), False), ('0195c8bb-465d-79c1-9535-b4d19e0c7354', datetime.datetime(2025, 3, 24, 15, 17, 51, 324736), datetime.datetime(2025, 3, 24, 15, 17, 51, 324736), False), ('0195c8bb-465e-796d-8570-9a68e43317ac', datetime.datetime(2025, 3, 24, 15, 17, 51, 324749), datetime.datetime(2025, 3, 24, 15, 17, 51, 324749), False), ('0195c8bb-465f-764b-82fb-a82585356348', datetime.datetime(2025, 3, 24, 15, 17, 51, 324759), datetime.datetime(2025, 3, 24, 15, 17, 51, 324759), False), ('0195c8bb-4660-7f70-a282-892ec8f426d8', datetime.datetime(2025, 3, 24, 15, 17, 51, 324769), datetime.datetime(2025, 3, 24, 15, 17, 51, 324769), False), ('0195c8bb-4661-737f-af61-09e0f176ea83', datetime.datetime(2025, 3, 24, 15, 17, 51, 324781), datetime.datetime(2025, 3, 24, 15, 17, 51, 324781), False), ('0195c8bb-4662-7ac2-802a-e6750f3bd4ca', datetime.datetime(2025, 3, 24, 15, 17, 51, 324788), datetime.datetime(2025, 3, 24, 15, 17, 51, 324788), False), ('0195c8bb-4663-7eba-a641-e3a7a574aca0', datetime.datetime(2025, 3, 24, 15, 17, 51, 324796), datetime.datetime(2025, 3, 24, 15, 17, 51, 324796), False)  ... displaying 10 of 1000 total bound parameter sets ...  ('0195c8bb-4a42-7067-b6d7-3adbde3ce43b', datetime.datetime(2025, 3, 24, 15, 17, 51, 330534), datetime.datetime(2025, 3, 24, 15, 17, 51, 330534), False), ('0195c8bb-4a43-70e6-94d8-5fdfb8345e65', datetime.datetime(2025, 3, 24, 15, 17, 51, 330541), datetime.datetime(2025, 3, 24, 15, 17, 51, 330541), False)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+ERROR 2025-03-24 15:17:51,381 task_logger Ошибка при выполнении задачи collect_sol_prices_task: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-4658-70c7-bc59-3a3dc1c44dd7, 2025-03-24 15:17:51.320004+00, 2025-03-24 15:17:51.320004+00, f, null, null, null, null, null, null).
+[SQL: INSERT INTO token (id, created_at, updated_at, is_metadata_parsed) VALUES ($1::UUID, $2::TIMESTAMP WITH TIME ZONE, $3::TIMESTAMP WITH TIME ZONE, $4::BOOLEAN) ON CONFLICT DO NOTHING]
+[parameters: [('0195c8bb-4658-70c7-bc59-3a3dc1c44dd7', datetime.datetime(2025, 3, 24, 15, 17, 51, 320004), datetime.datetime(2025, 3, 24, 15, 17, 51, 320004), False), ('0195c8bb-4659-7f50-9866-e371d13f0f7e', datetime.datetime(2025, 3, 24, 15, 17, 51, 320113), datetime.datetime(2025, 3, 24, 15, 17, 51, 320113), False), ('0195c8bb-465a-7f4a-9374-ba0728088c22', datetime.datetime(2025, 3, 24, 15, 17, 51, 320124), datetime.datetime(2025, 3, 24, 15, 17, 51, 320124), False), ('0195c8bb-465b-7ec4-8367-79a4e1566cbf', datetime.datetime(2025, 3, 24, 15, 17, 51, 320131), datetime.datetime(2025, 3, 24, 15, 17, 51, 320131), False), ('0195c8bb-465c-7703-a6eb-80490c90efed', datetime.datetime(2025, 3, 24, 15, 17, 51, 320138), datetime.datetime(2025, 3, 24, 15, 17, 51, 320138), False), ('0195c8bb-465d-7410-8f52-ad688eac1962', datetime.datetime(2025, 3, 24, 15, 17, 51, 320143), datetime.datetime(2025, 3, 24, 15, 17, 51, 320143), False), ('0195c8bb-465e-7b2b-9cac-126244ab98ba', datetime.datetime(2025, 3, 24, 15, 17, 51, 320149), datetime.datetime(2025, 3, 24, 15, 17, 51, 320149), False), ('0195c8bb-465f-787a-aa7b-68e41807db16', datetime.datetime(2025, 3, 24, 15, 17, 51, 320156), datetime.datetime(2025, 3, 24, 15, 17, 51, 320156), False)  ... displaying 10 of 1000 total bound parameter sets ...  ('0195c8bb-4a3e-7c38-be29-d9251f101037', datetime.datetime(2025, 3, 24, 15, 17, 51, 326599), datetime.datetime(2025, 3, 24, 15, 17, 51, 326599), False), ('0195c8bb-4a3f-70f7-82b3-91e71d17a017', datetime.datetime(2025, 3, 24, 15, 17, 51, 326604), datetime.datetime(2025, 3, 24, 15, 17, 51, 326604), False)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj) | Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 561, in _executemany
+    return await self._connection.executemany(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 390, in executemany
+    return await self._executemany(command, args, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 1988, in _executemany
+    result, _ = await self._do_execute(
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 2024, in _do_execute
+    result = await executor(stmt, None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 268, in bind_execute_many
+asyncpg.exceptions.NotNullViolationError: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-4658-70c7-bc59-3a3dc1c44dd7, 2025-03-24 15:17:51.320004+00, 2025-03-24 15:17:51.320004+00, f, null, null, null, null, null, null).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1936, in _exec_single_context
+    self.dialect.do_executemany(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 938, in do_executemany
+    cursor.executemany(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 573, in executemany
+    return self._adapt_connection.await_(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 565, in _executemany
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-4658-70c7-bc59-3a3dc1c44dd7, 2025-03-24 15:17:51.320004+00, 2025-03-24 15:17:51.320004+00, f, null, null, null, null, null, null).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 47, in collect_prices_async
+    await load_prices_to_db(prices_to_load)
+  File "/app/src/application/etl/sol_prices_collector.py", line 113, in load_prices_to_db
+    await SQLAlchemyTokenRepository(session).bulk_create(
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 97, in bulk_create
+    await connection.execute(stmt, values)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 657, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1936, in _exec_single_context
+    self.dialect.do_executemany(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 938, in do_executemany
+    cursor.executemany(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 573, in executemany
+    return self._adapt_connection.await_(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 565, in _executemany
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "address" of relation "token" violates not-null constraint
+DETAIL:  Failing row contains (0195c8bb-4658-70c7-bc59-3a3dc1c44dd7, 2025-03-24 15:17:51.320004+00, 2025-03-24 15:17:51.320004+00, f, null, null, null, null, null, null).
+[SQL: INSERT INTO token (id, created_at, updated_at, is_metadata_parsed) VALUES ($1::UUID, $2::TIMESTAMP WITH TIME ZONE, $3::TIMESTAMP WITH TIME ZONE, $4::BOOLEAN) ON CONFLICT DO NOTHING]
+[parameters: [('0195c8bb-4658-70c7-bc59-3a3dc1c44dd7', datetime.datetime(2025, 3, 24, 15, 17, 51, 320004), datetime.datetime(2025, 3, 24, 15, 17, 51, 320004), False), ('0195c8bb-4659-7f50-9866-e371d13f0f7e', datetime.datetime(2025, 3, 24, 15, 17, 51, 320113), datetime.datetime(2025, 3, 24, 15, 17, 51, 320113), False), ('0195c8bb-465a-7f4a-9374-ba0728088c22', datetime.datetime(2025, 3, 24, 15, 17, 51, 320124), datetime.datetime(2025, 3, 24, 15, 17, 51, 320124), False), ('0195c8bb-465b-7ec4-8367-79a4e1566cbf', datetime.datetime(2025, 3, 24, 15, 17, 51, 320131), datetime.datetime(2025, 3, 24, 15, 17, 51, 320131), False), ('0195c8bb-465c-7703-a6eb-80490c90efed', datetime.datetime(2025, 3, 24, 15, 17, 51, 320138), datetime.datetime(2025, 3, 24, 15, 17, 51, 320138), False), ('0195c8bb-465d-7410-8f52-ad688eac1962', datetime.datetime(2025, 3, 24, 15, 17, 51, 320143), datetime.datetime(2025, 3, 24, 15, 17, 51, 320143), False), ('0195c8bb-465e-7b2b-9cac-126244ab98ba', datetime.datetime(2025, 3, 24, 15, 17, 51, 320149), datetime.datetime(2025, 3, 24, 15, 17, 51, 320149), False), ('0195c8bb-465f-787a-aa7b-68e41807db16', datetime.datetime(2025, 3, 24, 15, 17, 51, 320156), datetime.datetime(2025, 3, 24, 15, 17, 51, 320156), False)  ... displaying 10 of 1000 total bound parameter sets ...  ('0195c8bb-4a3e-7c38-be29-d9251f101037', datetime.datetime(2025, 3, 24, 15, 17, 51, 326599), datetime.datetime(2025, 3, 24, 15, 17, 51, 326599), False), ('0195c8bb-4a3f-70f7-82b3-91e71d17a017', datetime.datetime(2025, 3, 24, 15, 17, 51, 326604), datetime.datetime(2025, 3, 24, 15, 17, 51, 326604), False)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+INFO 2025-03-24 15:20:19,525 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:20:19,592 sol_prices_collector Собираем цены с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:20:19.592450+00:00...
+DEBUG 2025-03-24 15:20:20,027 sol_prices_collector Собираем за период 2024-12-01 00:00:00+00:00 - 2025-03-24 15:20:19.592450+00:00
+INFO 2025-03-24 15:20:20,187 sol_prices_collector Цены успешно собраны за период с {current_time} до {next_time}!
+INFO 2025-03-24 15:20:20,194 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:22:15,884 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:22:15,950 sol_prices_collector Собираем цены с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:22:15.950959+00:00...
+DEBUG 2025-03-24 15:22:16,427 sol_prices_collector Собираем за период 2024-12-01 00:00:00+00:00 - 2025-03-24 15:22:15.950959+00:00
+INFO 2025-03-24 15:22:16,583 sol_prices_collector Цены успешно собраны за период с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:22:15.950959+00:00!
+INFO 2025-03-24 15:22:16,590 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:23:16,585 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+ERROR 2025-03-24 15:23:16,607 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 99, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+INFO 2025-03-24 15:23:58,823 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+ERROR 2025-03-24 15:23:58,890 sol_prices_collector None
+ERROR 2025-03-24 15:23:58,890 sol_prices_collector None
+ERROR 2025-03-24 15:23:58,901 task_logger Ошибка при выполнении задачи collect_sol_prices_task: 'NoneType' object has no attribute 'minute' | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 22, in collect_prices_async
+    start_time, end_time = await get_start_end_time(token)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 56, in get_start_end_time
+    logger.error(latest_token_price.minute)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'minute'
+
+INFO 2025-03-24 15:25:43,269 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:25:43,334 sol_prices_collector Собираем цены с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:25:43.334507+00:00...
+DEBUG 2025-03-24 15:25:43,741 sol_prices_collector Собираем за период 2024-12-01 00:00:00+00:00 - 2025-03-24 15:25:43.334507+00:00
+INFO 2025-03-24 15:25:43,876 sol_prices_collector Цены успешно собраны за период с 2024-12-01 00:00:00+00:00 до 2025-03-24 15:25:43.334507+00:00!
+INFO 2025-03-24 15:25:43,881 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:26:30,533 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:26:30,597 sol_prices_collector Собираем цены с 2025-03-15 20:42:00+00:00 до 2025-03-24 15:26:30.597949+00:00...
+DEBUG 2025-03-24 15:26:31,494 sol_prices_collector Собираем за период 2025-03-15 20:42:00+00:00 - 2025-03-24 15:26:30.597949+00:00
+INFO 2025-03-24 15:26:31,695 sol_prices_collector Цены успешно собраны за период с 2025-03-15 20:42:00+00:00 до 2025-03-24 15:26:30.597949+00:00!
+INFO 2025-03-24 15:26:31,706 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:28:18,184 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:28:18,250 sol_prices_collector Собираем цены с 2025-03-16 13:21:00+00:00 до 2025-03-24 15:28:18.250268+00:00...
+DEBUG 2025-03-24 15:28:18,696 sol_prices_collector Собираем за период 2025-03-16 13:21:00+00:00 - 2025-03-24 15:28:18.250268+00:00
+INFO 2025-03-24 15:28:18,852 sol_prices_collector Цены успешно собраны за период с 2025-03-16 13:21:00+00:00 до 2025-03-24 15:28:18.250268+00:00!
+INFO 2025-03-24 15:28:18,858 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:29:18,853 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+ERROR 2025-03-24 15:29:18,878 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 101, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+INFO 2025-03-24 15:29:37,761 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:29:37,837 sol_prices_collector Собираем цены с 2025-03-17 06:00:00+00:00 до 2025-03-24 15:29:37.837797+00:00...
+DEBUG 2025-03-24 15:29:38,722 sol_prices_collector Собираем за период 2025-03-17 06:00:00+00:00 - 2025-03-24 15:29:37.837797+00:00
+ERROR 2025-03-24 15:29:38,827 sol_prices_collector 1000
+ERROR 2025-03-24 15:29:38,827 sol_prices_collector 1000
+ERROR 2025-03-24 15:29:38,827 sol_prices_collector 1000
+ERROR 2025-03-24 15:29:38,827 sol_prices_collector 1000
+INFO 2025-03-24 15:29:38,877 sol_prices_collector Цены успешно собраны за период с 2025-03-17 06:00:00+00:00 до 2025-03-24 15:29:37.837797+00:00!
+INFO 2025-03-24 15:29:38,882 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 15:30:38,878 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+ERROR 2025-03-24 15:30:38,903 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 101, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+INFO 2025-03-24 15:30:51,255 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 15:30:51,319 sol_prices_collector Собираем цены с 2025-03-17 22:39:00+00:00 до 2025-03-18 15:19:00+00:00...
+DEBUG 2025-03-24 15:30:51,722 sol_prices_collector Собираем за период 2025-03-17 22:39:00+00:00 - 2025-03-18 15:19:00+00:00
+INFO 2025-03-24 15:30:51,823 sol_prices_collector Собираем цены с 2025-03-18 15:19:00+00:00 до 2025-03-19 07:59:00+00:00...
+DEBUG 2025-03-24 15:30:52,167 sol_prices_collector Собираем за период 2025-03-18 15:19:00+00:00 - 2025-03-19 07:59:00+00:00
+INFO 2025-03-24 15:30:52,268 sol_prices_collector Собираем цены с 2025-03-19 07:59:00+00:00 до 2025-03-20 00:39:00+00:00...
+DEBUG 2025-03-24 15:30:52,618 sol_prices_collector Собираем за период 2025-03-19 07:59:00+00:00 - 2025-03-20 00:39:00+00:00
+INFO 2025-03-24 15:30:52,719 sol_prices_collector Собираем цены с 2025-03-20 00:39:00+00:00 до 2025-03-20 17:19:00+00:00...
+DEBUG 2025-03-24 15:30:53,070 sol_prices_collector Собираем за период 2025-03-20 00:39:00+00:00 - 2025-03-20 17:19:00+00:00
+INFO 2025-03-24 15:30:53,170 sol_prices_collector Собираем цены с 2025-03-20 17:19:00+00:00 до 2025-03-21 09:59:00+00:00...
+DEBUG 2025-03-24 15:30:53,517 sol_prices_collector Собираем за период 2025-03-20 17:19:00+00:00 - 2025-03-21 09:59:00+00:00
+INFO 2025-03-24 15:30:53,618 sol_prices_collector Собираем цены с 2025-03-21 09:59:00+00:00 до 2025-03-22 02:39:00+00:00...
+DEBUG 2025-03-24 15:30:54,026 sol_prices_collector Собираем за период 2025-03-21 09:59:00+00:00 - 2025-03-22 02:39:00+00:00
+INFO 2025-03-24 15:30:54,126 sol_prices_collector Собираем цены с 2025-03-22 02:39:00+00:00 до 2025-03-22 19:19:00+00:00...
+DEBUG 2025-03-24 15:30:54,471 sol_prices_collector Собираем за период 2025-03-22 02:39:00+00:00 - 2025-03-22 19:19:00+00:00
+INFO 2025-03-24 15:30:54,572 sol_prices_collector Собираем цены с 2025-03-22 19:19:00+00:00 до 2025-03-23 11:59:00+00:00...
+DEBUG 2025-03-24 15:30:54,918 sol_prices_collector Собираем за период 2025-03-22 19:19:00+00:00 - 2025-03-23 11:59:00+00:00
+INFO 2025-03-24 15:30:55,019 sol_prices_collector Собираем цены с 2025-03-23 11:59:00+00:00 до 2025-03-24 04:39:00+00:00...
+DEBUG 2025-03-24 15:30:55,367 sol_prices_collector Собираем за период 2025-03-23 11:59:00+00:00 - 2025-03-24 04:39:00+00:00
+INFO 2025-03-24 15:30:55,467 sol_prices_collector Собираем цены с 2025-03-24 04:39:00+00:00 до 2025-03-24 15:30:51.319842+00:00...
+DEBUG 2025-03-24 15:30:55,796 sol_prices_collector Собираем за период 2025-03-24 04:39:00+00:00 - 2025-03-24 15:30:51.319842+00:00
+ERROR 2025-03-24 15:30:55,937 sol_prices_collector 9652
+ERROR 2025-03-24 15:30:55,938 sol_prices_collector 9652
+ERROR 2025-03-24 15:30:55,938 sol_prices_collector 9652
+ERROR 2025-03-24 15:30:55,938 sol_prices_collector 9652
+INFO 2025-03-24 15:30:56,312 sol_prices_collector Цены успешно собраны за период с 2025-03-17 22:39:00+00:00 до 2025-03-24 15:30:51.319842+00:00!
+INFO 2025-03-24 15:30:56,320 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 23:57:27,202 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:57:27,203 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:57:27,203 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:57:27,205 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:57:27,290 sol_prices_collector Собираем цены с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.289973+00:00...
+INFO 2025-03-24 23:57:27,290 sol_prices_collector Собираем цены с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.290334+00:00...
+INFO 2025-03-24 23:57:27,294 sol_prices_collector Собираем цены с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.294323+00:00...
+INFO 2025-03-24 23:57:27,308 sol_prices_collector Собираем цены с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.308714+00:00...
+DEBUG 2025-03-24 23:57:28,621 sol_prices_collector Собираем за период 2025-03-24 15:30:00+00:00 - 2025-03-24 23:57:27.290334+00:00
+DEBUG 2025-03-24 23:57:28,622 sol_prices_collector Собираем за период 2025-03-24 15:30:00+00:00 - 2025-03-24 23:57:27.294323+00:00
+DEBUG 2025-03-24 23:57:28,623 sol_prices_collector Собираем за период 2025-03-24 15:30:00+00:00 - 2025-03-24 23:57:27.289973+00:00
+DEBUG 2025-03-24 23:57:28,625 sol_prices_collector Собираем за период 2025-03-24 15:30:00+00:00 - 2025-03-24 23:57:27.308714+00:00
+ERROR 2025-03-24 23:57:28,724 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,724 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,724 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,725 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,725 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,726 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,726 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,726 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,727 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,727 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,727 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,728 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,728 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,729 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,729 sol_prices_collector 508
+ERROR 2025-03-24 23:57:28,729 sol_prices_collector 508
+INFO 2025-03-24 23:57:28,760 sol_prices_collector Цены успешно собраны за период с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.290334+00:00!
+INFO 2025-03-24 23:57:28,766 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 23:57:28,772 sol_prices_collector Цены успешно собраны за период с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.289973+00:00!
+INFO 2025-03-24 23:57:28,772 sol_prices_collector Цены успешно собраны за период с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.308714+00:00!
+INFO 2025-03-24 23:57:28,775 sol_prices_collector Цены успешно собраны за период с 2025-03-24 15:30:00+00:00 до 2025-03-24 23:57:27.294323+00:00!
+INFO 2025-03-24 23:57:28,777 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 23:57:28,777 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 23:57:28,780 task_logger Задача collect_sol_prices_task успешно завершена!
+INFO 2025-03-24 23:58:28,760 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:58:28,771 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:58:28,772 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+INFO 2025-03-24 23:58:28,775 task_logger Запуск задачи collect_sol_prices_task с параметрами: args=(), kwargs={}
+ERROR 2025-03-24 23:58:28,808 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 101, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+ERROR 2025-03-24 23:58:28,808 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 101, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+ERROR 2025-03-24 23:58:28,808 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 101, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+ERROR 2025-03-24 23:58:28,808 task_logger Ошибка при выполнении задачи collect_sol_prices_task: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 24, in collect_sol_prices_task
+    asyncio.run(collect_prices_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 21, in collect_prices_async
+    token = await get_sol_token()
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/sol_prices_collector.py", line 101, in get_sol_token
+    return await SQLAlchemyTokenRepository(session).get_by_address(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/token.py", line 27, in get_by_address
+    result = await self._session.scalars(stmt)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 574, in scalars
+    result = await self.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-7' coro=<collect_prices_async() running at /app/src/application/etl/sol_prices_collector.py:21> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+

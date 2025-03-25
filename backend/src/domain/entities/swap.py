@@ -13,7 +13,7 @@ class SwapEventType(StrEnum):
 
 
 @dataclass(kw_only=True, slots=True)
-class SwapEntity(BaseEntity, TimestampMixinEntity):
+class Swap(BaseEntity, TimestampMixinEntity):
     id: UUID | None = None
     wallet_id: UUID
     token_id: UUID

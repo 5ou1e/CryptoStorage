@@ -1,76 +1,89 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+from uuid import UUID
 
-from src.application.interfaces.repositories.generic_repository import BaseGenericRepository
+from src.application.interfaces.repositories.generic_repository import GenericRepositoryInterface
 from src.domain.entities.wallet import (
-    WalletEntity,
-    WalletStatistic7dEntity,
-    WalletStatistic30dEntity,
-    WalletStatisticAllEntity,
-    WalletStatisticBuyPriceGt15k7dEntity,
-    WalletStatisticBuyPriceGt15k30dEntity,
-    WalletStatisticBuyPriceGt15kAllEntity,
+    Wallet,
+    WalletStatistic7d,
+    WalletStatistic30d,
+    WalletStatisticAll,
+    WalletStatisticBuyPriceGt15k7d,
+    WalletStatisticBuyPriceGt15k30d,
+    WalletStatisticBuyPriceGt15kAll,
+    WalletToken,
 )
 
 
-class BaseWalletStatistic7dRepository(
-    BaseGenericRepository[WalletStatistic7dEntity],
+class WalletStatistic7dRepositoryInterface(
+    GenericRepositoryInterface[WalletStatistic7d],
     ABC,
 ):
     pass
 
 
-class BaseWalletStatistic30dRepository(
-    BaseGenericRepository[WalletStatistic30dEntity],
+class WalletStatistic30dRepositoryInterface(
+    GenericRepositoryInterface[WalletStatistic30d],
     ABC,
 ):
     pass
 
 
-class BaseWalletStatisticAllRepository(
-    BaseGenericRepository[WalletStatisticAllEntity],
+class WalletStatisticAllRepositoryInterface(
+    GenericRepositoryInterface[WalletStatisticAll],
     ABC,
 ):
     pass
 
 
-class BaseWalletStatisticBuyPriceGt15k7dRepository(
-    BaseGenericRepository[WalletStatisticBuyPriceGt15k7dEntity],
+class WalletStatisticBuyPriceGt15k7dRepositoryInterface(
+    GenericRepositoryInterface[WalletStatisticBuyPriceGt15k7d],
     ABC,
 ):
     pass
 
 
-class BaseWalletStatisticBuyPriceGt15k30dRepository(
-    BaseGenericRepository[WalletStatisticBuyPriceGt15k30dEntity],
+class WalletStatisticBuyPriceGt15k30dRepositoryInterface(
+    GenericRepositoryInterface[WalletStatisticBuyPriceGt15k30d],
     ABC,
 ):
     pass
 
 
-class BaseWalletStatisticBuyPriceGt15kAllRepository(
-    BaseGenericRepository[WalletStatisticBuyPriceGt15kAllEntity],
+class WalletStatisticBuyPriceGt15kAllRepositoryInterface(
+    GenericRepositoryInterface[WalletStatisticBuyPriceGt15kAll],
     ABC,
 ):
     pass
 
 
-class BaseWalletTokenRepository(BaseGenericRepository[WalletEntity], ABC):
-    pass
-
-
-class BaseWalletRepository(BaseGenericRepository[WalletEntity], ABC):
+class WalletTokenRepositoryInterface(GenericRepositoryInterface[WalletToken], ABC):
 
     @abstractmethod
-    async def get_by_address(self, address: str) -> WalletEntity | None:
+    async def get_wallet_tokens_by_wallet_for_buygt15k_statistic(self, wallet_id: UUID):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_by_address_with_details_and_stats(self, address: str) -> WalletEntity | None:
+    async def bulk_update_or_create_wallet_token_with_merge(
+        self,
+        objects: list[WalletToken],
+        batch_size: Optional[int] = None,
+    ) -> list[WalletToken]:
+        raise NotImplementedError
+
+
+class WalletRepositoryInterface(GenericRepositoryInterface[Wallet], ABC):
+
+    @abstractmethod
+    async def get_by_address(self, address: str) -> Wallet | None:
         raise NotImplementedError
 
     @abstractmethod
-    async def get_wallets_for_update_stats(self, count: int = 1) -> list[WalletEntity]:
+    async def get_wallets_for_update_stats(self, count: int = 1) -> list[Wallet]:
+        raise NotImplementedError
+
+    @abstractmethod
+    async def get_wallets_for_buygt15k_statistic(self) -> list[Wallet]:
         raise NotImplementedError
 
     @abstractmethod
@@ -80,6 +93,6 @@ class BaseWalletRepository(BaseGenericRepository[WalletEntity], ABC):
         matching_tokens_percent: int = 100,  # Мин. процент совпадающих токенов
         filter_by: Optional[dict] = None,
         prefetch: Optional[list] = None,
-    ) -> list[WalletEntity]:
+    ) -> list[Wallet]:
         # Получает кошельки, которые взаимодействовали со всеми переданными адресами токенов
         raise NotImplementedError

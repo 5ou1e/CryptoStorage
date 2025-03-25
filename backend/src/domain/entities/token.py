@@ -7,7 +7,7 @@ from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 
 @dataclass(kw_only=True, slots=True)
-class TokenEntity(BaseEntity, TimestampMixinEntity):
+class Token(BaseEntity, TimestampMixinEntity):
     id: UUID = None
     address: str = None
     name: str | None = None
@@ -19,7 +19,7 @@ class TokenEntity(BaseEntity, TimestampMixinEntity):
 
 
 @dataclass
-class TokenPriceEntity(BaseEntity, TimestampMixinEntity):
+class TokenPrice(BaseEntity, TimestampMixinEntity):
     id: UUID
     token_id: UUID
     price_usd: Decimal | None

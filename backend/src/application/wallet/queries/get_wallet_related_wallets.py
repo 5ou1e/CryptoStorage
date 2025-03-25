@@ -1,13 +1,8 @@
 import asyncio
 from collections import Counter, defaultdict
 
-from src.application.common.utils import (
-    classify_block_relation,
-    classify_related_wallet_status,
-    classify_token_trade_status,
-)
-from src.application.interfaces.repositories.swap import BaseSwapRepository
-from src.application.interfaces.repositories.wallet import BaseWalletRepository, BaseWalletTokenRepository
+from src.application.interfaces.repositories.swap import SwapRepositoryInterface
+from src.application.interfaces.repositories.wallet import WalletRepositoryInterface, WalletTokenRepositoryInterface
 from src.application.wallet.dto import CopiedByWalletDTO, CopyingWalletDTO, SimilarWalletDTO, WalletRelatedWalletsDTO
 from src.application.wallet.dto.wallet_related_wallet import UndeterminedRelatedWalletDTO
 from src.application.wallet.exceptions import WalletNotFoundException
@@ -17,9 +12,9 @@ from src.domain.entities.swap import SwapEventType
 class GetWalletRelatedWalletsHandler:
     def __init__(
         self,
-        wallet_repository: BaseWalletRepository,
-        wallet_token_repository: BaseWalletTokenRepository,
-        swap_repository: BaseSwapRepository,
+        wallet_repository: WalletRepositoryInterface,
+        wallet_token_repository: WalletTokenRepositoryInterface,
+        swap_repository: SwapRepositoryInterface,
     ) -> None:
         self._wallet_repository = wallet_repository
         self._wallet_token_repository = wallet_token_repository
@@ -58,14 +53,14 @@ class GetWalletRelatedWalletsHandler:
                 neighbor_buy_activities = await self._swap_repository.get_neighbors_by_token(
                     token_id=token_id,
                     block_id=first_buy_block_id,
-                    event_type="buy",
+                    event_type=SwapEventType.BUY,
                     exclude_wallets=[wallet_id],
                 )
                 # print(neighbor_buy_activities)
                 neighbor_sell_activities = await self._swap_repository.get_neighbors_by_token(
                     token_id=token_id,
                     block_id=first_sell_block_id,
-                    event_type="sell",
+                    event_type=SwapEventType.SELL,
                     exclude_wallets=[wallet_id],
                 )
                 # print(neighbor_sell_activities)
@@ -78,8 +73,6 @@ class GetWalletRelatedWalletsHandler:
                     }
                 )
                 for activity in neighbor_buy_activities:
-                    if not hasattr(activity, "block_id"):
-                        print(activity.__dict__)
                     current_buy = wallets_map[activity.wallet_id]["buy"]
                     if current_buy is None or activity.block_id < current_buy.block_id:
                         wallets_map[activity.wallet_id]["buy"] = activity
@@ -140,7 +133,7 @@ class GetWalletRelatedWalletsHandler:
                 "id__in": wallet_ids,
                 "is_bot": False,
             },
-            prefetch=["details", "stats_all", "stats_30d"],
+            prefetch=["stats_all", "stats_30d"],
         )
 
         response_map = {
@@ -214,30 +207,84 @@ class GetWalletRelatedWalletsHandler:
                         color=color,
                     )
                 )
-        # Сортируем по дате последнего трейда пересекающихся токенов
-        copying = sorted(
-            result["copying"],
-            key=lambda x: x.last_intersected_tokens_trade_timestamp,
-            reverse=True,
-        )
-        copied_by = sorted(
-            result["copied_by"],
-            key=lambda x: x.last_intersected_tokens_trade_timestamp,
-            reverse=True,
-        )
-        similar = sorted(
-            result["similar"],
-            key=lambda x: x.last_intersected_tokens_trade_timestamp,
-            reverse=True,
-        )
-        undetermined = sorted(
-            result["undetermined"],
-            key=lambda x: x.last_intersected_tokens_trade_timestamp,
-            reverse=True,
-        )
+
+        copying = sort_by_last_intersected_trade_timestamp(result["copying"])
+        copied_by = sort_by_last_intersected_trade_timestamp(result["copied_by"])
+        similar = sort_by_last_intersected_trade_timestamp(result["similar"])
+        undetermined = sort_by_last_intersected_trade_timestamp(result["undetermined"])
+
         return WalletRelatedWalletsDTO(
             copying_wallets=copying,
             copied_by_wallets=copied_by,
             similar_wallets=similar,
             undetermined_wallets=undetermined,
         )
+
+
+def sort_by_last_intersected_trade_timestamp(data):
+    return sorted(data, key=lambda x: x.last_intersected_tokens_trade_timestamp, reverse=True)
+
+
+def classify_block_relation(event_block: int, reference_block: int) -> str:
+    if event_block < reference_block:
+        return "before"
+    elif event_block > reference_block:
+        return "after"
+    return "same"
+
+
+def classify_token_trade_status(buy_status: str, sell_status: str):
+    if (buy_status, sell_status) in [
+        ("after", "after"),
+        ("same", "after"),
+        ("after", "same"),
+    ]:
+        status = "after"
+    elif (buy_status, sell_status) in [
+        ("same", "before"),
+        ("before", "before"),
+        ("before", "same"),
+    ]:
+        status = "before"
+    elif (buy_status, sell_status) == (
+        "same",
+        "same",
+    ):
+        status = "same"
+    else:
+        # ("before", "after"),
+        # ("after", "before"),
+        status = "mixed"
+    return status
+
+
+def classify_related_wallet_status(
+    statuses: set,
+    intersected_tokens_count: int,
+    total_token_count: int,
+    before_count: int,
+    after_count: int,
+):
+    color = None
+    if statuses == {"same"}:
+        status = "undetermined"
+    elif statuses <= {"after", "same"}:
+        status = "copied_by"
+    elif statuses <= {"before", "same"}:
+        status = "copying"
+    else:
+        status = "undetermined"  # если есть mixed
+
+    if status == "undetermined":
+        if total_token_count and intersected_tokens_count / total_token_count >= 0.4:
+            return "similar", color
+        if intersected_tokens_count >= 10:
+            if before_count / intersected_tokens_count >= 0.75:
+                return "copying", color
+            if after_count / intersected_tokens_count >= 0.75:
+                return "copied_by", color
+    if status in ["copied_by", "copying"]:
+        if total_token_count and intersected_tokens_count / total_token_count >= 0.4:
+            status = "similar"
+            color = "rgba(248, 113, 113, 0.1)"
+    return status, color

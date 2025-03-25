@@ -1,107 +1,59 @@
 import asyncio
-import time
-from concurrent.futures import ProcessPoolExecutor
+import logging
 from datetime import datetime
-from decimal import Decimal
-from functools import partial
-from typing import Optional, TypedDict
-from uuid import UUID
 
-import uuid6
+from sqlalchemy import case, delete, func, select, text
+from sqlalchemy.dialects.postgresql import insert
 
-from src.domain.entities.wallet import WalletStatisticAllEntity
+from src.infra.db.sqlalchemy.models import Swap
+from src.infra.db.sqlalchemy.setup import AsyncSessionLocal, engine, get_db_session
 
+# Создаем основной логгер
+logger = logging.getLogger(__name__)
 
-def load_data_to_db(objects):
-    print("ХОБА")
-    return objects
+# Устанавливаем общий уровень логирования
+logger.setLevel(logging.DEBUG)
 
+# Формат для логов
+log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-class WalletStatisticAllEntityDict(TypedDict):
-    wallet_id: Optional[UUID]
-    winrate: Optional[Decimal]
-    total_token_buy_amount_usd: Optional[Decimal]
-    total_token_sell_amount_usd: Optional[Decimal]
-    total_profit_usd: Optional[Decimal]
-    total_profit_multiplier: Optional[float]
-    total_token: Optional[int]
-    total_token_buys: Optional[int]
-    total_token_sales: Optional[int]
-    token_with_buy_and_sell: Optional[int]
-    token_with_buy: Optional[int]
-    token_sell_without_buy: Optional[int]
-    token_buy_without_sell: Optional[int]
-    token_with_sell_amount_gt_buy_amount: Optional[int]
-    token_avg_buy_amount: Optional[Decimal]
-    token_median_buy_amount: Optional[Decimal]
-    token_first_buy_avg_price_usd: Optional[Decimal]
-    token_first_buy_median_price_usd: Optional[Decimal]
-    token_avg_profit_usd: Optional[Decimal]
-    token_buy_sell_duration_avg: Optional[int]
-    token_buy_sell_duration_median: Optional[int]
-    pnl_lt_minus_dot5_num: Optional[int]
-    pnl_minus_dot5_0x_num: Optional[int]
-    pnl_lt_2x_num: Optional[int]
-    pnl_2x_5x_num: Optional[int]
-    pnl_gt_5x_num: Optional[int]
-    pnl_lt_minus_dot5_percent: Optional[float]
-    pnl_minus_dot5_0x_percent: Optional[float]
-    pnl_lt_2x_percent: Optional[float]
-    pnl_2x_5x_percent: Optional[float]
-    pnl_gt_5x_percent: Optional[float]
-    total_swaps_from_arbitrage_swap_events: Optional[int]
-    total_swaps_from_txs_with_mt_3_swappers: Optional[int]
+# Форматтер для логов
+formatter = logging.Formatter(log_format, datefmt="%Y-%m-%d %H:%M:%S")
+
+# Создаем обработчик для записи в файл
+file_handler = logging.FileHandler("swaps_parser.log", encoding="utf-8")
+file_handler.setLevel(logging.INFO)  # Уровень логирования для файла
+file_handler.setFormatter(formatter)
+
+# Создаем обработчик для вывода в консоль
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)  # Уровень логирования для консоли
+console_handler.setFormatter(formatter)
+
+# Добавляем обработчики в логгер
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
 
 
-async def load_process():
-    created = datetime.now()
-    objects_to_load = [
-        WalletStatisticAllEntity(
-            wallet_id=uuid6.uuid7,
-            created_at=created,
-            updated_at=created,
-            winrate=123,
-            total_token_buy_amount_usd=123,
-            total_token_sell_amount_usd=123,
-            total_profit_usd=123,
-            total_profit_multiplier=123,
-            total_token=123,
-            total_token_buys=123,
-            total_token_sales=123,
-            token_with_buy_and_sell=123,
-            token_with_buy=123,
-            token_sell_without_buy=123,
-            token_buy_without_sell=123,
-            token_with_sell_amount_gt_buy_amount=123,
-            token_avg_buy_amount=123,
-            token_median_buy_amount=123,
-            token_first_buy_avg_price_usd=123,
-            token_first_buy_median_price_usd=123,
-            token_avg_profit_usd=123,
-            token_buy_sell_duration_avg=123,
-            token_buy_sell_duration_median=123,
-            pnl_lt_minus_dot5_num=123,
-            pnl_minus_dot5_0x_num=123,
-            pnl_lt_2x_num=123,
-            pnl_2x_5x_num=123,
-            pnl_gt_5x_num=123,
-            pnl_lt_minus_dot5_percent=123,
-            pnl_minus_dot5_0x_percent=123,
-            pnl_lt_2x_percent=123,
-            pnl_2x_5x_percent=123,
-            pnl_gt_5x_percent=123,
-            total_swaps_from_arbitrage_swap_events=123,
-            total_swaps_from_txs_with_mt_3_swappers=123,
-        )
-        for i in range(1000000)
-    ]
-    start = datetime.now()
-    for obj in objects_to_load:
-        obj.to_dict()
-    end = datetime.now()
-    print(f"Время: {end - start}")
-    time.sleep(100)
+async def main():
+    BATCH_SIZE = 1  # размер одной пачки
+    count = 0
+    async with AsyncSessionLocal() as session:
+        while True:
+            result = await session.execute(
+                delete(Swap)
+                .where(Swap.token_id == "01959d63-0c2f-720a-b45b-d9472ee3045a")
+                .limit(BATCH_SIZE)  # Удаляем ограниченное количество записей
+            )
+
+            if result.rowcount == 0:
+                break  # Если больше нечего удалять, выходим
+
+            await session.commit()  # Фиксируем удаление
+            count += 1
+            logger.info(count)
+            break
+        print("Удаление завершено.")
 
 
-if __name__ == "__main__":
-    asyncio.run(load_process())
+asyncio.run(main())

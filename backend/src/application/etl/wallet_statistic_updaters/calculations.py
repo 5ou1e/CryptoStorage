@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytz
 
-from src.domain.entities.wallet import WalletEntity, WalletStatisticAllEntity
+from src.domain.entities.wallet import Wallet, WalletStatisticAll
 
 
 def calculate_wallet_stats(wallet):
@@ -16,8 +16,6 @@ def calculate_wallet_stats(wallet):
         elif period == 30:
             stats = wallet.stats_30d
         else:
-            # if not wallet.is_need_update_stats_all:
-            #     continue
             stats = wallet.stats_all
         token_stats = filter_period_tokens(all_tokens, period, current_datetime)
         recalculate_wallet_period_stats(stats, token_stats)
@@ -27,10 +25,10 @@ def calculate_wallet_stats(wallet):
 
 
 def determine_bot_status(
-    wallet: WalletEntity,
+    wallet: Wallet,
 ) -> bool:
     """Определяем статус арбитраж-бота"""
-    stats_all: WalletStatisticAllEntity | None = wallet.stats_all
+    stats_all: WalletStatisticAll | None = wallet.stats_all
     # Если у кошелька более 50% активностей помечены как арбитражные - помечаем его как арбитраж-бота
     if stats_all.total_buys_and_sales_count > 0:
         if stats_all.total_swaps_from_arbitrage_swap_events / stats_all.total_buys_and_sales_count >= 0.5:
@@ -51,10 +49,10 @@ def determine_bot_status(
 
 
 def determine_scammer_status(
-    wallet: WalletEntity,
+    wallet: Wallet,
 ) -> bool:
     """Определяем статус скамера"""
-    stats_all: WalletStatisticAllEntity | None = wallet.stats_all
+    stats_all: WalletStatisticAll | None = wallet.stats_all
     # Если у кошелька более 5 токенов и процент "с продажей без покупки" больше N - помечаем как скамера
     if stats_all.total_token >= 5 and stats_all.token_sell_without_buy / stats_all.total_token >= 0.21:
         return True

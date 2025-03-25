@@ -4,7 +4,7 @@ from uuid6 import uuid7
 
 class FlipsideConfig(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
-    swaps_parsed_untill_inserted_timestamp = models.DateTimeField(null=True, blank=True, verbose_name="INSERTED_TIMESTAMP до которого собраны транзакции")
+    swaps_parsed_until_block_timestamp = models.DateTimeField(null=True, blank=True, verbose_name="BLOCK_TIMESTAMP до которого собраны транзакции")
 
     class Meta:
         db_table = 'flipsidecrypto_config'

@@ -8,12 +8,12 @@ from fastapi_users import BaseUserManager, models
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
 
-from src.application.interfaces.repositories.user import BaseUserRepository
+from src.application.interfaces.repositories.user import UserRepositoryInterface
 from src.application.user.dto import UserCreateDTO, UserUpdateDTO
 from src.domain.entities.base_entity import BaseEntity
-from src.domain.entities.user import UserEntity
+from src.domain.entities.user import User
 
-from ..interfaces.uow import BaseUnitOfWork
+from ..interfaces.uow import UnitOfWorkInterface
 from .exceptions import (
     InvalidAccessTokenException,
     InvalidResetPasswordTokenException,
@@ -72,13 +72,13 @@ class UserService(IntegerIDMixin):
     verification_token_lifetime_seconds: int = 3600
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
 
-    user_repository: BaseUserRepository
+    user_repository: UserRepositoryInterface
     password_helper: PasswordHelperProtocol
 
     def __init__(
         self,
-        uow: BaseUnitOfWork,
-        user_repository: BaseUserRepository,
+        uow: UnitOfWorkInterface,
+        user_repository: UserRepositoryInterface,
         password_helper: Optional[PasswordHelperProtocol] = None,
     ):
         self._uow = uow
@@ -88,7 +88,7 @@ class UserService(IntegerIDMixin):
         else:
             self.password_helper = password_helper  # pragma: no cover
 
-    async def get(self, id_: ID) -> UserEntity:
+    async def get(self, id_: ID) -> User:
         """
         Get a user by id.
         """
@@ -97,7 +97,7 @@ class UserService(IntegerIDMixin):
             raise UserDoesNotExistsException()
         return user
 
-    async def get_by_email(self, user_email: str) -> UserEntity:
+    async def get_by_email(self, user_email: str) -> User:
         """
         Get a user by e-mail.
         """
@@ -106,7 +106,7 @@ class UserService(IntegerIDMixin):
             raise UserDoesNotExistsException()
         return user
 
-    async def get_by_oauth_account(self, oauth: str, account_id: str) -> UserEntity:
+    async def get_by_oauth_account(self, oauth: str, account_id: str) -> User:
         """
         Get a user by OAuth account.
         """
@@ -122,7 +122,7 @@ class UserService(IntegerIDMixin):
         user_create: UserCreateDTO,
         safe: bool = False,
         request: Optional[Request] = None,
-    ) -> UserEntity:
+    ) -> User:
         """
         Create a user in database.
         Triggers the on_after_register handler on success.
@@ -139,7 +139,7 @@ class UserService(IntegerIDMixin):
             #     if safe
             #     else user_create.create_update_dict_superuser()
             # )
-            user = UserEntity.create(
+            user = User.create(
                 username=user_create.username,
                 email=user_create.email,
                 hashed_password=self.password_helper.hash(user_create.password),
@@ -276,7 +276,7 @@ class UserService(IntegerIDMixin):
 
     async def request_verify(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -311,7 +311,7 @@ class UserService(IntegerIDMixin):
         self,
         token: str,
         request: Optional[Request] = None,
-    ) -> UserEntity:
+    ) -> User:
         """
         Validate a verification request.
 
@@ -365,7 +365,7 @@ class UserService(IntegerIDMixin):
 
     async def forgot_password(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -398,7 +398,7 @@ class UserService(IntegerIDMixin):
         token: str,
         password: str,
         request: Optional[Request] = None,
-    ) -> UserEntity:
+    ) -> User:
         """
         Reset the password of a user.
 
@@ -454,10 +454,10 @@ class UserService(IntegerIDMixin):
     async def update(
         self,
         user_update: UserUpdateDTO,
-        user: UserEntity,
+        user: User,
         safe: bool = False,
         request: Optional[Request] = None,
-    ) -> UserEntity:
+    ) -> User:
         """
         Update a user.
 
@@ -486,7 +486,7 @@ class UserService(IntegerIDMixin):
 
     async def delete(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -503,7 +503,7 @@ class UserService(IntegerIDMixin):
     async def validate_password(
         self,
         password: str,
-        user: Union[UserCreateDTO, UserEntity],
+        user: Union[UserCreateDTO, User],
     ) -> None:
         """
         Validate a password.
@@ -519,7 +519,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_register(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -535,7 +535,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_update(
         self,
-        user: UserEntity,
+        user: User,
         update_dict: dict[str, Any],
         request: Optional[Request] = None,
     ) -> None:
@@ -553,7 +553,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_request_verify(
         self,
-        user: UserEntity,
+        user: User,
         token: str,
         request: Optional[Request] = None,
     ) -> None:
@@ -571,7 +571,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_verify(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -587,7 +587,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_forgot_password(
         self,
-        user: UserEntity,
+        user: User,
         token: str,
         request: Optional[Request] = None,
     ) -> None:
@@ -605,7 +605,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_reset_password(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -621,7 +621,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_login(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
         response: Optional[Response] = None,
     ) -> None:
@@ -639,7 +639,7 @@ class UserService(IntegerIDMixin):
 
     async def on_before_delete(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -655,7 +655,7 @@ class UserService(IntegerIDMixin):
 
     async def on_after_delete(
         self,
-        user: UserEntity,
+        user: User,
         request: Optional[Request] = None,
     ) -> None:
         """
@@ -672,7 +672,7 @@ class UserService(IntegerIDMixin):
     async def authenticate(
         self,
         credentials: OAuth2PasswordRequestForm,
-    ) -> Optional[UserEntity]:
+    ) -> Optional[User]:
         """
         Authenticate and return a user following an email and a password.
 
@@ -705,9 +705,9 @@ class UserService(IntegerIDMixin):
 
     async def _update(
         self,
-        user: UserEntity,
+        user: User,
         update_dict: dict[str, Any],
-    ) -> UserEntity:
+    ) -> User:
         validated_update_dict = {}
         for field, value in update_dict.items():
             if field == "email" and value != user.email:

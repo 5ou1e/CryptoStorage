@@ -4,9 +4,10 @@ from fastapi import APIRouter
 from fastapi_filter.contrib.sqlalchemy import Filter
 
 from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
-from src.infra.db.models.sqlalchemy import Wallet
-from src.infra.db.repositories.sqlalchemy import SQLAlchemyWalletRepository
-from src.infra.db.setup import get_db_session
+from src.infra.db.sqlalchemy.models import Wallet
+from src.infra.db.sqlalchemy.readers import SQLAlchemyWalletReader
+from src.infra.db.sqlalchemy.repositories import SQLAlchemyWalletRepository
+from src.infra.db.sqlalchemy.setup import get_db_session
 from src.presentation.api.schemas.response import ApiResponse
 
 router = APIRouter(prefix="/test", tags=["Test endpoints"])
@@ -24,8 +25,8 @@ class WalletFilter(Filter):
 @router.get("/test", response_model=Any)
 async def test() -> Any:
     session = get_db_session()
-    async with get_db_session() as session:
-        repo = SQLAlchemyWalletRepository(session)
-        service = GetWalletByAddressHandler(repo)
+    async for session in get_db_session():
+        reader = SQLAlchemyWalletReader(session)
+        service = GetWalletByAddressHandler(reader)
         result = await service(address="12312312")
         return ApiResponse(result=result)

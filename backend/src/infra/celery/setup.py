@@ -26,11 +26,11 @@ app.conf.update(
 @app.on_after_configure.connect
 def setup_tasks_on_startup(sender, **kwargs):
     """Настройка периодических задач Celery при старте воркера."""
-    collect_sol_prices_task.apply_async(task_name="Сбор цены Solana с Binance")
-
+    # collect_sol_prices_task.apply_async(task_name="Сбор цены Solana с Binance")
+    #
     # update_wallet_statistics_task.apply_async(task_name="Обновление статистик кошельков")
     #
-    # update_wallet_statistics_buy_price_gt_15k_task.apply_async(task_name="Обновление статистик кошельков Price gt 15k")
+    update_wallet_statistics_buy_price_gt_15k_task.apply_async(task_name="Обновление статистик кошельков Price gt 15k")
     #
     # parse_tokens_metadata_task.apply_async(task_name="Сбор метаданных токенов")
     #

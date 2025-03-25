@@ -5,26 +5,29 @@ from asyncio import Queue
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-from asyncpg.exceptions import DeadlockDetectedError
+from sqlalchemy import select
+from sqlalchemy.exc import DBAPIError
 from tortoise import Tortoise
 from tortoise.timezone import now
 
 from src.application.etl.wallet_statistic_updaters import calculations
 from src.domain.entities.wallet import (
-    WalletEntity,
-    WalletStatistic7dEntity,
-    WalletStatistic30dEntity,
-    WalletStatisticAllEntity,
-    WalletTokenEntity,
+    Wallet,
+    WalletStatistic7d,
+    WalletStatistic30d,
+    WalletStatisticAll,
+    WalletToken,
 )
-from src.infra.db.models.tortoise import WalletToken
-from src.infra.db.repositories.tortoise import (
-    TortoiseWalletRepository,
-    TortoiseWalletStatistic7dRepository,
-    TortoiseWalletStatistic30dRepository,
-    TortoiseWalletStatisticAllRepository,
+from src.infra.db.sqlalchemy.models import WalletToken as WalletTokenModel
+from src.infra.db.sqlalchemy.repositories import (
+    SQLAlchemyWalletRepository,
+    SQLAlchemyWalletStatistic7dRepository,
+    SQLAlchemyWalletStatistic30dRepository,
+    SQLAlchemyWalletStatisticAllRepository,
+    SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.setup_tortoise import init_db_async
+from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.tortoise.setup import init_db_async
 
 logger = logging.getLogger("tasks.update_wallet_statistics")
 
@@ -42,7 +45,8 @@ async def receive_wallets_from_db(
     """Загрузка данных из БД и помещение в очередь"""
     logger.info(f"Начинаем получение кошельков из БД")
     t1 = datetime.now()
-    wallets: list[WalletEntity] = await TortoiseWalletRepository().get_wallets_for_update_stats(count=count)
+    async with AsyncSessionLocal() as session:
+        wallets: list[Wallet] = await SQLAlchemyWalletRepository(session).get_wallets_for_update_stats(count=count)
     t2 = datetime.now()
     logger.info(f"Получили {len(wallets)} кошельков из БД | Время: {t2 - t1}")
     for wallet in wallets:
@@ -72,7 +76,7 @@ async def fetch_wallets_related_data(
     batch = []
     tasks = []  # Список активных задач обработки батчей
     while True:
-        wallet: WalletEntity | None = await received_wallets_queue.get()
+        wallet: Wallet | None = await received_wallets_queue.get()
         if wallet is not None:
             batch.append(wallet)
         # Если набрали батч нужного размера или пришёл сигнал завершения (wallet is None)
@@ -104,32 +108,29 @@ async def fetch_wallets_related_data(
 
 
 async def _fetch_related_data(
-    wallets: list[WalletEntity],
+    wallets: list[Wallet],
     fetched_wallets_queue: Queue,
 ):
-    # Загружаем связанные токены для кошельков
-    # TODO: использовать метод репозитория
-    # wallet_tokens = await WalletTokenRepository().get(
-    #     filter_by={
-    #         "wallet_id__in": [wallet.id for wallet in wallets]
-    #     }
-    # )
+    # Загружаем токены для кошельков
     start = datetime.now()
-    wallet_tokens = await WalletToken.filter(wallet_id__in=[wallet.id for wallet in wallets]).all().values()
+    async with AsyncSessionLocal() as session:
+        wallet_tokens = await SQLAlchemyWalletTokenRepository(session).get_wallet_tokens_by_wallets_list(
+            [wallet.id for wallet in wallets]
+        )
     end = datetime.now()
     wt_count = len(wallet_tokens)
     logger.debug(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
     start = datetime.now()
 
-    wallet_tokens_dict = defaultdict(list)
+    wallet_tokens_map = defaultdict(list)
     for wt in wallet_tokens:
-        wallet_tokens_dict[wt["wallet_id"]].append(wt)
+        wallet_tokens_map[wt.wallet_id].append(wt)
 
     for wallet in wallets:
-        wallet.stats_7d = WalletStatistic7dEntity(wallet_id=wallet.id)
-        wallet.stats_30d = WalletStatistic30dEntity(wallet_id=wallet.id)
-        wallet.stats_all = WalletStatisticAllEntity(wallet_id=wallet.id)
-        wallet.tokens = [WalletTokenEntity(**token) for token in wallet_tokens_dict[wallet.id]]
+        wallet.stats_7d = WalletStatistic7d(wallet_id=wallet.id)
+        wallet.stats_30d = WalletStatistic30d(wallet_id=wallet.id)
+        wallet.stats_all = WalletStatisticAll(wallet_id=wallet.id)
+        wallet.tokens = [wt for wt in wallet_tokens_map[wallet.id]]
 
     end = datetime.now()
     logger.debug(f"Время создания обьектов токенов: {end-start}")
@@ -145,7 +146,7 @@ async def calculate_wallets(
     spent_time = timedelta(minutes=0)
     tokens_count = 0
     while True:
-        wallet: WalletEntity | None = await received_wallets_queue.get()
+        wallet: Wallet | None = await received_wallets_queue.get()
         if wallet:
             #  TODO потестить как лучше с \ без await asyncio.sleep(0)
             # await asyncio.sleep(0)
@@ -174,7 +175,7 @@ async def update_wallets(
                 if exception:
                     # Обрабатываем ошибку внутри задачи
                     raise exception
-        wallet: WalletEntity | None = await calculated_wallets_queue.get()
+        wallet: Wallet | None = await calculated_wallets_queue.get()
         if wallet is not None:
             batch.append(wallet)
         # Если набрали батч нужного размера или пришёл сигнал завершения (wallet is None)
@@ -209,44 +210,60 @@ async def _update_wallets_data(wallets):
         "wallet_id",
         "created_at",
     ]
-    # !!!Сортируем по адресу, чтобы избежать дедлоков при массовом апдейте
-    wallets.sort(key=lambda w: w.address)
+
     await asyncio.gather(
         _update_wallets(wallets),
-        TortoiseWalletStatistic7dRepository().bulk_update(
-            [wallet.stats_7d for wallet in wallets],
-            excluded_fields=excluded_fields,
-            id_column="wallet_id",
-        ),
-        TortoiseWalletStatistic30dRepository().bulk_update(
-            [wallet.stats_30d for wallet in wallets],
-            excluded_fields=excluded_fields,
-            id_column="wallet_id",
-        ),
-        TortoiseWalletStatisticAllRepository().bulk_update(
-            [wallet.stats_all for wallet in wallets],
-            excluded_fields=excluded_fields,
-            id_column="wallet_id",
-        ),
+        _update_wallet_stats_7d([wallet.stats_7d for wallet in wallets], excluded_fields),
+        _update_wallet_stats_30d([wallet.stats_30d for wallet in wallets], excluded_fields),
+        _update_wallet_stats_all([wallet.stats_all for wallet in wallets], excluded_fields),
     )
 
     elapsed_time = now() - start
     logger.debug(f"Обновили {len(wallets)} кошельков в базе! | Время: {elapsed_time}")
 
 
+async def _update_wallet_stats_7d(stats, excluded_fields):
+    async with AsyncSessionLocal() as session:
+        await SQLAlchemyWalletStatistic7dRepository(session).bulk_update(
+            stats,
+            excluded_fields=excluded_fields,
+        )
+        await session.commit()
+
+
+async def _update_wallet_stats_30d(stats, excluded_fields):
+    async with AsyncSessionLocal() as session:
+        await SQLAlchemyWalletStatistic30dRepository(session).bulk_update(
+            stats,
+            excluded_fields=excluded_fields,
+        )
+        await session.commit()
+
+
+async def _update_wallet_stats_all(stats, excluded_fields):
+    async with AsyncSessionLocal() as session:
+        await SQLAlchemyWalletStatisticAllRepository(session).bulk_update(
+            stats,
+            excluded_fields=excluded_fields,
+        )
+        await session.commit()
+
+
 async def _update_wallets(wallets):
     for i in range(5):
         try:
-            await TortoiseWalletRepository().bulk_update(
-                wallets,
-                fields=["last_stats_check", "is_bot", "is_scammer"],
-            )
-            break
-        except DeadlockDetectedError as e:
+            async with AsyncSessionLocal() as session:
+                await SQLAlchemyWalletRepository(session).bulk_update(
+                    wallets,
+                    fields=["last_stats_check", "is_bot", "is_scammer"],
+                )
+                await session.commit()
+                break
+        except DBAPIError as e:
             logger.error(f"Deadlock при обновлении кошельков: {e}")
             await asyncio.sleep(random.randint(1, 3))
     else:
-        raise DeadlockDetectedError("Не удалось обновить кошельки после 5 попыток")
+        raise ValueError("Не удалось обновить кошельки после 5 попыток")
 
 
 async def log_statistics(

@@ -3,11 +3,11 @@ from datetime import datetime
 
 import pytz
 
-from src.domain.entities.swap import SwapEntity, SwapEventType
-from src.domain.entities.wallet import WalletTokenEntity
+from src.domain.entities.swap import Swap, SwapEventType
+from src.domain.entities.wallet import WalletToken
 
 
-def calculate_wallet_token(wt: WalletTokenEntity, activities: list[SwapEntity]) -> None:
+def calculate_wallet_token(wt: WalletToken, activities: list[Swap]) -> None:
     """Пересчитывает статистику для связки кошелька с токеном"""
 
     for activity in activities:
@@ -39,21 +39,22 @@ def calculate_wallet_token(wt: WalletTokenEntity, activities: list[SwapEntity]) 
 
     if wt.first_buy_timestamp and wt.first_sell_timestamp and (wt.first_buy_timestamp <= wt.first_sell_timestamp):
         wt.first_buy_sell_duration = int((wt.first_sell_timestamp - wt.first_buy_timestamp).total_seconds())
-    if wt.total_buys_count > 0:
-        wt.total_profit_usd = wt.total_sell_amount_usd - wt.total_buy_amount_usd
-        wt.total_profit_percent = (
-            round(
-                wt.total_profit_usd / wt.total_buy_amount_usd * 100,
-                2,
-            )
-            if not wt.total_buy_amount_usd == 0
-            else None
+
+    wt.total_profit_usd = wt.total_sell_amount_usd - wt.total_buy_amount_usd
+
+    wt.total_profit_percent = (
+        round(
+            wt.total_profit_usd / wt.total_buy_amount_usd * 100,
+            2,
         )
+        if not wt.total_buy_amount_usd == 0
+        else None
+    )
 
     wt.updated_at = datetime.now(pytz.timezone("Europe/Moscow"))
 
 
-def calculate_wallet_tokens(wallet_tokens: list[WalletTokenEntity], activities: list[SwapEntity]):
+def calculate_wallet_tokens(wallet_tokens: list[WalletToken], activities: list[Swap]):
     activity_map = defaultdict(list)
     for act in activities:
         activity_map[(act.wallet_id, act.token_id)].append(act)

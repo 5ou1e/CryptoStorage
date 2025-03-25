@@ -6,14 +6,14 @@ from typing import List, Tuple
 from uuid6 import uuid7
 
 from src.domain.constants import OKX_WALLET_ADDRESS, SOL_ADDRESS
-from src.domain.entities.swap import SwapEntity, SwapEventType
-from src.domain.entities.token import TokenEntity
+from src.domain.entities.swap import Swap, SwapEventType
+from src.domain.entities.token import Token
 from src.domain.entities.wallet import (
-    WalletEntity,
-    WalletStatistic7dEntity,
-    WalletStatistic30dEntity,
-    WalletStatisticAllEntity,
-    WalletTokenEntity,
+    Wallet,
+    WalletStatistic7d,
+    WalletStatistic30d,
+    WalletStatisticAll,
+    WalletToken,
 )
 
 from .common import calculations
@@ -61,7 +61,7 @@ def populate_swaps_data(swaps: list):
 def builds_objects(
     swaps: list,
     sol_prices: dict,
-) -> Tuple[List[WalletEntity], List[TokenEntity], List[SwapEntity], List[WalletTokenEntity]]:
+) -> Tuple[List[Wallet], List[Token], List[Swap], List[WalletToken]]:
     """Извлечение и создание обьектов кошельков, токенов и активностей из полученных swaps"""
     activities_list = []
     wallets = {}
@@ -93,7 +93,7 @@ def builds_objects(
         wallet = wallets.get(wallet_address)
 
         if not wallet:
-            wallet = WalletEntity(
+            wallet = Wallet(
                 id=uuid7(),  # fake temp id
                 address=wallet_address,
                 created_at=created_at,
@@ -106,7 +106,7 @@ def builds_objects(
 
         token = tokens.get(token_address)
         if not token:
-            token = TokenEntity(
+            token = Token(
                 id=uuid7(),  # fake temp id
                 address=token_address,
                 is_metadata_parsed=False,
@@ -115,7 +115,7 @@ def builds_objects(
             )
             tokens[token_address] = token
 
-        activity = SwapEntity(
+        activity = Swap(
             id=uuid7(),
             wallet_id=wallet.id,
             token_id=token.id,
@@ -142,7 +142,7 @@ def builds_objects(
         activities_list.append(activity)
 
         if (wallet_address, token_address) not in wallet_tokens:
-            wallet_token = WalletTokenEntity(
+            wallet_token = WalletToken(
                 id=uuid7(),
                 wallet_id=wallet.id,
                 token_id=token.id,
@@ -161,17 +161,17 @@ def builds_objects(
 
 
 def build_wallet_relations(wallet, created_at):
-    wallet.stats_7d = WalletStatistic7dEntity(
+    wallet.stats_7d = WalletStatistic7d(
         wallet_id=wallet.id,
         created_at=created_at,
         updated_at=created_at,
     )
-    wallet.stats_30d = WalletStatistic30dEntity(
+    wallet.stats_30d = WalletStatistic30d(
         wallet_id=wallet.id,
         created_at=created_at,
         updated_at=created_at,
     )
-    wallet.stats_all = WalletStatisticAllEntity(
+    wallet.stats_all = WalletStatisticAll(
         wallet_id=wallet.id,
         created_at=created_at,
         updated_at=created_at,

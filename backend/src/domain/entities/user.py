@@ -6,7 +6,7 @@ from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 
 @dataclass(kw_only=True)
-class UserEntity(BaseEntity, TimestampMixinEntity):
+class User(BaseEntity, TimestampMixinEntity):
     id: UUID | None = None
     username: str | None
     email: str = None
@@ -24,7 +24,7 @@ class UserEntity(BaseEntity, TimestampMixinEntity):
         username: str,
         email: str,
         hashed_password: str,
-    ) -> "UserEntity":
+    ) -> "User":
         user = cls(
             username=username,
             email=email,

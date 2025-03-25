@@ -1,0 +1,456 @@
+INFO 2025-03-25 00:41:23,377 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f228b4440d0>,), kwargs={}
+INFO 2025-03-25 00:41:23,553 task_logger Задача update_wallet_statistics_buy_price_gt_15k_task успешно завершена!
+INFO 2025-03-25 00:52:04,440 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7fe7f6297910>,), kwargs={}
+INFO 2025-03-25 00:52:04,720 task_logger Задача update_wallet_statistics_buy_price_gt_15k_task успешно завершена!
+INFO 2025-03-25 00:52:55,843 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7fcfdcbd8290>,), kwargs={}
+ERROR 2025-03-25 00:52:56,136 task_logger Ошибка при выполнении задачи update_wallet_statistics_buy_price_gt_15k_task: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "created_at" of relation "wallet_statistic_buy_price_gt_15k_7d" violates not-null constraint
+DETAIL:  Failing row contains (0195c8cc-a910-790c-bc1c-0e05a4b2dd7e, null, 2025-03-25 00:52:56.100538+00, 33, 66, 440.8889204781417, 0, 0, 50, 0, 50, 2, 2, 7, 2, 2, 0, 0, 1, 0, 0, 1, 0, 1, 100.00000, 2727.22863984766500000000, 1237.15000000000000000000, 6691.60727969533000000000, 5454.45727969533000000000, 618.57500000000000000000, 618.57500000000000000000, 0.00106974621900804445, 0.00106974621900804445).
+[SQL: INSERT INTO wallet_statistic_buy_price_gt_15k_7d (wallet_id, created_at, updated_at, token_buy_sell_duration_avg, token_buy_sell_duration_median, total_profit_multiplier, pnl_lt_minus_dot5_percent, pnl_minus_dot5_0x_percent, pnl_lt_2x_percent, pnl_2x_5x_percent, pnl_gt_5x_percent, total_token, total_token_buys, total_token_sales, token_with_buy_and_sell, token_with_buy, token_sell_without_buy, token_buy_without_sell, token_with_sell_amount_gt_buy_amount, pnl_lt_minus_dot5_num, pnl_minus_dot5_0x_num, pnl_lt_2x_num, pnl_2x_5x_num, pnl_gt_5x_num, winrate, token_avg_profit_usd, total_token_buy_amount_usd, total_token_sell_amount_usd, total_profit_usd, token_avg_buy_amount, token_median_buy_amount, token_first_buy_avg_price_usd, token_first_buy_median_price_usd) VALUES ($1::UUID, $2::TIMESTAMP WITH TIME ZONE, $3::TIMESTAMP WITH TIME ZONE, $4::BIGINT, $5::BIGINT, $6::FLOAT, $7::FLOAT, $8::FLOAT, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::INTEGER, $13::INTEGER, $14::INTEGER, $15::INTEGER, $16::INTEGER, $17::INTEGER, $18::INTEGER, $19::INTEGER, $20::INTEGER, $21::INTEGER, $22::INTEGER, $23::INTEGER, $24::INTEGER, $25::NUMERIC(40, 5), $26::NUMERIC(50, 20), $27::NUMERIC(50, 20), $28::NUMERIC(50, 20), $29::NUMERIC(50, 20), $30::NUMERIC(50, 20), $31::NUMERIC(50, 20), $32::NUMERIC(50, 20), $33::NUMERIC(50, 20))]
+[parameters: [('0195c8cc-a910-790c-bc1c-0e05a4b2dd7e', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 100538, tzinfo=datetime.timezone.utc), 33.0, 66, Decimal('440.8889204781416966414743564'), 0.0, 0.0, 50.0, 0.0, 50.0, 2, 2, 7, 2, 2, 0, 0, 1, 0, 0, 1, 0, 1, '100.0', '2727.22863984766500000000', '1237.15000000000000000000', '6691.60727969533000000000', '5454.45727969533000000000', '618.57500000000000000000', '618.57500000000000000000', '0.001069746219008044445', '0.001069746219008044445'), ('0195c91c-aefb-7c62-a5af-ea33da1a7bf1', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 109011, tzinfo=datetime.timezone.utc), 831.0, 831, Decimal('2251.850949522859567982422826'), 0.0, 0.0, 0.0, 0.0, 100.0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, '100.0', '19355.51204128729000000000', '859.53788572856000000000', '20215.04992701585000000000', '19355.51204128729000000000', '859.53788572856000000000', '859.53788572856000000000', '0.09077779925741351246', '0.09077779925741351246'), ('0195c91d-aeb2-726f-ad96-0ea439c98217', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 108950, tzinfo=datetime.timezone.utc), 209.0, 209, Decimal('284.9860764862895181060765235'), 0.0, 0.0, 0.0, 100.0, 0.0, 1, 2, 3, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, '100.0', '2603.90871056239000000000', '913.69681728562000000000', '3517.60552784801000000000', '2603.90871056239000000000', '913.69681728562000000000', '913.69681728562000000000', '0.00821325171492773645', '0.00821325171492773645'), ('0195c8c9-58f4-75e0-a55d-dca3079fd90f', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 107227, tzinfo=datetime.timezone.utc), 410.0, 410, Decimal('747.1636264566156436578054680'), 0.0, 0.0, 0.0, 0.0, 100.0, 1, 1, 6, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, '100.0', '2271.96394787488000000000', '304.07850000000000000000', '2576.04244787488000000000', '2271.96394787488000000000', '304.07850000000000000000', '304.07850000000000000000', '0.00003009369289568108', '0.00003009369289568108'), ('0195c8c8-612b-7a24-8dee-9c4e1a3480c3', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 107779, tzinfo=datetime.timezone.utc), 124.0, 124, Decimal('19300.56713352806366581922824'), 0.0, 0.0, 0.0, 0.0, 100.0, 1, 25, 22, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, '100.0', '34233.76043986206000000000', '177.37178500000000000000', '34411.13222486206000000000', '34233.76043986206000000000', '177.37178500000000000000', '177.37178500000000000000', '0.00985077659699641669', '0.00985077659699641669'), ('0195c8c8-6bab-7509-979b-d8fe4593da43', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 109086, tzinfo=datetime.timezone.utc), 83.5, 83.5, Decimal('476.2978119562991773402796766'), 50.0, 0.0, 0.0, 0.0, 50.0, 2, 165, 17, 2, 2, 0, 0, 1, 1, 0, 0, 0, 1, '50.0', '1364.08381715308500000000', '572.78609429272000000000', '3300.95372859889000000000', '2728.16763430617000000000', '286.39304714636000000000', '286.39304714636000000000', '0.10569685770449388089', '0.10569685770449388089'), ('0195c8c8-3e83-7d20-a9df-2d86c9b11041', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 108687, tzinfo=datetime.timezone.utc), 252.5, 252.5, Decimal('524.9589964832721050611124486'), 50.0, 0.0, 0.0, 0.0, 50.0, 2, 164, 19, 2, 2, 0, 0, 1, 1, 0, 0, 0, 1, '50.0', '1554.52293760417000000000', '592.24546984355000000000', '3701.29134505189000000000', '3109.04587520834000000000', '296.12273492177500000000', '296.12273492177500000000', '0.11137025759943563348', '0.11137025759943563348'), ('0195c8c8-405b-7ed9-9e57-da45623fd905', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 108760, tzinfo=datetime.timezone.utc), -15.5, 165, Decimal('67.54468557982997714470117007'), 20.0, 20.0, 60.0, 0.0, 0.0, 10, 51, 195, 8, 10, 0, 2, 4, 2, 2, 6, 0, 0, '60.0', '304.75243525895400000000', '4511.86400000000000000000', '7559.38835258954000000000', '3047.52435258954000000000', '451.18640000000000000000', '246.87600000000000000000', '0.001933964162503457006', '0.000097026061514192835')]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj) | Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 561, in _executemany
+    return await self._connection.executemany(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 390, in executemany
+    return await self._executemany(command, args, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 1988, in _executemany
+    result, _ = await self._do_execute(
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 2024, in _do_execute
+    result = await executor(stmt, None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 268, in bind_execute_many
+asyncpg.exceptions.NotNullViolationError: null value in column "created_at" of relation "wallet_statistic_buy_price_gt_15k_7d" violates not-null constraint
+DETAIL:  Failing row contains (0195c8cc-a910-790c-bc1c-0e05a4b2dd7e, null, 2025-03-25 00:52:56.100538+00, 33, 66, 440.8889204781417, 0, 0, 50, 0, 50, 2, 2, 7, 2, 2, 0, 0, 1, 0, 0, 1, 0, 1, 100.00000, 2727.22863984766500000000, 1237.15000000000000000000, 6691.60727969533000000000, 5454.45727969533000000000, 618.57500000000000000000, 618.57500000000000000000, 0.00106974621900804445, 0.00106974621900804445).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1936, in _exec_single_context
+    self.dialect.do_executemany(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 938, in do_executemany
+    cursor.executemany(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 573, in executemany
+    return self._adapt_connection.await_(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 565, in _executemany
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "created_at" of relation "wallet_statistic_buy_price_gt_15k_7d" violates not-null constraint
+DETAIL:  Failing row contains (0195c8cc-a910-790c-bc1c-0e05a4b2dd7e, null, 2025-03-25 00:52:56.100538+00, 33, 66, 440.8889204781417, 0, 0, 50, 0, 50, 2, 2, 7, 2, 2, 0, 0, 1, 0, 0, 1, 0, 1, 100.00000, 2727.22863984766500000000, 1237.15000000000000000000, 6691.60727969533000000000, 5454.45727969533000000000, 618.57500000000000000000, 618.57500000000000000000, 0.00106974621900804445, 0.00106974621900804445).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 67, in update_wallet_statistics_buy_price_gt_15k_task
+    asyncio.run(update_wallet_statistics_buygt15k_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 37, in update_wallet_statistics_buygt15k_async
+    await process_wallets(wallets)
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 83, in process_wallets
+    await update_wallet_stats_in_db(wallets)
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 95, in update_wallet_stats_in_db
+    await asyncio.gather(
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 105, in _update_stats_7d
+    await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).bulk_create(stats)
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 95, in bulk_create
+    await connection.execute(stmt, values)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/engine.py", line 657, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1936, in _exec_single_context
+    self.dialect.do_executemany(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 938, in do_executemany
+    cursor.executemany(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 573, in executemany
+    return self._adapt_connection.await_(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 565, in _executemany
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 497, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 780, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) <class 'asyncpg.exceptions.NotNullViolationError'>: null value in column "created_at" of relation "wallet_statistic_buy_price_gt_15k_7d" violates not-null constraint
+DETAIL:  Failing row contains (0195c8cc-a910-790c-bc1c-0e05a4b2dd7e, null, 2025-03-25 00:52:56.100538+00, 33, 66, 440.8889204781417, 0, 0, 50, 0, 50, 2, 2, 7, 2, 2, 0, 0, 1, 0, 0, 1, 0, 1, 100.00000, 2727.22863984766500000000, 1237.15000000000000000000, 6691.60727969533000000000, 5454.45727969533000000000, 618.57500000000000000000, 618.57500000000000000000, 0.00106974621900804445, 0.00106974621900804445).
+[SQL: INSERT INTO wallet_statistic_buy_price_gt_15k_7d (wallet_id, created_at, updated_at, token_buy_sell_duration_avg, token_buy_sell_duration_median, total_profit_multiplier, pnl_lt_minus_dot5_percent, pnl_minus_dot5_0x_percent, pnl_lt_2x_percent, pnl_2x_5x_percent, pnl_gt_5x_percent, total_token, total_token_buys, total_token_sales, token_with_buy_and_sell, token_with_buy, token_sell_without_buy, token_buy_without_sell, token_with_sell_amount_gt_buy_amount, pnl_lt_minus_dot5_num, pnl_minus_dot5_0x_num, pnl_lt_2x_num, pnl_2x_5x_num, pnl_gt_5x_num, winrate, token_avg_profit_usd, total_token_buy_amount_usd, total_token_sell_amount_usd, total_profit_usd, token_avg_buy_amount, token_median_buy_amount, token_first_buy_avg_price_usd, token_first_buy_median_price_usd) VALUES ($1::UUID, $2::TIMESTAMP WITH TIME ZONE, $3::TIMESTAMP WITH TIME ZONE, $4::BIGINT, $5::BIGINT, $6::FLOAT, $7::FLOAT, $8::FLOAT, $9::FLOAT, $10::FLOAT, $11::FLOAT, $12::INTEGER, $13::INTEGER, $14::INTEGER, $15::INTEGER, $16::INTEGER, $17::INTEGER, $18::INTEGER, $19::INTEGER, $20::INTEGER, $21::INTEGER, $22::INTEGER, $23::INTEGER, $24::INTEGER, $25::NUMERIC(40, 5), $26::NUMERIC(50, 20), $27::NUMERIC(50, 20), $28::NUMERIC(50, 20), $29::NUMERIC(50, 20), $30::NUMERIC(50, 20), $31::NUMERIC(50, 20), $32::NUMERIC(50, 20), $33::NUMERIC(50, 20))]
+[parameters: [('0195c8cc-a910-790c-bc1c-0e05a4b2dd7e', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 100538, tzinfo=datetime.timezone.utc), 33.0, 66, Decimal('440.8889204781416966414743564'), 0.0, 0.0, 50.0, 0.0, 50.0, 2, 2, 7, 2, 2, 0, 0, 1, 0, 0, 1, 0, 1, '100.0', '2727.22863984766500000000', '1237.15000000000000000000', '6691.60727969533000000000', '5454.45727969533000000000', '618.57500000000000000000', '618.57500000000000000000', '0.001069746219008044445', '0.001069746219008044445'), ('0195c91c-aefb-7c62-a5af-ea33da1a7bf1', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 109011, tzinfo=datetime.timezone.utc), 831.0, 831, Decimal('2251.850949522859567982422826'), 0.0, 0.0, 0.0, 0.0, 100.0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, '100.0', '19355.51204128729000000000', '859.53788572856000000000', '20215.04992701585000000000', '19355.51204128729000000000', '859.53788572856000000000', '859.53788572856000000000', '0.09077779925741351246', '0.09077779925741351246'), ('0195c91d-aeb2-726f-ad96-0ea439c98217', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 108950, tzinfo=datetime.timezone.utc), 209.0, 209, Decimal('284.9860764862895181060765235'), 0.0, 0.0, 0.0, 100.0, 0.0, 1, 2, 3, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, '100.0', '2603.90871056239000000000', '913.69681728562000000000', '3517.60552784801000000000', '2603.90871056239000000000', '913.69681728562000000000', '913.69681728562000000000', '0.00821325171492773645', '0.00821325171492773645'), ('0195c8c9-58f4-75e0-a55d-dca3079fd90f', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 107227, tzinfo=datetime.timezone.utc), 410.0, 410, Decimal('747.1636264566156436578054680'), 0.0, 0.0, 0.0, 0.0, 100.0, 1, 1, 6, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, '100.0', '2271.96394787488000000000', '304.07850000000000000000', '2576.04244787488000000000', '2271.96394787488000000000', '304.07850000000000000000', '304.07850000000000000000', '0.00003009369289568108', '0.00003009369289568108'), ('0195c8c8-612b-7a24-8dee-9c4e1a3480c3', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 107779, tzinfo=datetime.timezone.utc), 124.0, 124, Decimal('19300.56713352806366581922824'), 0.0, 0.0, 0.0, 0.0, 100.0, 1, 25, 22, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, '100.0', '34233.76043986206000000000', '177.37178500000000000000', '34411.13222486206000000000', '34233.76043986206000000000', '177.37178500000000000000', '177.37178500000000000000', '0.00985077659699641669', '0.00985077659699641669'), ('0195c8c8-6bab-7509-979b-d8fe4593da43', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 109086, tzinfo=datetime.timezone.utc), 83.5, 83.5, Decimal('476.2978119562991773402796766'), 50.0, 0.0, 0.0, 0.0, 50.0, 2, 165, 17, 2, 2, 0, 0, 1, 1, 0, 0, 0, 1, '50.0', '1364.08381715308500000000', '572.78609429272000000000', '3300.95372859889000000000', '2728.16763430617000000000', '286.39304714636000000000', '286.39304714636000000000', '0.10569685770449388089', '0.10569685770449388089'), ('0195c8c8-3e83-7d20-a9df-2d86c9b11041', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 108687, tzinfo=datetime.timezone.utc), 252.5, 252.5, Decimal('524.9589964832721050611124486'), 50.0, 0.0, 0.0, 0.0, 50.0, 2, 164, 19, 2, 2, 0, 0, 1, 1, 0, 0, 0, 1, '50.0', '1554.52293760417000000000', '592.24546984355000000000', '3701.29134505189000000000', '3109.04587520834000000000', '296.12273492177500000000', '296.12273492177500000000', '0.11137025759943563348', '0.11137025759943563348'), ('0195c8c8-405b-7ed9-9e57-da45623fd905', None, datetime.datetime(2025, 3, 25, 0, 52, 56, 108760, tzinfo=datetime.timezone.utc), -15.5, 165, Decimal('67.54468557982997714470117007'), 20.0, 20.0, 60.0, 0.0, 0.0, 10, 51, 195, 8, 10, 0, 2, 4, 2, 2, 6, 0, 0, '60.0', '304.75243525895400000000', '4511.86400000000000000000', '7559.38835258954000000000', '3047.52435258954000000000', '451.18640000000000000000', '246.87600000000000000000', '0.001933964162503457006', '0.000097026061514192835')]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+INFO 2025-03-25 00:55:02,359 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f2fb2070050>,), kwargs={}
+INFO 2025-03-25 00:55:02,652 task_logger Задача update_wallet_statistics_buy_price_gt_15k_task успешно завершена!
+INFO 2025-03-25 01:41:31,562 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f2fb2070050>,), kwargs={}
+ERROR 2025-03-25 01:41:31,604 task_logger Ошибка при выполнении задачи update_wallet_statistics_buy_price_gt_15k_task: Task <Task pending name='Task-28' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:31> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 67, in update_wallet_statistics_buy_price_gt_15k_task
+    asyncio.run(update_wallet_statistics_buygt15k_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 31, in update_wallet_statistics_buygt15k_async
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 70, in delete_all
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/bulk_persistence.py", line 2021, in orm_execute_statement
+    return super().orm_execute_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-28' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:31> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+INFO 2025-03-25 01:53:11,604 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f2fb2070050>,), kwargs={}
+ERROR 2025-03-25 01:53:11,622 task_logger Ошибка при выполнении задачи update_wallet_statistics_buy_price_gt_15k_task: Task <Task pending name='Task-32' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:31> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 67, in update_wallet_statistics_buy_price_gt_15k_task
+    asyncio.run(update_wallet_statistics_buygt15k_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 31, in update_wallet_statistics_buygt15k_async
+    logger = logging.getLogger("tasks.update_wallet_statistics")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 70, in delete_all
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/bulk_persistence.py", line 2021, in orm_execute_statement
+    return super().orm_execute_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-32' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:31> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+INFO 2025-03-25 01:55:02,493 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f2fb2070050>,), kwargs={}
+ERROR 2025-03-25 01:55:02,503 task_logger Ошибка при выполнении задачи update_wallet_statistics_buy_price_gt_15k_task: Task <Task pending name='Task-36' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:31> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 67, in update_wallet_statistics_buy_price_gt_15k_task
+    asyncio.run(update_wallet_statistics_buygt15k_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 31, in update_wallet_statistics_buygt15k_async
+    logger = logging.getLogger("tasks.update_wallet_statistics")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 70, in delete_all
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/bulk_persistence.py", line 2021, in orm_execute_statement
+    return super().orm_execute_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-36' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:31> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+
+INFO 2025-03-25 02:05:23,078 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f205a6f8050>,), kwargs={}
+INFO 2025-03-25 02:05:23,260 task_logger Задача update_wallet_statistics_buy_price_gt_15k_task успешно завершена!
+INFO 2025-03-25 03:05:23,119 task_logger Запуск задачи update_wallet_statistics_buy_price_gt_15k_task с параметрами: args=(<@task: src.infra.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task of core at 0x7f205a6f8050>,), kwargs={}
+ERROR 2025-03-25 03:05:23,170 task_logger Ошибка при выполнении задачи update_wallet_statistics_buy_price_gt_15k_task: Task <Task pending name='Task-14' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:37> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop | Traceback (most recent call last):
+  File "/app/src/infra/celery/task_logger.py", line 12, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/infra/celery/tasks.py", line 67, in update_wallet_statistics_buy_price_gt_15k_task
+    asyncio.run(update_wallet_statistics_buygt15k_async())
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py", line 37, in update_wallet_statistics_buygt15k_async
+    await process_wallets(wallets)
+  File "/app/src/infra/db/sqlalchemy/repositories/generic_repository.py", line 72, in delete_all
+    async def bulk_create(
+        ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/bulk_persistence.py", line 2021, in orm_execute_statement
+    return super().orm_execute_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2358, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 568, in execute
+    self._adapt_connection.await_(
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 504, in _prepare_and_execute
+    await adapt_connection._start_transaction()
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 833, in _start_transaction
+    self._handle_exception(error)
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 782, in _handle_exception
+    raise error
+  File "/usr/local/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 831, in _start_transaction
+    await self._transaction.start()
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/transaction.py", line 146, in start
+    await self._connection.execute(query)
+  File "/usr/local/lib/python3.11/site-packages/asyncpg/connection.py", line 349, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 375, in query
+RuntimeError: Task <Task pending name='Task-14' coro=<update_wallet_statistics_buygt15k_async() running at /app/src/application/etl/wallet_statistic_updaters/wallet_statistic_buygt15k_updater.py:37> cb=[_run_until_complete_cb() at /usr/local/lib/python3.11/asyncio/base_events.py:181]> got Future <Future pending cb=[BaseProtocol._on_waiter_completed()]> attached to a different loop
+

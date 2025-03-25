@@ -4,11 +4,13 @@ from decimal import Decimal
 from typing import Optional
 from uuid import UUID
 
+import pytz
+
 from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 
 @dataclass(kw_only=True, slots=True)
-class WalletEntity(
+class Wallet(
     BaseEntity,
     TimestampMixinEntity,
 ):
@@ -20,14 +22,14 @@ class WalletEntity(
     sol_balance: Optional[Decimal] = None
     is_scammer: bool = False
     is_bot: bool = False
-    stats_7d: Optional["WalletStatistic7dEntity"] = None
-    stats_30d: Optional["WalletStatistic30dEntity"] = None
-    stats_all: Optional["WalletStatisticAllEntity"] = None
-    tokens: list["WalletTokenEntity"] = field(default_factory=list)
+    stats_7d: Optional["WalletStatistic7d"] = None
+    stats_30d: Optional["WalletStatistic30d"] = None
+    stats_all: Optional["WalletStatisticAll"] = None  # field(default=None, repr=False)
+    tokens: list["WalletToken"] = field(default_factory=list)
 
 
 @dataclass(slots=True)
-class AbstractWalletStatisticEntity(BaseEntity, TimestampMixinEntity):
+class AbstractWalletStatistic(BaseEntity, TimestampMixinEntity):
     wallet_id: Optional[UUID] = None
     winrate: Optional[Decimal] = None
     total_token_buy_amount_usd: Optional[Decimal] = None
@@ -68,37 +70,37 @@ class AbstractWalletStatisticEntity(BaseEntity, TimestampMixinEntity):
 
 
 @dataclass
-class WalletStatistic7dEntity(AbstractWalletStatisticEntity):
+class WalletStatistic7d(AbstractWalletStatistic):
     pass
 
 
 @dataclass
-class WalletStatistic30dEntity(AbstractWalletStatisticEntity):
+class WalletStatistic30d(AbstractWalletStatistic):
     pass
 
 
 @dataclass
-class WalletStatisticAllEntity(AbstractWalletStatisticEntity):
+class WalletStatisticAll(AbstractWalletStatistic):
     pass
 
 
 @dataclass
-class WalletStatisticBuyPriceGt15k7dEntity(AbstractWalletStatisticEntity):
+class WalletStatisticBuyPriceGt15k7d(AbstractWalletStatistic):
     pass
 
 
 @dataclass
-class WalletStatisticBuyPriceGt15k30dEntity(AbstractWalletStatisticEntity):
+class WalletStatisticBuyPriceGt15k30d(AbstractWalletStatistic):
     pass
 
 
 @dataclass
-class WalletStatisticBuyPriceGt15kAllEntity(AbstractWalletStatisticEntity):
+class WalletStatisticBuyPriceGt15kAll(AbstractWalletStatistic):
     pass
 
 
 @dataclass(slots=True)
-class WalletTokenEntity(BaseEntity, TimestampMixinEntity):
+class WalletToken(BaseEntity, TimestampMixinEntity):
     id: Optional[UUID] = None
     wallet_id: Optional[UUID] = None
     token_id: Optional[UUID] = None
@@ -121,5 +123,5 @@ class WalletTokenEntity(BaseEntity, TimestampMixinEntity):
 
 
 @dataclass
-class TgSentWalletEntity(BaseEntity, TimestampMixinEntity):
+class TgSentWallet(BaseEntity, TimestampMixinEntity):
     wallet_id: Optional[UUID] = None

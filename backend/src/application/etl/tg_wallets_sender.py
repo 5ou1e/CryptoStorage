@@ -4,8 +4,8 @@ import logging
 import aiohttp
 from tortoise import Tortoise
 
-from src.infra.db.models.tortoise import TgSentWallet, Wallet
-from src.infra.db.setup_tortoise import init_db_async
+from src.infra.db.tortoise.models import TgSentWallet, Wallet
+from src.infra.db.tortoise.setup import init_db_async
 from src.settings import config
 
 logger = logging.getLogger("tasks.send_wallets_in_tg")

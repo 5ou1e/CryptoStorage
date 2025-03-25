@@ -9,16 +9,16 @@ from .models import FlipsideAccount, FlipsideConfig
 @admin.register(FlipsideConfig)
 class FlipsideConfigAdmin(ModelAdmin):
     list_per_page = 30
-    list_display = ['id', 'swaps_parsed_untill_inserted_timestamp_display']  # + [field.name for field in GmgnWalletActivity._meta.get_fields()]
-    list_display_links = ['id', 'swaps_parsed_untill_inserted_timestamp_display']
+    list_display = ['id', 'swaps_parsed_until_block_timestamp_display']  # + [field.name for field in GmgnWalletActivity._meta.get_fields()]
+    list_display_links = ['id', 'swaps_parsed_until_block_timestamp_display']
 
     @display(
-        description=("INSERTED_TIMESTAMP до которого собраны транзакции (MSK)"),
+        description="BLOCK_TIMESTAMP до которого собраны транзакции (MSK timezone)",
         ordering="-wallet__address",
     )
     # Функция для форматирования времени с миллисекундами
-    def swaps_parsed_untill_inserted_timestamp_display(self, obj):
-        return localtime(obj.swaps_parsed_untill_inserted_timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
+    def swaps_parsed_until_block_timestamp_display(self, obj):
+        return localtime(obj.swaps_parsed_until_block_timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
 
 
 @admin.register(FlipsideAccount)

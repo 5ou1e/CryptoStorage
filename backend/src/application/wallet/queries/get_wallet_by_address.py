@@ -1,18 +1,13 @@
-from src.application.interfaces.repositories.wallet import BaseWalletRepository
+from src.application.interfaces.readers import WalletReaderInterface
 from src.application.wallet.dto import WalletDTO
-from src.application.wallet.exceptions import WalletNotFoundException
 
 
 class GetWalletByAddressHandler:
     def __init__(
         self,
-        wallet_repository: BaseWalletRepository,
+        wallet_reader: WalletReaderInterface,
     ) -> None:
-        self._wallet_repository = wallet_repository
+        self._reader = wallet_reader
 
     async def __call__(self, address: str) -> WalletDTO:
-        wallet = await self._wallet_repository.get_by_address(address=address)
-        # wallet = await self._wallet_repository.get_by_address_with_details_and_stats(address=address)
-        if not wallet:
-            raise WalletNotFoundException(address)
-        return WalletDTO.from_orm(wallet)
+        return await self._reader.get_wallet_by_address(address)
