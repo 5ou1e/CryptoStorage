@@ -14,11 +14,11 @@ class SwapEventType(StrEnum):
 
 @dataclass(kw_only=True, slots=True)
 class Swap(BaseEntity, TimestampMixinEntity):
-    id: UUID | None = None
+    id: UUID
     wallet_id: UUID
     token_id: UUID
-    tx_hash: str | None = None
-    block_id: int | None = None
+    tx_hash: str
+    block_id: int
     timestamp: datetime | None = None
     event_type: SwapEventType | None = None
     quote_amount: Decimal | None = None

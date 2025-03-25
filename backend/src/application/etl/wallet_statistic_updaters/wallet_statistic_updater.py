@@ -316,63 +316,59 @@ async def log_statistics(
 
 
 async def process_update_wallet_statistics():
-    try:
-        await init_db_async()
-        received_wallets_queue = Queue()
-        fetched_wallets_queue = Queue()
-        calculated_wallets_queue = Queue()
-        wallets_count = 300_000
-        total_wallets_processed = 0
-        total_tokens_processed = 0
-        total_elapsed_time = 0
-        while True:
-            start = datetime.now()
-            # Получаем кошельки для обновления из БД
-            await receive_wallets_from_db(
-                received_wallets_queue,
-                count=wallets_count,
+    received_wallets_queue = Queue()
+    fetched_wallets_queue = Queue()
+    calculated_wallets_queue = Queue()
+    wallets_count = 300_000
+    total_wallets_processed = 0
+    total_tokens_processed = 0
+    total_elapsed_time = 0
+    while True:
+        start = datetime.now()
+        # Получаем кошельки для обновления из БД
+        await receive_wallets_from_db(
+            received_wallets_queue,
+            count=wallets_count,
+        )
+        # Запускаем обработку кошельков
+        async with asyncio.TaskGroup() as tg:
+            tg.create_task(
+                fetch_wallets_related_data(
+                    received_wallets_queue,
+                    fetched_wallets_queue,
+                    batch_size=1000,
+                    max_parallel=5,
+                )
             )
-            # Запускаем обработку кошельков
-            async with asyncio.TaskGroup() as tg:
-                tg.create_task(
-                    fetch_wallets_related_data(
-                        received_wallets_queue,
-                        fetched_wallets_queue,
-                        batch_size=1000,
-                        max_parallel=5,
-                    )
+            calc_task = tg.create_task(
+                calculate_wallets(
+                    fetched_wallets_queue,
+                    calculated_wallets_queue,
                 )
-                calc_task = tg.create_task(
-                    calculate_wallets(
-                        fetched_wallets_queue,
-                        calculated_wallets_queue,
-                    )
+            )
+            tg.create_task(
+                update_wallets(
+                    calculated_wallets_queue,
+                    batch_size=5000,
+                    max_parallel=3,
                 )
-                tg.create_task(
-                    update_wallets(
-                        calculated_wallets_queue,
-                        batch_size=5000,
-                        max_parallel=3,
-                    )
-                )
-            end = datetime.now()
-            tokens_count = calc_task.result()
-            elapsed_time = (end - start).total_seconds()
+            )
+        end = datetime.now()
+        tokens_count = calc_task.result()
+        elapsed_time = (end - start).total_seconds()
 
-            (
-                total_wallets_processed,
-                total_tokens_processed,
-                total_elapsed_time,
-            ) = await log_statistics(
-                wallets_count,
-                tokens_count,
-                elapsed_time,
-                total_wallets_processed,
-                total_tokens_processed,
-                total_elapsed_time,
-            )
-    finally:
-        await Tortoise.close_connections()
+        (
+            total_wallets_processed,
+            total_tokens_processed,
+            total_elapsed_time,
+        ) = await log_statistics(
+            wallets_count,
+            tokens_count,
+            elapsed_time,
+            total_wallets_processed,
+            total_tokens_processed,
+            total_elapsed_time,
+        )
 
 
 if __name__ == "__main__":

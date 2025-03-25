@@ -1,18 +1,33 @@
-import time
+import asyncio
+from dataclasses import dataclass
+from datetime import datetime
+from decimal import Decimal
+from typing import TypedDict
+from uuid import UUID
 
-# Прямое вычисление
-start = time.time()
-for _ in range(1000000):
-    offset = (max(10, 1) - 1) * 20
-print("Direct calculation:", time.time() - start)
+from sqlalchemy import MetaData, Table, Column, Integer, String, Text, ForeignKey, DateTime, select
+from sqlalchemy.orm import registry
+from src.domain.entities import Swap as SwapEventType
+from src.infra.db.sqlalchemy.models import Swap
+from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
 
 
-# Вызов функции
-def get_offset_from_pagination(pagination):
-    return (max(10, 1) - 1) * 20
+@dataclass(kw_only=True)
+class SwapEntity:
+    field1: str
+    field2: str
+    field3: str
+    field4: str
+    field5: str
 
 
-start = time.time()
-for _ in range(1000000):
-    offset = get_offset_from_pagination({"page": 10, "page_size": 20})
-print("Function call:", time.time() - start)
+start = datetime.now()
+for i in range(2_000_000):
+    s = Swap(
+        field1='str',
+        field2='str',
+        field3='str',
+        field4='str',
+        field5='str'
+    )
+print(datetime.now()-start)
