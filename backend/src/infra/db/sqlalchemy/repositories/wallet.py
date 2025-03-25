@@ -97,7 +97,7 @@ class SQLAlchemyWalletTokenRepository(
     entity_class = WalletTokenEntity
 
     async def get_wallet_tokens_by_wallets_list(self, wallet_ids: list[UUID]):
-        query = select(*self.model_class.__table__.columns()).where(
+        query = select(*self.model_class.__table__.columns).where(
             self.model_class.wallet_id.in_([id_ for id_ in wallet_ids])
         )
 
@@ -106,7 +106,7 @@ class SQLAlchemyWalletTokenRepository(
         return [self.entity_class(**row) for row in result.mappings().all()]
 
     async def get_wallet_tokens_by_wallet_for_buygt15k_statistic(self, wallet_id: UUID) -> list[WalletTokenEntity]:
-        query = select(*self.model_class.__table__.columns()).where(
+        query = select(*self.model_class.__table__.columns).where(
             WalletToken.wallet_id == wallet_id,
             self.model_class.first_buy_price_usd >= 0.000008,
             self.model_class.total_buy_amount_usd >= 100,
@@ -157,7 +157,7 @@ class SQLAlchemyWalletRepository(
     async def get_wallets_for_buygt15k_statistic(self) -> list[WalletEntity]:
         """Возвращает подходящие кошельки для подсчета статистики buygt15k"""
         query = (
-            select(*self.model_class.__table__.columns())
+            select(*self.model_class.__table__.columns)
             .join(WalletStatisticAll, WalletStatisticAll.wallet_id == Wallet.id)
             .join(WalletStatistic7d, WalletStatistic7d.wallet_id == Wallet.id)
             .where(

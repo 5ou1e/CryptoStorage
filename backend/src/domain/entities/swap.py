@@ -12,7 +12,7 @@ class SwapEventType(StrEnum):
     SELL = "sell"
 
 
-@dataclass(kw_only=True, slots=True)
+@dataclass(kw_only=False, slots=True)
 class Swap(BaseEntity, TimestampMixinEntity):
     id: UUID
     wallet_id: UUID
