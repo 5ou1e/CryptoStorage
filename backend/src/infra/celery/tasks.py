@@ -2,12 +2,14 @@ import asyncio
 import logging
 
 from celery import shared_task
-
 from src.application.etl.sol_prices_collector import collect_prices_async
 from src.application.etl.tg_wallets_sender import send_wallets_in_tg_async
 from src.application.etl.tokens_metadata_parser import parse_tokens_metadata_async
 from src.application.etl.wallet_statistic_updaters.wallet_statistic_buygt15k_updater import (
     update_wallet_statistics_buygt15k_async,
+)
+from src.application.etl.wallet_statistic_updaters.wallet_statistic_copytraders_updater import (
+    update_wallet_statistics_copytraders_async,
 )
 from src.application.etl.wallet_statistic_updaters.wallet_statistic_updater import (
     process_update_wallet_statistics,
@@ -59,11 +61,26 @@ def update_single_wallet_statistics_task(self, wallet_id):
 
 
 @shared_task(bind=True, ignore_result=False)
-@task_logger(logger=logging.getLogger("tasks.update_wallet_statistics_buy_price_gt_15k"))
+@task_logger(
+    logger=logging.getLogger("tasks.update_wallet_statistics_buy_price_gt_15k")
+)
 def update_wallet_statistics_buy_price_gt_15k_task(
     self,
 ):
     """Задача обновления статистики кошельков с ценой покупки токена более 15к"""
     asyncio.run(update_wallet_statistics_buygt15k_async())
-    countdown = config.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task_interval
+    countdown = (
+        config.celery.tasks.update_wallet_statistics_buy_price_gt_15k_task_interval
+    )
     update_wallet_statistics_buy_price_gt_15k_task.apply_async(countdown=countdown)
+
+
+@shared_task(bind=True, ignore_result=False)
+@task_logger(
+    logger=logging.getLogger("tasks.update_wallet_statistics_buy_price_gt_15k")
+)
+def update_wallet_statistics_copytraders_task(
+    self,
+):
+    """Задача обновления статистики кошельков с ценой покупки токена более 15к"""
+    asyncio.run(update_wallet_statistics_copytraders_async())

@@ -5,9 +5,20 @@ from decimal import Decimal
 from typing import TypedDict
 from uuid import UUID
 
-from sqlalchemy import MetaData, Table, Column, Integer, String, Text, ForeignKey, DateTime, select
+from sqlalchemy import (
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    MetaData,
+    String,
+    Table,
+    Text,
+    select,
+)
 from sqlalchemy.orm import registry
-from src.domain.entities import Swap as SwapEntity, SwapEventType
+from src.domain.entities import Swap as SwapEntity
+from src.domain.entities import SwapEventType
 from src.infra.db.sqlalchemy.models import Swap
 from src.infra.db.sqlalchemy.repositories import SQLAlchemySwapRepository
 from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
@@ -33,7 +44,9 @@ async def main():
         res = await session.execute(query)
         swaps = [SwapEntity(**s) for s in res.mappings().all()]
         print(swaps[0])
+
+
 if __name__ == "__main__":
     start = datetime.now()
     asyncio.run(main())
-    print(datetime.now()-start)
+    print(datetime.now() - start)

@@ -1,9 +1,8 @@
-from .admin import (WalletPeriodStatistic7dAdmin,
-                    WalletPeriodStatistic30dAdmin,
-                    WalletPeriodStatisticAllAdmin)
+from .admin import (WalletStatistic7dAdmin, WalletStatistic30dAdmin,
+                    WalletStatisticAllAdmin)
 
 __all__ = [
-    "WalletPeriodStatistic7dAdmin",
-    "WalletPeriodStatistic30dAdmin",
-    "WalletPeriodStatisticAllAdmin"
+    "WalletStatistic7dAdmin",
+    "WalletStatistic30dAdmin",
+    "WalletStatisticAllAdmin",
 ]

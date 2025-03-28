@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-
 from src.application.user.dto import UserCreateDTO, UserReadDTO
 from src.presentation.api.dependencies.auth import auth_backend, fastapi_users
 

@@ -6,16 +6,10 @@ from typing import List
 import numpy as np
 from sqlalchemy import update
 from sqlalchemy.exc import DBAPIError
-
 from src.domain.entities.swap import Swap
 from src.domain.entities.token import Token
-from src.domain.entities.wallet import (
-    Wallet,
-    WalletToken,
-)
-from src.infra.db.sqlalchemy.models import (
-    FlipsideConfig,
-)
+from src.domain.entities.wallet import Wallet, WalletToken
+from src.infra.db.sqlalchemy.models import FlipsideConfig
 from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemySwapRepository,
     SQLAlchemyTokenRepository,
@@ -25,7 +19,9 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletStatisticAllRepository,
     SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.sqlalchemy.repositories.flipside import SQLAlchemyFlipsideConfigRepositoryInterface
+from src.infra.db.sqlalchemy.repositories.flipside import (
+    SQLAlchemyFlipsideConfigRepositoryInterface,
+)
 from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
 
 from . import config
@@ -58,7 +54,9 @@ async def load_data_to_db(wallets, tokens, activities, wallet_tokens, end_time) 
 async def import_wallets_data(wallets, chunks_count=10) -> dict[str, Wallet]:
     """Создаем кошельки и все их связи в несколько тасков"""
     chunks = np.array_split(wallets, chunks_count)
-    results = await asyncio.gather(*[import_wallets_data_chunk(chunks[i].tolist()) for i in range(chunks_count)])
+    results = await asyncio.gather(
+        *[import_wallets_data_chunk(chunks[i].tolist()) for i in range(chunks_count)]
+    )
     logger.info(f"Кошельки импортированы")
     return {key: value for result in results for key, value in result.items()}
 
@@ -109,9 +107,15 @@ async def import_wallets_data_chunk(
             wallet_stats_30d.append(wallet.stats_30d)
             wallet_stats_all.append(wallet.stats_all)
 
-        await SQLAlchemyWalletStatistic7dRepository(session).bulk_create(wallet_stats_7d, ignore_conflicts=True)
-        await SQLAlchemyWalletStatistic30dRepository(session).bulk_create(wallet_stats_30d, ignore_conflicts=True)
-        await SQLAlchemyWalletStatisticAllRepository(session).bulk_create(wallet_stats_all, ignore_conflicts=True)
+        await SQLAlchemyWalletStatistic7dRepository(session).bulk_create(
+            wallet_stats_7d, ignore_conflicts=True
+        )
+        await SQLAlchemyWalletStatistic30dRepository(session).bulk_create(
+            wallet_stats_30d, ignore_conflicts=True
+        )
+        await SQLAlchemyWalletStatisticAllRepository(session).bulk_create(
+            wallet_stats_all, ignore_conflicts=True
+        )
 
         await session.commit()
 
@@ -135,15 +139,17 @@ async def import_activities_and_wallet_tokens(
     end_time: datetime,
 ):
     async with AsyncSessionLocal() as session:
-        await SQLAlchemySwapRepository(session).bulk_create(activities, batch_size=500000)
-        await SQLAlchemyWalletTokenRepository(session).bulk_update_or_create_wallet_token_with_merge(
-            wallet_tokens, batch_size=20000
+        await SQLAlchemySwapRepository(session).bulk_create(
+            activities, batch_size=500000
         )
+        await SQLAlchemyWalletTokenRepository(
+            session
+        ).bulk_update_or_create_wallet_token_with_merge(wallet_tokens, batch_size=20000)
         if config.PERSISTENT_MODE:
             flipside_cfg = await utils.get_flipside_config()
             flipside_cfg.swaps_parsed_until_block_timestamp = end_time
-            await SQLAlchemyFlipsideConfigRepositoryInterface(session).update_swaps_parsed_untill_timestamp(
-                flipside_cfg
-            )
+            await SQLAlchemyFlipsideConfigRepositoryInterface(
+                session
+            ).update_swaps_parsed_until_timestamp(flipside_cfg)
         await session.commit()
         logger.info(f"Активности и WalletToken импортированы")

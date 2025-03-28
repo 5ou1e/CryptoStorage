@@ -2,8 +2,10 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import select
-
-from src.application.interfaces.repositories.token import TokenPriceRepositoryInterface, TokenRepositoryInterface
+from src.application.interfaces.repositories.token import (
+    TokenPriceRepositoryInterface,
+    TokenRepositoryInterface,
+)
 from src.application.token.exceptions import TokenNotFoundException
 from src.domain.entities.token import Token as TokenEntity
 from src.domain.entities.token import TokenPrice as TokenPriceEntity
@@ -29,7 +31,11 @@ class SQLAlchemyTokenRepository(
         return self.model_to_entity(instance)
 
     async def get_tokens_without_metadata(self, limit=100) -> list[TokenEntity]:
-        stmt = select(self.model_class).where(self.model_class.is_metadata_parsed == False).limit(100)
+        stmt = (
+            select(self.model_class)
+            .where(self.model_class.is_metadata_parsed == False)
+            .limit(100)
+        )
         result = await self._session.execute(stmt)
         instances = result.scalars().all()  # Получаем список объектов Token
         return [self.model_to_entity(instance) for instance in instances]
@@ -44,7 +50,12 @@ class SQLAlchemyTokenPriceRepository(
 
     async def get_latest_by_token(self, token_id: UUID) -> TokenPriceEntity | None:
         """Возвращает последнюю по времени цену по id токена"""
-        query = select(TokenPrice).where(TokenPrice.token_id == token_id).order_by(TokenPrice.minute.desc()).limit(1)
+        query = (
+            select(TokenPrice)
+            .where(TokenPrice.token_id == token_id)
+            .order_by(TokenPrice.minute.desc())
+            .limit(1)
+        )
         result = await self._session.scalars(query)
         instance = result.first()
         if not instance:
@@ -55,7 +66,9 @@ class SQLAlchemyTokenPriceRepository(
         self, token_id: UUID, minute_from: datetime, minute_to: datetime
     ) -> list[TokenPriceEntity]:
         query = select(self.model_class).where(
-            self.model_class.token_id == token_id, TokenPrice.minute >= minute_from, TokenPrice.minute <= minute_to
+            self.model_class.token_id == token_id,
+            TokenPrice.minute >= minute_from,
+            TokenPrice.minute <= minute_to,
         )
         result = await self._session.scalars(query)
         instances = result.all()

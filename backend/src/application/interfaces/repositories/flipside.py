@@ -5,7 +5,9 @@ from src.domain.entities.flipside import FlipsideAccount, FlipsideConfig
 from .generic_repository import GenericRepositoryInterface
 
 
-class FlipsideAccountRepositoryInterface(GenericRepositoryInterface[FlipsideAccount], ABC):
+class FlipsideAccountRepositoryInterface(
+    GenericRepositoryInterface[FlipsideAccount], ABC
+):
     """Интерфейс репозитория FlipsdeAccount"""
 
     @abstractmethod
@@ -20,9 +22,11 @@ class FlipsideAccountRepositoryInterface(GenericRepositoryInterface[FlipsideAcco
         raise NotImplementedError
 
 
-class FlipsideConfigRepositoryInterface(GenericRepositoryInterface[FlipsideConfig], ABC):
+class FlipsideConfigRepositoryInterface(
+    GenericRepositoryInterface[FlipsideConfig], ABC
+):
     """Интерфейс репозитория FlipsdeConfig"""
 
     @abstractmethod
-    async def update_swaps_parsed_untill_timestamp(self, entity: FlipsideConfig) -> None:
+    async def update_swaps_parsed_until_timestamp(self, entity: FlipsideConfig) -> None:
         raise NotImplementedError

@@ -2,7 +2,10 @@ from datetime import datetime
 
 from src.domain.constants import SOL_ADDRESS
 from src.domain.entities import FlipsideAccount, FlipsideConfig
-from src.infra.db.sqlalchemy.repositories import SQLAlchemyTokenPriceRepository, SQLAlchemyTokenRepository
+from src.infra.db.sqlalchemy.repositories import (
+    SQLAlchemyTokenPriceRepository,
+    SQLAlchemyTokenRepository,
+)
 from src.infra.db.sqlalchemy.repositories.flipside import (
     SQLAlchemyFlipsideAccountRepositoryInterface,
     SQLAlchemyFlipsideConfigRepositoryInterface,

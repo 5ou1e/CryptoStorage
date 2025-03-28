@@ -19,7 +19,7 @@ class DjangoConfig(BaseConfig):
     debug: bool = Field(True)
     allowed_hosts: List[str] = Field(["*"])
     csrf_trusted_origins: List[str] = Field()
-    time_zone: str = Field('Europe/Moscow')
+    time_zone: str = Field("Europe/Moscow")
 
 
 class DjangoUnfoldConfig(BaseConfig):

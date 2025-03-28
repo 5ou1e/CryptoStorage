@@ -13,7 +13,9 @@ def sql_get_swaps(
     """SQL-запрос для получения swaps с Flipside-crypto"""
     if limit is None:
         limit = 100000
-    blacklisted_tokens.add(SOL_ADDRESS)  # Добавляем SOL_ADDRESS чтобы исключить свапы WSOL -> WSOL
+    blacklisted_tokens.add(
+        SOL_ADDRESS
+    )  # Добавляем SOL_ADDRESS чтобы исключить свапы WSOL -> WSOL
     blacklist_tokens_values = ",".join(f"'{token}'" for token in blacklisted_tokens)
     query = f"""
         WITH jupiter_swaps AS (

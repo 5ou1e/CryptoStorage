@@ -1,11 +1,10 @@
 import logging
 import time
 
+from src.settings import config
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
-
-from src.settings import config
 
 logger = logging.getLogger(__name__)
 

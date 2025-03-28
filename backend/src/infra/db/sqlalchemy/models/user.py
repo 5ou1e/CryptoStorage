@@ -15,8 +15,12 @@ class User(Base, UUIDIDMixin, TimestampsMixin):
     password: Mapped[str] = mapped_column(String(255), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
-    first_name: Mapped[str | None] = mapped_column(String(150), nullable=True, default="")
-    last_name: Mapped[str | None] = mapped_column(String(150), nullable=True, default="")
+    first_name: Mapped[str | None] = mapped_column(
+        String(150), nullable=True, default=""
+    )
+    last_name: Mapped[str | None] = mapped_column(
+        String(150), nullable=True, default=""
+    )
     is_staff: Mapped[bool] = mapped_column(Boolean, default=False)
     date_joined: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -44,7 +48,9 @@ class UserWallet(Base, UUIDIDMixin):
     is_watch_later: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     remark: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, nullable=False
+    )
 
     user: Mapped["User"] = relationship("User")
     wallet: Mapped["Wallet"] = relationship("Wallet")

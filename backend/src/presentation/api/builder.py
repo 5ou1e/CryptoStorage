@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-
 from src.infra.db.tortoise.setup import register_db
 from src.presentation.api.exceptions import setup_exception_handlers
 from src.presentation.api.middlewares import setup_middlewares

@@ -3,8 +3,11 @@ from uuid import UUID
 
 from fastapi import Depends
 from fastapi_users import FastAPIUsers
-from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
-
+from fastapi_users.authentication import (
+    AuthenticationBackend,
+    BearerTransport,
+    JWTStrategy,
+)
 from src.domain.entities.user import User
 from src.infra.db.tortoise.models import User
 from src.presentation.api.dependencies.services import get_user_service

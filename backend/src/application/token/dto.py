@@ -1,7 +1,6 @@
 from typing import Optional
 
 from pydantic import BaseModel
-
 from src.application.common.dto import PaginationResult
 
 

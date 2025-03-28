@@ -121,7 +121,7 @@ def setup_celery_logging():
     logging.config.dictConfig(CELERY_LOGGING)
 
 
-def setup_logging(level=logging.DEBUG):
+def setup_logging(level=logging.INFO):
     logging.basicConfig(
         format="%(asctime)s [%(levelname)s] %(message)s",
         level=level,

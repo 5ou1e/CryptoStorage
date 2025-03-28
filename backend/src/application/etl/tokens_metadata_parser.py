@@ -6,12 +6,11 @@ import struct
 
 import aiohttp
 from solders.pubkey import Pubkey
-from tortoise import Tortoise
-
 from src.infra.db.sqlalchemy.repositories import SQLAlchemyTokenRepository
 from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
 from src.infra.db.tortoise.models import Token
 from src.infra.db.tortoise.setup import init_db_async
+from tortoise import Tortoise
 
 logger = logging.getLogger("tasks.parse_tokens_metadata")
 
@@ -32,7 +31,9 @@ async def parse_tokens_metadata_async():
 
 async def get_tokens_to_process():
     async with AsyncSessionLocal() as session:
-        return await SQLAlchemyTokenRepository(session).get_tokens_without_metadata(limit=100)
+        return await SQLAlchemyTokenRepository(session).get_tokens_without_metadata(
+            limit=100
+        )
 
 
 async def process_tokens(tokens):
@@ -44,14 +45,25 @@ async def update_tokens_metadata(tokens):
     async with AsyncSessionLocal() as session:
         repo = SQLAlchemyTokenRepository(session)
         await repo.bulk_update(
-            tokens, fields=["metadata", "name", "symbol", "uri", "logo", "created_on", "is_metadata_parsed"]
+            tokens,
+            fields=[
+                "metadata",
+                "name",
+                "symbol",
+                "uri",
+                "logo",
+                "created_on",
+                "is_metadata_parsed",
+            ],
         )
         await session.commit()
 
 
 async def fetch_and_set_token_metadata(token):
     try:
-        metadata = await fetch_token_metadata(token.address)  # Функция для получения метаданных для токена
+        metadata = await fetch_token_metadata(
+            token.address
+        )  # Функция для получения метаданных для токена
     except Exception as e:
         logger.debug(f"Ошибка парсинга метаданных токена: {token} - {e}")
         return
@@ -61,7 +73,9 @@ async def fetch_and_set_token_metadata(token):
         try:
             json_metadata = await fetch_json_metadata_from_uri(uri)
         except Exception as e:
-            logger.debug(f"Не удалось получить JSON-метаданные по URI токена {token} - {e}")
+            logger.debug(
+                f"Не удалось получить JSON-метаданные по URI токена {token} - {e}"
+            )
     await set_token_metadata(token, metadata, json_metadata)
     logger.debug(f"Метаданные токена {token.address} успешно обновлены!")
 
@@ -89,7 +103,9 @@ async def fetch_token_metadata(token_address):
 
 
 async def get_token_metadata_pubkey(mint_address):
-    metadata_program_id = Pubkey.from_string("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
+    metadata_program_id = Pubkey.from_string(
+        "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+    )
     mint_pubkey = Pubkey.from_string(mint_address)
     metadata_pubkey = Pubkey.find_program_address(
         [

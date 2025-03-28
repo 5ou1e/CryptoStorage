@@ -7,9 +7,6 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.exc import DBAPIError
-from tortoise import Tortoise
-from tortoise.timezone import now
-
 from src.application.etl.wallet_statistic_updaters import calculations
 from src.domain.entities.wallet import (
     Wallet,
@@ -28,6 +25,8 @@ from src.infra.db.sqlalchemy.repositories import (
 )
 from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
 from src.infra.db.tortoise.setup import init_db_async
+from tortoise import Tortoise
+from tortoise.timezone import now
 
 logger = logging.getLogger("tasks.update_wallet_statistics")
 
@@ -46,7 +45,9 @@ async def receive_wallets_from_db(
     logger.info(f"Начинаем получение кошельков из БД")
     t1 = datetime.now()
     async with AsyncSessionLocal() as session:
-        wallets: list[Wallet] = await SQLAlchemyWalletRepository(session).get_wallets_for_update_stats(count=count)
+        wallets: list[Wallet] = await SQLAlchemyWalletRepository(
+            session
+        ).get_wallets_for_update_stats(count=count)
     t2 = datetime.now()
     logger.info(f"Получили {len(wallets)} кошельков из БД | Время: {t2 - t1}")
     for wallet in wallets:
@@ -114,12 +115,14 @@ async def _fetch_related_data(
     # Загружаем токены для кошельков
     start = datetime.now()
     async with AsyncSessionLocal() as session:
-        wallet_tokens = await SQLAlchemyWalletTokenRepository(session).get_wallet_tokens_by_wallets_list(
-            [wallet.id for wallet in wallets]
-        )
+        wallet_tokens = await SQLAlchemyWalletTokenRepository(
+            session
+        ).get_wallet_tokens_by_wallets_list([wallet.id for wallet in wallets])
     end = datetime.now()
     wt_count = len(wallet_tokens)
-    logger.debug(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
+    logger.debug(
+        f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}"
+    )
     start = datetime.now()
 
     wallet_tokens_map = defaultdict(list)
@@ -213,9 +216,15 @@ async def _update_wallets_data(wallets):
 
     await asyncio.gather(
         _update_wallets(wallets),
-        _update_wallet_stats_7d([wallet.stats_7d for wallet in wallets], excluded_fields),
-        _update_wallet_stats_30d([wallet.stats_30d for wallet in wallets], excluded_fields),
-        _update_wallet_stats_all([wallet.stats_all for wallet in wallets], excluded_fields),
+        _update_wallet_stats_7d(
+            [wallet.stats_7d for wallet in wallets], excluded_fields
+        ),
+        _update_wallet_stats_30d(
+            [wallet.stats_30d for wallet in wallets], excluded_fields
+        ),
+        _update_wallet_stats_all(
+            [wallet.stats_all for wallet in wallets], excluded_fields
+        ),
     )
 
     elapsed_time = now() - start

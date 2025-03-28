@@ -3,8 +3,6 @@ import math
 from typing import Optional
 from uuid import UUID
 
-from tortoise.functions import Count
-
 from src.application.interfaces.repositories.wallet import (
     WalletRepositoryInterface,
     WalletStatistic7dRepositoryInterface,
@@ -19,9 +17,15 @@ from src.domain.entities.wallet import Wallet as WalletEntity
 from src.domain.entities.wallet import WalletStatistic7d as WalletStatistic7dEntity
 from src.domain.entities.wallet import WalletStatistic30d as WalletStatistic30dEntity
 from src.domain.entities.wallet import WalletStatisticAll as WalletStatisticAllEntity
-from src.domain.entities.wallet import WalletStatisticBuyPriceGt15k7d as WalletStatisticBuyPriceGt15k7dEntity
-from src.domain.entities.wallet import WalletStatisticBuyPriceGt15k30d as WalletStatisticBuyPriceGt15k30dEntity
-from src.domain.entities.wallet import WalletStatisticBuyPriceGt15kAll as WalletStatisticBuyPriceGt15kAllEntity
+from src.domain.entities.wallet import (
+    WalletStatisticBuyPriceGt15k7d as WalletStatisticBuyPriceGt15k7dEntity,
+)
+from src.domain.entities.wallet import (
+    WalletStatisticBuyPriceGt15k30d as WalletStatisticBuyPriceGt15k30dEntity,
+)
+from src.domain.entities.wallet import (
+    WalletStatisticBuyPriceGt15kAll as WalletStatisticBuyPriceGt15kAllEntity,
+)
 from src.domain.entities.wallet import WalletToken as WalletTokenEntity
 from src.infra.db import queries
 from src.infra.db.tortoise.models import (
@@ -34,6 +38,7 @@ from src.infra.db.tortoise.models import (
     WalletStatisticBuyPriceGt15kAll,
     WalletToken,
 )
+from tortoise.functions import Count
 
 from .generic_repository import TortoiseGenericRepository
 
@@ -138,7 +143,9 @@ class TortoiseWalletRepository(
         wallets = (
             await Wallet.filter(
                 wallet_tokens__token__address__in=token_addresses,
-                _token_count__gte=math.ceil(matching_tokens_percent / 100 * len(token_addresses)),
+                _token_count__gte=math.ceil(
+                    matching_tokens_percent / 100 * len(token_addresses)
+                ),
                 **filter_by,
             )
             .annotate(_token_count=Count("wallet_tokens__token_id"))  # , distinct=True

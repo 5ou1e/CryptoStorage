@@ -2,7 +2,7 @@ import aiohttp
 from aiohttp import BasicAuth
 
 
-class GmgnAPIClient():
+class GmgnAPIClient:
     BASE_URL = "https://gmgn.ai/defi/quotation/v1/"
 
     def __init__(self, cookies, proxy=None):
@@ -13,7 +13,9 @@ class GmgnAPIClient():
     def init_session(self, proxy):
         if proxy:
             proxy_address, proxy_auth = self.parse_proxy(proxy)
-            self.session = aiohttp.ClientSession(proxy=proxy_address, proxy_auth=proxy_auth)
+            self.session = aiohttp.ClientSession(
+                proxy=proxy_address, proxy_auth=proxy_auth
+            )
         else:
             self.session = aiohttp.ClientSession()
 
@@ -28,7 +30,14 @@ class GmgnAPIClient():
         if not self.session.closed:
             await self.session.close()
 
-    async def get_token_trades(self, token_address, limit=None, limit_per_req=100, maker_address="", from_timestamp=""):
+    async def get_token_trades(
+        self,
+        token_address,
+        limit=None,
+        limit_per_req=100,
+        maker_address="",
+        from_timestamp="",
+    ):
         url = f"https://gmgn.ai/api/v1/token_trades/sol/{token_address}?limit={limit_per_req}&maker={maker_address}&from={from_timestamp}"
 
         headers = self.headers()
@@ -43,8 +52,8 @@ class GmgnAPIClient():
                 next_url = f"{url}&cursor={next}"
                 result = await self.fetch(next_url, headers)
 
-                results.extend(result['data']['history'])
-                next = result['data'].get('next')  # Проверяем, есть ли 'next' в ответе
+                results.extend(result["data"]["history"])
+                next = result["data"].get("next")  # Проверяем, есть ли 'next' в ответе
                 if not next or (limit and len(results) >= limit):
                     stop = True
             except Exception as e:
@@ -53,17 +62,20 @@ class GmgnAPIClient():
 
     async def get_new_pools(self):
         new_pair_ranks = await self.get_new_pair_ranks()
-        return new_pair_ranks['new_pools']
+        return new_pair_ranks["new_pools"]
 
     async def get_new_pair_ranks(self):
-        url = self.BASE_URL + f"pairs/sol/new_pair_ranks/1h?limit=50&new_pool=%7B%22filters%22:[],%22platforms%22:[%22pump%22,%22moonshot%22,%22raydium%22]%7D&burnt=%7B%22filters%22:[],%22platforms%22:[%22pump%22,%22moonshot%22,%22raydium%22]%7D&dexscreener_spent=%7B%22filters%22:[],%22platforms%22:[%22pump%22,%22moonshot%22,%22raydium%22]%7D"
+        url = (
+            self.BASE_URL
+            + f"pairs/sol/new_pair_ranks/1h?limit=50&new_pool=%7B%22filters%22:[],%22platforms%22:[%22pump%22,%22moonshot%22,%22raydium%22]%7D&burnt=%7B%22filters%22:[],%22platforms%22:[%22pump%22,%22moonshot%22,%22raydium%22]%7D&dexscreener_spent=%7B%22filters%22:[],%22platforms%22:[%22pump%22,%22moonshot%22,%22raydium%22]%7D"
+        )
 
         headers = self.headers()
         headers.update({"referer": f"https://gmgn.ai/new-pair?chain=sol"})
 
         result = await self.fetch(url, headers)
 
-        return result['data']
+        return result["data"]
 
     async def get_wallet_data(self, wallet):
         url = self.BASE_URL + f"smartmoney/sol/walletNew/{wallet}?period=30d"
@@ -73,13 +85,21 @@ class GmgnAPIClient():
 
         result = await self.fetch(url, headers)
 
-        return result['data']
+        return result["data"]
 
-
-    async def get_wallet_activities_data(self, wallet, limit=None, limit_per_req=100, from_timestamp=None,):
-        if limit_per_req and limit_per_req>100:
+    async def get_wallet_activities_data(
+        self,
+        wallet,
+        limit=None,
+        limit_per_req=100,
+        from_timestamp=None,
+    ):
+        if limit_per_req and limit_per_req > 100:
             limit_per_req = 100
-        url = self.BASE_URL + f"wallet_activity/sol?type=buy&type=sell&wallet={wallet}&limit={limit_per_req}&cost=10"
+        url = (
+            self.BASE_URL
+            + f"wallet_activity/sol?type=buy&type=sell&wallet={wallet}&limit={limit_per_req}&cost=10"
+        )
 
         headers = self.headers()
         headers.update({"referer": f"https://gmgn.ai/sol/address/{wallet}"})
@@ -92,16 +112,22 @@ class GmgnAPIClient():
             try:
                 next_url = f"{url}&cursor={next}"
                 result = await self.fetch(next_url, headers)
-                next = result['data'].get('next')  # Проверяем, есть ли 'next' в ответе
+                next = result["data"].get("next")  # Проверяем, есть ли 'next' в ответе
 
                 if from_timestamp:
-                    filtered_activities = [activity for activity in result['data']['activities'] if
-                                           int(activity.get('timestamp')) >= from_timestamp]
+                    filtered_activities = [
+                        activity
+                        for activity in result["data"]["activities"]
+                        if int(activity.get("timestamp")) >= from_timestamp
+                    ]
                     results.extend(filtered_activities)
-                    if not filtered_activities or len(filtered_activities) < limit_per_req:
+                    if (
+                        not filtered_activities
+                        or len(filtered_activities) < limit_per_req
+                    ):
                         stop = True
                 else:
-                    results.extend(result['data']['activities'])
+                    results.extend(result["data"]["activities"])
 
                 if not next or (limit and len(results) >= limit):
                     stop = True
@@ -109,15 +135,18 @@ class GmgnAPIClient():
                 print(f"Ошибка при получении транзакций кошелька {wallet} -- {e}")
         return results
 
-
     async def fetch(self, url, headers, data=None):
         if data:
             """Метод для выполнения запроса."""
-            async with self.session.post(url, data=data, headers=headers, cookies=self.cookies) as response:
+            async with self.session.post(
+                url, data=data, headers=headers, cookies=self.cookies
+            ) as response:
                 data = await response.json()
         else:
             """Метод для выполнения запроса."""
-            async with self.session.get(url, headers=headers, cookies=self.cookies) as response:
+            async with self.session.get(
+                url, headers=headers, cookies=self.cookies
+            ) as response:
                 data = await response.json()
         # print(response.status)
         # print(data)
@@ -125,9 +154,10 @@ class GmgnAPIClient():
         # print(data)
         return data
 
-
     def headers(self):
-        cookie_string = ";".join([f"{key}={value}" for key, value in self.cookies.items()])
+        cookie_string = ";".join(
+            [f"{key}={value}" for key, value in self.cookies.items()]
+        )
         headers = {
             "accept": "application/json, text/plain, */*",
             "accept-encoding": "gzip, deflate, br, zstd",
@@ -147,6 +177,6 @@ class GmgnAPIClient():
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "same-origin",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:40.0) Gecko/20100101 Firefox/40.0"
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:40.0) Gecko/20100101 Firefox/40.0",
         }
         return headers

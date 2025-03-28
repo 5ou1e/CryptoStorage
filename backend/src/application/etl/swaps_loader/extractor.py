@@ -1,6 +1,10 @@
 import warnings
 
-warnings.filterwarnings("ignore", message=".*pydantic.error_wrappers:ValidationError.*", category=UserWarning)
+warnings.filterwarnings(
+    "ignore",
+    message=".*pydantic.error_wrappers:ValidationError.*",
+    category=UserWarning,
+)
 
 from flipside import Flipside
 

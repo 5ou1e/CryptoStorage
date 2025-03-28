@@ -32,7 +32,9 @@ class Wallet(Model, UUIDIDMixin, TimestampsMixin):
         null=True,
         description="Время последней Defi-активности",
     )
-    first_activity_timestamp = fields.DatetimeField(null=True, description="Время первой Defi-активности")
+    first_activity_timestamp = fields.DatetimeField(
+        null=True, description="Время первой Defi-активности"
+    )
 
     class Meta:
         table = "wallet"
@@ -53,7 +55,10 @@ class Wallet(Model, UUIDIDMixin, TimestampsMixin):
 
 class AbstractWalletStatistic(Model, TimestampsMixin):
     wallet = fields.OneToOneField(
-        "models.Wallet", related_name="wallet_statistic_period_abstract", on_delete=fields.CASCADE, pk=True
+        "models.Wallet",
+        related_name="wallet_statistic_period_abstract",
+        on_delete=fields.CASCADE,
+        pk=True,
     )
     winrate = CorrectedDecimalField(
         max_digits=40,
@@ -124,7 +129,9 @@ class AbstractWalletStatistic(Model, TimestampsMixin):
         index=True,
     )
     token_buy_sell_duration_avg = fields.BigIntField(null=True, blank=True)
-    token_buy_sell_duration_median = fields.BigIntField(null=True, blank=True, index=True)
+    token_buy_sell_duration_median = fields.BigIntField(
+        null=True, blank=True, index=True
+    )
     pnl_lt_minus_dot5_num = fields.IntField(null=True, blank=True)
     pnl_minus_dot5_0x_num = fields.IntField(null=True, blank=True)
     pnl_lt_2x_num = fields.IntField(null=True, blank=True)
@@ -139,7 +146,9 @@ class AbstractWalletStatistic(Model, TimestampsMixin):
     @property
     def total_buys_and_sales_count(self) -> int:
         return (
-            self.total_token_buys + self.total_token_sales if (self.total_token_buys and self.total_token_sales) else 0
+            self.total_token_buys + self.total_token_sales
+            if (self.total_token_buys and self.total_token_sales)
+            else 0
         )
 
     total_swaps_from_arbitrage_swap_events: Optional[int] = 0
@@ -150,7 +159,9 @@ class AbstractWalletStatistic(Model, TimestampsMixin):
 
 
 class WalletStatistic7d(AbstractWalletStatistic):
-    wallet = fields.OneToOneField("models.Wallet", related_name="stats_7d", on_delete=fields.CASCADE, pk=True)
+    wallet = fields.OneToOneField(
+        "models.Wallet", related_name="stats_7d", on_delete=fields.CASCADE, pk=True
+    )
 
     class Meta:
         table = "wallet_statistic_7d"
@@ -160,7 +171,9 @@ class WalletStatistic7d(AbstractWalletStatistic):
 
 
 class WalletStatistic30d(AbstractWalletStatistic):
-    wallet = fields.OneToOneField("models.Wallet", related_name="stats_30d", on_delete=fields.CASCADE, pk=True)
+    wallet = fields.OneToOneField(
+        "models.Wallet", related_name="stats_30d", on_delete=fields.CASCADE, pk=True
+    )
 
     class Meta:
         table = "wallet_statistic_30d"
@@ -170,7 +183,9 @@ class WalletStatistic30d(AbstractWalletStatistic):
 
 
 class WalletStatisticAll(AbstractWalletStatistic):
-    wallet = fields.OneToOneField("models.Wallet", related_name="stats_all", on_delete=fields.CASCADE, pk=True)
+    wallet = fields.OneToOneField(
+        "models.Wallet", related_name="stats_all", on_delete=fields.CASCADE, pk=True
+    )
 
     class Meta:
         table = "wallet_statistic_all"
@@ -181,7 +196,10 @@ class WalletStatisticAll(AbstractWalletStatistic):
 
 class WalletStatisticBuyPriceGt15k7d(AbstractWalletStatistic):
     wallet = fields.OneToOneField(
-        "models.Wallet", related_name="stats_buy_price_gt_15k_7d", on_delete=fields.CASCADE, pk=True
+        "models.Wallet",
+        related_name="stats_buy_price_gt_15k_7d",
+        on_delete=fields.CASCADE,
+        pk=True,
     )
 
     class Meta:
@@ -193,7 +211,10 @@ class WalletStatisticBuyPriceGt15k7d(AbstractWalletStatistic):
 
 class WalletStatisticBuyPriceGt15k30d(AbstractWalletStatistic):
     wallet = fields.OneToOneField(
-        "models.Wallet", related_name="stats_buy_price_gt_15k_30d", on_delete=fields.CASCADE, pk=True
+        "models.Wallet",
+        related_name="stats_buy_price_gt_15k_30d",
+        on_delete=fields.CASCADE,
+        pk=True,
     )
 
     class Meta:
@@ -205,7 +226,10 @@ class WalletStatisticBuyPriceGt15k30d(AbstractWalletStatistic):
 
 class WalletStatisticBuyPriceGt15kAll(AbstractWalletStatistic):
     wallet = fields.OneToOneField(
-        "models.Wallet", related_name="stats_buy_price_gt_15k_all", on_delete=fields.CASCADE, pk=True
+        "models.Wallet",
+        related_name="stats_buy_price_gt_15k_all",
+        on_delete=fields.CASCADE,
+        pk=True,
     )
 
     class Meta:
@@ -236,7 +260,9 @@ class WalletToken(Model, UUIDIDMixin, TimestampsMixin):
         null=True,
         description="Цена токена в момент 1-й покупки",
     )
-    first_buy_timestamp = fields.DatetimeField(null=True, description="Время 1-й покупки")
+    first_buy_timestamp = fields.DatetimeField(
+        null=True, description="Время 1-й покупки"
+    )
     total_sales_count = fields.IntField(default=0, description="Всего продаж")
     total_sell_amount_usd = CorrectedDecimalField(
         max_digits=40,
@@ -256,8 +282,12 @@ class WalletToken(Model, UUIDIDMixin, TimestampsMixin):
         null=True,
         description="Цена токена в момент 1-й продажи",
     )
-    first_sell_timestamp = fields.DatetimeField(null=True, description="Время 1-й продажи")
-    last_activity_timestamp = fields.DatetimeField(null=True, description="Последняя активность")
+    first_sell_timestamp = fields.DatetimeField(
+        null=True, description="Время 1-й продажи"
+    )
+    last_activity_timestamp = fields.DatetimeField(
+        null=True, description="Последняя активность"
+    )
     total_profit_usd = CorrectedDecimalField(
         default=0,
         max_digits=40,
@@ -303,7 +333,9 @@ class WalletToken(Model, UUIDIDMixin, TimestampsMixin):
 
 
 class TgSentWallet(Model, TimestampsMixin):
-    wallet = fields.OneToOneField("models.Wallet", related_name="tg_sent", on_delete=fields.CASCADE, pk=True)
+    wallet = fields.OneToOneField(
+        "models.Wallet", related_name="tg_sent", on_delete=fields.CASCADE, pk=True
+    )
 
     class Meta:
         table = "tg_sent_wallet"

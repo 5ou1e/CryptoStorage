@@ -16,7 +16,7 @@ GET_WALLETS_FOR_UPDATE_STATS = textwrap.dedent(
 )
 
 
-GET_WALLETS_FOR_UPDATE_STATS_ALL = textwrap.dedent(
+GET_WALLETS_FOR_UPDATE_STATS = textwrap.dedent(
     """\
     SELECT *
     FROM wallet

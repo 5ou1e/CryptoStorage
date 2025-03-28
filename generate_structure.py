@@ -23,14 +23,16 @@ class FolderStructureGenerator:
             "nginx",
             "admin",
             "sql_queries",
-            "tests"
+            "tests",
         }
         self.excluded_files = excluded_files or {".DS_Store", ".gitignore"}
 
     def generate(self, directory: str, prefix: str = "") -> List[str]:
         tree_lines = []
         entries = sorted(
-            e for e in os.listdir(directory) if e not in self.excluded_dirs and e not in self.excluded_files
+            e
+            for e in os.listdir(directory)
+            if e not in self.excluded_dirs and e not in self.excluded_files
         )
 
         for i, entry in enumerate(entries):
@@ -39,7 +41,11 @@ class FolderStructureGenerator:
             tree_lines.append(prefix + connector + entry)
 
             if os.path.isdir(path):
-                tree_lines.extend(self.generate(path, prefix + ("    " if i == len(entries) - 1 else "│   ")))
+                tree_lines.extend(
+                    self.generate(
+                        path, prefix + ("    " if i == len(entries) - 1 else "│   ")
+                    )
+                )
 
         return tree_lines
 

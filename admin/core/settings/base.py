@@ -37,61 +37,61 @@ CSRF_TRUSTED_ORIGINS = config.django.csrf_trusted_origins
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000000
 
 INSTALLED_APPS = [
-    'unfold',
+    "unfold",
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
     "unfold.contrib.inlines",  # optional, if special inlines are needed
     "unfold.contrib.import_export",  # optional, if django-import-export package is used
     "unfold.contrib.guardian",  # optional, if django-guardian package is used
     "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_filters',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django_filters",
     # 'django_celery_beat',
     # 'django_celery_results',
-    'core',
-    'users.apps.UsersConfig',
-    'solana',
-    'external_services',
+    "core",
+    "users.apps.UsersConfig",
+    "solana",
+    "external_services",
 ]
 
 
-AUTH_USER_MODEL = 'users.User' # new
+AUTH_USER_MODEL = "users.User"  # new
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
@@ -100,13 +100,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # from django.db.backends.postgresql.psycopg_any import IsolationLevel
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config.db.name,
-        'USER': config.db.user,
-        'PASSWORD': config.db.password,
-        'HOST': config.db.host,  # имя вашего сервиса PostgreSQL в Docker Compose
-        'PORT': config.db.port,
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config.db.name,
+        "USER": config.db.user,
+        "PASSWORD": config.db.password,
+        "HOST": config.db.host,  # имя вашего сервиса PostgreSQL в Docker Compose
+        "PORT": config.db.port,
         # "OPTIONS": {
         #     "isolation_level": IsolationLevel.READ_UNCOMMITTED,
         # }
@@ -114,9 +114,9 @@ DATABASES = {
 }
 
 MIGRATION_MODULES = {
-    'users': None,
-    'solana': None,
-    'external_services': None,
+    "users": None,
+    "solana": None,
+    "external_services": None,
     # и другие приложения, которые ты не хочешь мигрировать
 }
 
@@ -125,40 +125,39 @@ MIGRATION_MODULES = {
 
 
 PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',  # <-- будет использоваться для новых паролей
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    "django.contrib.auth.hashers.Argon2PasswordHasher",  # <-- будет использоваться для новых паролей
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.BCryptPasswordHasher",
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=90),  # Время жизни access токена
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Время жизни refresh токена
-    'ROTATE_REFRESH_TOKENS': True,                 # Генерация нового refresh токена при обновлении
-    'BLACKLIST_AFTER_ROTATION': True,              # Устаревание старых refresh токенов
-
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=90),  # Время жизни access токена
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # Время жизни refresh токена
+    "ROTATE_REFRESH_TOKENS": True,  # Генерация нового refresh токена при обновлении
+    "BLACKLIST_AFTER_ROTATION": True,  # Устаревание старых refresh токенов
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
@@ -172,26 +171,26 @@ USE_TZ = True
 USE_I18N = True
 USE_L10N = True
 
-LANGUAGE_CODE = 'ru'  # Установите русский как основной язык
+LANGUAGE_CODE = "ru"  # Установите русский как основной язык
 
 LANGUAGES = [
-    ('en', 'English'),
-    ('ru', 'Russian'),
+    ("en", "English"),
+    ("ru", "Russian"),
 ]
 
 LOCALE_PATHS = [
-    BASE_DIR / 'locale',
+    BASE_DIR / "locale",
 ]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "core/static"),]
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "core/static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

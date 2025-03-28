@@ -5,9 +5,10 @@ from sqlalchemy import delete, func, inspect, select, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import class_mapper
-
 from src.application.common.dto import Pagination
-from src.application.interfaces.repositories.generic_repository import GenericRepositoryInterface
+from src.application.interfaces.repositories.generic_repository import (
+    GenericRepositoryInterface,
+)
 from src.domain.entities.base_entity import BaseEntity
 from src.infra.db.sqlalchemy.models import Base
 
@@ -86,11 +87,18 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         elif update_fields and on_conflict:
             stmt = stmt.on_conflict_do_update(
                 index_elements=on_conflict,
-                set_={field: getattr(stmt.excluded, field) for field in update_fields if hasattr(stmt.excluded, field)},
+                set_={
+                    field: getattr(stmt.excluded, field)
+                    for field in update_fields
+                    if hasattr(stmt.excluded, field)
+                },
             )
         connection = await self._session.connection()
         if batch_size:
-            [await connection.execute(stmt, values[i : i + batch_size]) for i in range(0, len(objects), batch_size)]
+            [
+                await connection.execute(stmt, values[i : i + batch_size])
+                for i in range(0, len(objects), batch_size)
+            ]
         else:
             await connection.execute(stmt, values)
         return objects
@@ -109,7 +117,11 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         """
         if not objects:
             return objects
-        fields = set(fields) if fields else {column.name for column in inspect(self.model_class).columns}
+        fields = (
+            set(fields)
+            if fields
+            else {column.name for column in inspect(self.model_class).columns}
+        )
         excluded_fields = set(excluded_fields) if excluded_fields else set()
         fields_to_update = fields - excluded_fields  # Поля для обновления
 
@@ -139,7 +151,9 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         if hasattr(self.model_class, field_name):
             column = getattr(self.model_class, field_name).property.columns[0]
             if not (column.unique or column.primary_key):
-                raise ValueError(f"Поле {field_name} не является уникальным в модели {self.model_class}")
+                raise ValueError(
+                    f"Поле {field_name} не является уникальным в модели {self.model_class}"
+                )
 
         batch_size = 32_000  # Лимит PostgreSQL на кол-во аргументов
         conn = await self._session.connection()
@@ -147,24 +161,36 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
 
         for i in range(0, len(id_list), batch_size):
             batch = id_list[i : i + batch_size]
-            stmt = select(self.model_class).where(getattr(self.model_class, field_name).in_(batch))
+            stmt = select(self.model_class).where(
+                getattr(self.model_class, field_name).in_(batch)
+            )
             result = await conn.execute(stmt)
             instances = result.mappings().all()
 
-            result_dict.update({instance[field_name]: self.entity_class(**instance) for instance in instances})
+            result_dict.update(
+                {
+                    instance[field_name]: self.entity_class(**instance)
+                    for instance in instances
+                }
+            )
 
         return result_dict
 
     def model_to_entity(self, instance: Base) -> Entity:
         """Конвертация ORM Model -> Entity"""
-        instance_dict = {column.key: getattr(instance, column.key) for column in class_mapper(self.model_class).columns}
+        instance_dict = {
+            column.key: getattr(instance, column.key)
+            for column in class_mapper(self.model_class).columns
+        }
         return self.entity_class(**instance_dict)
 
     def dataclass_to_model(self, entity: Entity) -> Base:
         """Конвертация Entity -> ORM Model"""
         data = entity.to_dict()
         mapper = class_mapper(self.model_class)
-        model_data = {col.key: data[col.key] for col in mapper.columns if col.key in data}
+        model_data = {
+            col.key: data[col.key] for col in mapper.columns if col.key in data
+        }
         return self.model_class(**model_data)
 
     # noinspection PyMethodMayBeStatic

@@ -2,7 +2,6 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-
 from src.application.common.dto import Pagination
 from src.application.wallet.dto import (
     GetWalletActivitiesFilters,

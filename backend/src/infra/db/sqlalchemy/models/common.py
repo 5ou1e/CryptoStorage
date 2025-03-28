@@ -12,7 +12,9 @@ class Base(DeclarativeBase):
 
 
 class IntIDMixin:
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, sort_order=-1000)
+    id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True, sort_order=-1000
+    )
 
 
 class UUIDIDMixin:
@@ -28,7 +30,12 @@ class UUIDIDMixin:
 class TimestampsMixin:
     """Базовый класс для моделей с временными метками"""
 
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), sort_order=-1)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), sort_order=-1
+    )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), sort_order=-1
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        sort_order=-1,
     )

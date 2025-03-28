@@ -5,7 +5,6 @@ from typing import Optional
 from uuid import UUID
 
 import pytz
-
 from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 

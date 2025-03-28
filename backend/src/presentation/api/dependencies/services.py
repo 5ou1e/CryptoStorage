@@ -1,13 +1,18 @@
 from typing import Annotated
 
 from fastapi import Depends
-
 from src.application.token.queries.get_token_by_address import GetTokenByAddressHandler
 from src.application.token.queries.get_tokens import GetTokensHandler
 from src.application.user.service import UserService
-from src.application.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
-from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
-from src.application.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
+from src.application.wallet.queries.get_wallet_activities import (
+    GetWalletActivitiesHandler,
+)
+from src.application.wallet.queries.get_wallet_by_address import (
+    GetWalletByAddressHandler,
+)
+from src.application.wallet.queries.get_wallet_related_wallets import (
+    GetWalletRelatedWalletsHandler,
+)
 from src.application.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
 from src.application.wallet.queries.get_wallets import GetWalletsHandler
 from src.infra.db.sqlalchemy.setup import get_db_session

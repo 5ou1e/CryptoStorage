@@ -1,7 +1,9 @@
 from src.application.common.dto import Pagination
 from src.application.interfaces.readers import WalletReaderInterface
-
-from src.application.wallet.dto import GetWalletActivitiesFilters, WalletActivitiesPageDTO
+from src.application.wallet.dto import (
+    GetWalletActivitiesFilters,
+    WalletActivitiesPageDTO,
+)
 
 
 class GetWalletActivitiesHandler:
@@ -14,4 +16,6 @@ class GetWalletActivitiesHandler:
         pagination: Pagination,
         filters: GetWalletActivitiesFilters,
     ) -> WalletActivitiesPageDTO:
-        return await self._reader.get_wallet_activities(address=address, pagination=pagination)
+        return await self._reader.get_wallet_activities(
+            address=address, pagination=pagination
+        )

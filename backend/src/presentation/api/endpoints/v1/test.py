@@ -2,8 +2,9 @@ from typing import Any, Optional
 
 from fastapi import APIRouter
 from fastapi_filter.contrib.sqlalchemy import Filter
-
-from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
+from src.application.wallet.queries.get_wallet_by_address import (
+    GetWalletByAddressHandler,
+)
 from src.infra.db.sqlalchemy.models import Wallet
 from src.infra.db.sqlalchemy.readers import SQLAlchemyWalletReader
 from src.infra.db.sqlalchemy.repositories import SQLAlchemyWalletRepository

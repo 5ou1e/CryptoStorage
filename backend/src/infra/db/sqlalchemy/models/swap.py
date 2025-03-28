@@ -2,9 +2,17 @@ import uuid
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import DECIMAL, UUID, BigInteger, Boolean, DateTime, ForeignKey, Index, String
+from sqlalchemy import (
+    DECIMAL,
+    UUID,
+    BigInteger,
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from src.infra.db.sqlalchemy.models.common import Base, TimestampsMixin, UUIDIDMixin
 
 
@@ -19,8 +27,12 @@ class Swap(Base, UUIDIDMixin, TimestampsMixin):
     )
     timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     block_id: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
-    is_part_of_transaction_with_mt_3_swappers: Mapped[bool] = mapped_column(Boolean, default=False)
-    is_part_of_arbitrage_swap_event: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_part_of_transaction_with_mt_3_swappers: Mapped[bool] = mapped_column(
+        Boolean, default=False
+    )
+    is_part_of_arbitrage_swap_event: Mapped[bool] = mapped_column(
+        Boolean, default=False
+    )
     token_amount: Mapped[Decimal | None] = mapped_column(DECIMAL(40, 20), nullable=True)
     quote_amount: Mapped[Decimal | None] = mapped_column(DECIMAL(40, 20), nullable=True)
     price_usd: Mapped[Decimal | None] = mapped_column(DECIMAL(40, 20), nullable=True)

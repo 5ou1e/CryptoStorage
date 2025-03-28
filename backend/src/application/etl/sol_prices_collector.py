@@ -4,12 +4,14 @@ from datetime import datetime, timedelta
 
 import pytz
 import requests
-from uuid6 import uuid7
-
 from src.domain.constants import SOL_ADDRESS
 from src.domain.entities.token import TokenPrice as TokenPrice
-from src.infra.db.sqlalchemy.repositories import SQLAlchemyTokenPriceRepository, SQLAlchemyTokenRepository
+from src.infra.db.sqlalchemy.repositories import (
+    SQLAlchemyTokenPriceRepository,
+    SQLAlchemyTokenRepository,
+)
 from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from uuid6 import uuid7
 
 logger = logging.getLogger("tasks.collect_sol_prices")
 
@@ -29,7 +31,9 @@ async def collect_prices_async():
     current_time = start_time
     all_candles = []
     while current_time < end_time:
-        next_time = min(current_time + timedelta(minutes=1000), end_time)  # Максимальный диапазон за запрос
+        next_time = min(
+            current_time + timedelta(minutes=1000), end_time
+        )  # Максимальный диапазон за запрос
         logger.info(f"Собираем цены с {current_time} до {next_time}...")
         try:
             candles = fetch_candles(
@@ -105,7 +109,9 @@ async def get_sol_token():
 
 async def get_latest_token_price(token_id: str) -> TokenPrice | None:
     async with AsyncSessionLocal() as session:
-        return await SQLAlchemyTokenPriceRepository(session).get_latest_by_token(token_id)
+        return await SQLAlchemyTokenPriceRepository(session).get_latest_by_token(
+            token_id
+        )
 
 
 async def load_prices_to_db(prices: list[TokenPrice]):

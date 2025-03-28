@@ -16,12 +16,8 @@ admin.site.unregister(Group)
 @admin.register(User)
 class CustomUserAdmin(BaseUserAdmin, ModelAdmin):
     list_filter_submit = True  # Submit button at the bottom of the filter
-    list_filter = [
-        ("username", FieldTextFilter),
-        ('date_joined', RangeDateTimeFilter)
-    ]
-    search_fields = ('id', 'username', 'email')
-
+    list_filter = [("username", FieldTextFilter), ("date_joined", RangeDateTimeFilter)]
+    search_fields = ("id", "username", "email")
 
 
 @admin.register(Group)
@@ -32,23 +28,23 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 @admin.register(UserWallet)
 class UserWalletAdmin(ModelAdmin):
     inlines = []
-    list_display = ('id', 'user_id', 'wallet_id')
+    list_display = ("id", "user_id", "wallet_id")
 
     def get_urls(self):
         return [
             path(
-                '<uuid:wallet_id>/toggle_status/',
+                "<uuid:wallet_id>/toggle_status/",
                 toggle_wallet_status,  # IMPORTANT: model_admin is required
-                name="user_wallet_toggle_status"
+                name="user_wallet_toggle_status",
             ),
             path(
-                '<uuid:wallet_id>/update_remark/',
+                "<uuid:wallet_id>/update_remark/",
                 update_remark,  # IMPORTANT: model_admin is required
-                name="user_wallet_update_remark"
+                name="user_wallet_update_remark",
             ),
             path(
-                '<uuid:wallet_id>/update_stats/',
+                "<uuid:wallet_id>/update_stats/",
                 update_wallet_stats_view,  # IMPORTANT: model_admin is required
-                name="wallet_update_stats"
+                name="wallet_update_stats",
             ),
         ] + super().get_urls()

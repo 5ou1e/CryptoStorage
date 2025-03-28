@@ -1,8 +1,22 @@
 from django.templatetags.static import static
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
 from .config import config
+
+
+def get_wallets_favorite_tab_url():
+    base_url = reverse_lazy("admin:solana_wallet_changelist")
+    query_params = "is_my_favorite=1"
+    return f"{base_url}?{query_params}"
+
+
+def get_wallets_all_tab_url():
+    base_url = reverse_lazy("admin:solana_wallet_changelist")
+    query_params = "period=30d&is_scammer=0&is_bot=0&is_blacklisted=0"
+    return f"{base_url}?{query_params}"
+
 
 UNFOLD = {
     "SHOW_LANGUAGES": True,
@@ -28,8 +42,8 @@ UNFOLD = {
             "href": lambda request: static("img/logo.png"),
         },
     ],
-    "SHOW_HISTORY": True, # show/hide "History" button, default: True
-    "SHOW_VIEW_ON_SITE": True, # show/hide "View on site" button, default: True
+    "SHOW_HISTORY": True,  # show/hide "History" button, default: True
+    "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
     # "ENVIRONMENT": "sample_app.environment_callback",
     # "DASHBOARD_CALLBACK": "sample_app.dashboard_callback",
     # "THEME": "dark", # Force theme: "dark" or "light". Will disable theme switcher
@@ -45,30 +59,30 @@ UNFOLD = {
     ],
     "COLORS": {
         "base": {
-            '50': '#fafafa',
-            '100': '#f4f4f5',
-            '200': '#e4e4e7',
-            '300': '#d4d4d8',
-            '400': '#a1a1aa',
-            '500': '#71717a',
-            '600': '#52525b',
-            '700': '#3f3f46',
-            '800': '#27272a',
-            '900': '#18181b',
-            '950': '#09090b',
+            "50": "#fafafa",
+            "100": "#f4f4f5",
+            "200": "#e4e4e7",
+            "300": "#d4d4d8",
+            "400": "#a1a1aa",
+            "500": "#71717a",
+            "600": "#52525b",
+            "700": "#3f3f46",
+            "800": "#27272a",
+            "900": "#18181b",
+            "950": "#09090b",
         },
         "primary": {
-            '50': '#f5f3ff',
-            '100': '#ede9fe',
-            '200': '#ddd6fe',
-            '300': '#c4b5fd',
-            '400': '#a78bfa',
-            '500': '#8b5cf6',
-            '600': '#7c3aed',
-            '700': '#6d28d9',
-            '800': '#5b21b6',
-            '900': '#4c1d95',
-            '950': '#2e1065',
+            "50": "#f5f3ff",
+            "100": "#ede9fe",
+            "200": "#ddd6fe",
+            "300": "#c4b5fd",
+            "400": "#a78bfa",
+            "500": "#8b5cf6",
+            "600": "#7c3aed",
+            "700": "#6d28d9",
+            "800": "#5b21b6",
+            "900": "#4c1d95",
+            "950": "#2e1065",
         },
         "font": {
             "subtle-light": "var(--color-base-500)",  # text-base-500
@@ -115,38 +129,37 @@ UNFOLD = {
                 "separator": True,  # Top border
                 "collapsible": False,  # Collapsible group of links
                 "items": [
-                    {
-                        "title": _("Кошельки"),
-                        "icon": "account_balance_wallet",
-                        "link": reverse_lazy("admin:solana_walletproxy_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_walletproxy"),
-                    },
+                    # {
+                    #     "title": _("Кошельки"),
+                    #     "icon": "account_balance_wallet",
+                    #     "link": reverse_lazy("admin:solana_walletproxy_changelist"),
+                    #     "permission": lambda request: request.user.has_perm("solana.view_walletproxy"),
+                    # },
                     {
                         "title": _("Токены"),
                         "icon": "token",
                         "link": reverse_lazy("admin:solana_token_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_token"),
+                        "permission": lambda request: request.user.has_perm(
+                            "solana.view_token"
+                        ),
                     },
                     {
                         "title": _("Цены токенов"),
                         "icon": "attach_money",
                         "link": reverse_lazy("admin:solana_tokenprice_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_token"),
+                        "permission": lambda request: request.user.has_perm(
+                            "solana.view_token"
+                        ),
                     },
                     {
-                        "title": _("Статистики кошелек-токен"),
-                        "icon": "token",
-                        "link": reverse_lazy("admin:solana_wallettokenstatistic_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_wallettokenstatistic"),
-                    },
-                    {
-                        "title": _("Свап-транзакции"),
+                        "title": _("Свапы"),
                         "icon": "send_money",
                         "link": reverse_lazy("admin:solana_walletactivity_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_walletactivity"),
+                        "permission": lambda request: request.user.has_perm(
+                            "solana.view_walletactivity"
+                        ),
                     },
                 ],
-
             },
             {
                 "title": _("Статистики"),
@@ -156,17 +169,22 @@ UNFOLD = {
                     {
                         "title": _("Кошельки"),
                         "icon": "account_balance_wallet",
-                        "link": reverse_lazy("admin:solana_wallet_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_wallet"),
+                        "link": lazy(get_wallets_all_tab_url, str)(),
+                        "permission": lambda request: request.user.has_perm(
+                            "solana.view_wallet"
+                        ),
                     },
                     {
                         "title": _("Кошельки (Buy Price Gt 15k)"),
                         "icon": "account_balance_wallet",
-                        "link": reverse_lazy("admin:solana_walletbuypricegt15k_changelist"),
-                        "permission": lambda request: request.user.has_perm("solana.view_walletbuypricegt15k"),
+                        "link": reverse_lazy(
+                            "admin:solana_walletbuypricegt15k_changelist"
+                        ),
+                        "permission": lambda request: request.user.has_perm(
+                            "solana.view_walletbuypricegt15k"
+                        ),
                     },
                 ],
-
             },
             {
                 "title": _("Внешние сервисы"),
@@ -176,16 +194,22 @@ UNFOLD = {
                     {
                         "title": _("FlipsideCrypto конфиг"),
                         "icon": "settings",
-                        "link": reverse_lazy("admin:external_services_FlipsideConfig_changelist"),
+                        "link": reverse_lazy(
+                            "admin:external_services_flipsideconfig_changelist"
+                        ),
                         "permission": lambda request: request.user.has_perm(
-                            "external_services.view_FlipsideConfig"),
+                            "external_services.view_flipsideconfig"
+                        ),
                     },
                     {
                         "title": _("FlipsideCrypto Аккаунты"),
                         "icon": "settings",
-                        "link": reverse_lazy("admin:external_services_FlipsideAccount_changelist"),
+                        "link": reverse_lazy(
+                            "admin:external_services_flipsideaccount_changelist"
+                        ),
                         "permission": lambda request: request.user.has_perm(
-                            "external_services.view_FlipsideAccount"),
+                            "external_services.view_flipsideaccount"
+                        ),
                     },
                 ],
             },
@@ -239,21 +263,26 @@ UNFOLD = {
             #     ],
             #
             # },
-
         ],
     },
+    "TABS": "solana.admin.tabs_callback",
     # "TABS": [
     #     {
     #         "models": [
-    #             "gmgn.gmgnwalletstatistic",
+    #             "solana.wallet",
     #         ],
     #         "items": [
     #             {
+    #                 "title": _("Главная"),
+    #                 "link": lazy(get_wallets_all_tab_url, str)(),
+    #                 # "permission": "users.permission_callback",
+    #             },
+    #             {
     #                 "title": _("Избранные"),
-    #                 "link": reverse_lazy("admin:gmgn_gmgnwalletstatistic_changelist"),
+    #                 "link": lazy(get_wallets_favorite_tab_url, str)(),
     #                 # "permission": "users.permission_callback",
     #             }
-    #         ]
+    #         ],
     #     }
     # ],
 }

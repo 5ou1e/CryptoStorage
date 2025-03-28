@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from uuid import UUID
 
-from src.application.interfaces.repositories.generic_repository import GenericRepositoryInterface
+from src.application.interfaces.repositories.generic_repository import (
+    GenericRepositoryInterface,
+)
 from src.domain.entities.wallet import (
     Wallet,
     WalletStatistic7d,

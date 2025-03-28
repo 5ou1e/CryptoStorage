@@ -1,7 +1,9 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from src.infra.db.sqlalchemy.readers import SQLAlchemyTokenReader, SQLAlchemyWalletReader
+from src.infra.db.sqlalchemy.readers import (
+    SQLAlchemyTokenReader,
+    SQLAlchemyWalletReader,
+)
 from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemySwapRepository,
     SQLAlchemyTokenRepository,
