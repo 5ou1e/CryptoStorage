@@ -2,10 +2,11 @@ import asyncio
 import logging
 
 import aiohttp
+from tortoise import Tortoise
+
 from src.infra.db.tortoise.models import TgSentWallet, Wallet
 from src.infra.db.tortoise.setup import init_db_async
 from src.settings import config
-from tortoise import Tortoise
 
 logger = logging.getLogger("tasks.send_wallets_in_tg")
 
@@ -43,8 +44,7 @@ async def get_wallets_to_send():
         )
         .prefetch_related(
             "stats_all",
-        )
-        .all()
+        ).all()
     )
 
 
@@ -55,31 +55,19 @@ async def send_wallets_in_batches(wallets, batch_size=50):
         try:
             await send_tg_message(batch)
             # Можно добавить логику для сохранения отправленных кошельков в базе данных, если нужно
-            await TgSentWallet.bulk_create(
-                [TgSentWallet(wallet_id=w.id) for w in batch]
-            )
+            await TgSentWallet.bulk_create([TgSentWallet(wallet_id=w.id) for w in batch])
         except Exception as e:
-            logger.error(
-                f"Ошибка при отправке уведомления в тг для пакета {i // batch_size + 1}: {e}"
-            )
+            logger.error(f"Ошибка при отправке уведомления в тг для пакета {i // batch_size + 1}: {e}")
         await asyncio.sleep(5)
 
 
 async def send_tg_message(wallets):
     def format_wallet(w, number):
-        winrate = (
-            f"{w.stats_all.winrate:.2f}%"
-            if w.stats_all and w.stats_all.winrate
-            else "N/A"
-        )
-        profit = (
-            f"{w.stats_all.total_profit_usd:.2f}$"
-            if w.stats_all and w.stats_all.total_profit_usd
-            else "N/A"
-        )
+        winrate = f"{w.stats_all.winrate:.2f}%" if w.stats_all and w.stats_all.winrate else "N/A"
+        profit = f"{w.stats_all.total_profit_usd:.2f}$" if w.stats_all and w.stats_all.total_profit_usd else "N/A"
         formatted = (
             f"<b>{number}.</b> <b><code>{w.address}</code></b>"
-            f"  <a href='https://cryptostorage.space/ru/solana/wallet/{w.address}/statistics/'>🔗</a>"
+            f"  <a href='https://cryptostorage.space/solana/wallet/{w.address}/'>🔗</a>"
             f"\n└  В/Р: <b>{winrate}</b>"
             f"     Профит: <b>{profit}</b>"
         )
@@ -89,9 +77,7 @@ async def send_tg_message(wallets):
         return
     url = f"https://api.telegram.org/bot{config.telegram.bot_token}/sendMessage"
     message = "🚀 Подборка новых кошельков!\n\n"
-    message += "\n\n".join(
-        [format_wallet(w, number + 1) for number, w in enumerate(wallets)]
-    )
+    message += "\n\n".join([format_wallet(w, number + 1) for number, w in enumerate(wallets)])
 
     async with aiohttp.ClientSession() as session:
         async with session.post(
@@ -103,3 +89,7 @@ async def send_tg_message(wallets):
             },
         ) as response:
             response.raise_for_status()
+
+
+if __name__ == "__main__":
+    asyncio.run(send_wallets_in_tg_async())

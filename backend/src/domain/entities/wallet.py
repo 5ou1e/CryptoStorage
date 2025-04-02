@@ -5,6 +5,7 @@ from typing import Optional
 from uuid import UUID
 
 import pytz
+
 from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 
 
@@ -13,8 +14,8 @@ class Wallet(
     BaseEntity,
     TimestampMixinEntity,
 ):
-    id: Optional[UUID] = None
-    address: Optional[str] = None
+    id: Optional[UUID] = None  # Generates in DB
+    address: str
     last_stats_check: Optional[datetime] = None
     last_activity_timestamp: Optional[datetime] = None
     first_activity_timestamp: Optional[datetime] = None

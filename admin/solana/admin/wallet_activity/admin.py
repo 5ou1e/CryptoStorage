@@ -5,8 +5,8 @@ from unfold.decorators import display
 
 from solana.models import WalletActivity
 
-from ..shared.base_admin_model import BaseAdminModel
-from ..shared.filters import TokenAddressFilter, WalletAddressFilter
+from ..common.base_admin_model import BaseAdminModel
+from ..common.filters import TokenAddressFilter, WalletAddressFilter
 
 
 @admin.register(WalletActivity)

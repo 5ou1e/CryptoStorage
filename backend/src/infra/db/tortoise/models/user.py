@@ -17,7 +17,7 @@ class User(Model, UUIDIDMixin, TimestampsMixin):
     updated_at = fields.DatetimeField(auto_now=True)
 
     class Meta:
-        table = "auth_user"
+        table = "user"
 
     class PydanticMeta:
         exclude = ["hashed_password"]

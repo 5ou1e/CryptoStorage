@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy import select
+
 from src.application.interfaces.repositories.token import (
     TokenPriceRepositoryInterface,
     TokenRepositoryInterface,
@@ -30,15 +31,17 @@ class SQLAlchemyTokenRepository(
             raise TokenNotFoundException(address)
         return self.model_to_entity(instance)
 
-    async def get_tokens_without_metadata(self, limit=100) -> list[TokenEntity]:
-        stmt = (
-            select(self.model_class)
-            .where(self.model_class.is_metadata_parsed == False)
-            .limit(100)
-        )
+    async def get_tokens_with_no_metadata_parsed(self, limit=100) -> list[TokenEntity]:
+        stmt = select(self.model_class).where(self.model_class.is_metadata_parsed == False).limit(limit)
         result = await self._session.execute(stmt)
         instances = result.scalars().all()  # Получаем список объектов Token
         return [self.model_to_entity(instance) for instance in instances]
+
+    async def bulk_update_all_metadata_fields(self, tokens: list[TokenEntity]) -> None:
+        await self.bulk_update(
+            tokens,
+            fields=["name", "symbol", "uri", "logo", "created_on", "is_metadata_parsed", "updated_at"],
+        )
 
 
 class SQLAlchemyTokenPriceRepository(
@@ -50,12 +53,7 @@ class SQLAlchemyTokenPriceRepository(
 
     async def get_latest_by_token(self, token_id: UUID) -> TokenPriceEntity | None:
         """Возвращает последнюю по времени цену по id токена"""
-        query = (
-            select(TokenPrice)
-            .where(TokenPrice.token_id == token_id)
-            .order_by(TokenPrice.minute.desc())
-            .limit(1)
-        )
+        query = select(TokenPrice).where(TokenPrice.token_id == token_id).order_by(TokenPrice.minute.desc()).limit(1)
         result = await self._session.scalars(query)
         instance = result.first()
         if not instance:

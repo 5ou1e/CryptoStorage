@@ -2,6 +2,27 @@
 {% load unfold %}
 {% load i18n admin_urls static admin_list unfold_list %}
 
+{% block breadcrumbs %}{% if not is_popup %}
+    <div class="px-4 lg:px-8">
+        <div class="container mb-6 mx-auto -my-3 lg:mb-12">
+            <ul class="flex flex-wrap">
+                {% url 'admin:index' as link %}
+                {% trans 'Home' as name %}
+                {% include 'unfold/helpers/breadcrumb_item.html' with link=link name=name %}
+
+                {% url 'admin:solana_wallet_changelist' as link %}
+                {% trans 'Кошельки' as name %}
+                {% include 'unfold/helpers/breadcrumb_item.html' with link=link name=name %}
+
+                {% with wallet.address as name %}
+                    {% include 'unfold/helpers/breadcrumb_item.html' with name=wallet.address link=None %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+{% endif %}{% endblock %}
+
+
 {% block content %}
 <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <div id="notification-container"></div>
@@ -120,7 +141,7 @@
                             <h3 > >500% </h3>
                         </div>
                         <div class="text-right">
-                            <h3 style="color: #81C784;">{{ data.pnl_gt_5x_num }} </h3>
+                            <h3 style="color: #81C784;">{{ data.pnl_gt_5x }} </h3>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mb-3" style="font-size:16px;">
@@ -129,7 +150,7 @@
                             <h3> 200% ~ 500% </h3>
                         </div>
                         <div class="text-right">
-                            <h3 style="color: #81C784;">{{ data.pnl_2x_5x_num }} </h3>
+                            <h3 style="color: #81C784;">{{ data.pnl_2x_5x }} </h3>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mb-3" style="font-size:16px;">
@@ -138,7 +159,7 @@
                             <h3 > 0% ~ 200% </h3>
                         </div>
                         <div class="text-right">
-                            <h3 style="color: #81C784;">{{ data.pnl_lt_2x_num }} </h3>
+                            <h3 style="color: #81C784;">{{ data.pnl_lt_2x }} </h3>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mb-3" style="font-size:16px;">
@@ -147,7 +168,7 @@
                             <h3> 0% ~ -50% </h3>
                         </div>
                         <div class="text-right">
-                            <h3 style="color: rgb(248 113 113);">{{ data.pnl_minus_dot5_0x_num }} </h3>
+                            <h3 style="color: rgb(248 113 113);">{{ data.pnl_minus_dot5_0x }} </h3>
                         </div>
                     </div>
                     <div class="flex justify-between items-center " style="font-size:16px;">
@@ -156,7 +177,7 @@
                             <h3> <-50% </h3>
                         </div>
                         <div class="text-right">
-                            <h3 style="color: rgb(248 113 113);">{{ data.pnl_lt_minus_dot5_num }} </h3>
+                            <h3 style="color: rgb(248 113 113);">{{ data.pnl_lt_minus_dot5 }} </h3>
                         </div>
                     </div>
                 {% endcomponent %}
@@ -530,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 row.innerHTML = `
                     <td class="py-2 px-3">
-                        <a href="https://cryptostorage.space/ru/solana/wallet/${wallet.address}/statistics/" target="_blank" rel="noopener noreferrer">
+                        <a href="https://cryptostorage.space/solana/wallet/${wallet.address}/" target="_blank" rel="noopener noreferrer">
                             ${wallet.address.slice(0, 5)}...${wallet.address.slice(-2)}
                         </a>
                     </td>

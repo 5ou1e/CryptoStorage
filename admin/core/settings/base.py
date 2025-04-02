@@ -114,7 +114,7 @@ DATABASES = {
 }
 
 MIGRATION_MODULES = {
-    "users": None,
+    # "users": None,
     "solana": None,
     "external_services": None,
     # и другие приложения, которые ты не хочешь мигрировать
@@ -176,10 +176,12 @@ LANGUAGE_CODE = "ru"  # Установите русский как основн�
 LANGUAGES = [
     ("en", "English"),
     ("ru", "Russian"),
+    ('th', 'Thai'),
 ]
 
 LOCALE_PATHS = [
     BASE_DIR / "locale",
+    "C:\\Python\\Мои проекты\\CryptoStorage\\.venv\\Lib\\site-packages\\unfold\\",
 ]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

@@ -1,20 +1,24 @@
 from django.templatetags.static import static
-from django.urls import reverse, reverse_lazy
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
+
 from .config import config
 
+from typing import Any
+from urllib.parse import parse_qs, urlparse
 
-def get_wallets_favorite_tab_url():
+from django.http import HttpRequest
+from django.urls import reverse_lazy
+
+
+def get_wallets_changelist_url():
+    from solana.admin import WalletFilterType
+    is_blacklisted = WalletFilterType.IS_BLACKLISTED
+    is_bot = WalletFilterType.IS_BOT
+    is_scammer = WalletFilterType.IS_SCAMMER
     base_url = reverse_lazy("admin:solana_wallet_changelist")
-    query_params = "is_my_favorite=1"
-    return f"{base_url}?{query_params}"
-
-
-def get_wallets_all_tab_url():
-    base_url = reverse_lazy("admin:solana_wallet_changelist")
-    query_params = "period=30d&is_scammer=0&is_bot=0&is_blacklisted=0"
+    query_params = f"period=30d&{is_scammer}=0&{is_bot}=0&{is_blacklisted}=0"
     return f"{base_url}?{query_params}"
 
 
@@ -23,7 +27,6 @@ UNFOLD = {
     "SITE_TITLE": config.django_unfold.site_title,
     "SITE_HEADER": config.django_unfold.site_header,
     "SITE_URL": "/",
-    # "SITE_ICON": lambda request: static("icon.svg"),  # both modes, optimise for 32px height
     "SITE_ICON": {
         "light": lambda request: static("img/logo.png"),  # light mode
         "dark": lambda request: static("img/logo.png"),  # dark mode
@@ -33,6 +36,7 @@ UNFOLD = {
     #     "light": lambda request: static("img/logo.png"),  # light mode
     #     "dark": lambda request: static("img/logo.png"),  # dark mode
     # },
+    "SHOW_BACK_BUTTON": True,
     "SITE_SYMBOL": "speed",  # symbol from icon set
     "SITE_FAVICONS": [
         {
@@ -57,6 +61,7 @@ UNFOLD = {
     "SCRIPTS": [
         lambda request: static("js/script.js"),
     ],
+    "BORDER_RADIUS": "6px",
     "COLORS": {
         "base": {
             "50": "#fafafa",
@@ -169,7 +174,7 @@ UNFOLD = {
                     {
                         "title": _("Кошельки"),
                         "icon": "account_balance_wallet",
-                        "link": lazy(get_wallets_all_tab_url, str)(),
+                        "link": lazy(get_wallets_changelist_url, str)(),
                         "permission": lambda request: request.user.has_perm(
                             "solana.view_wallet"
                         ),
@@ -213,76 +218,83 @@ UNFOLD = {
                     },
                 ],
             },
-            # {
-            #     "title": _("Периодические задачи"),
-            #     "separator": True,  # Top border
-            #     "collapsible": False,  # Collapsible group of links
-            #     "items": [
-            #         {
-            #             "title": _("Periodic tasks"),
-            #             "icon": "task",
-            #             "link": reverse_lazy("admin:django_celery_beat_periodictask_changelist"),
-            #             "permission": lambda request: request.user.has_perm("django_celery_beat.view_periodictask"),
-            #         },
-            #         {
-            #             "title": _("Task results"),
-            #             "icon": "summarize",
-            #             "link": reverse_lazy("admin:django_celery_results_taskresult_changelist"),
-            #             "permission": lambda request: request.user.has_perm("django_celery_results.view_taskresult"),
-            #         },
-            #         # {
-            #         #     "title": _("Group results"),
-            #         #     "icon": "bar_chart",
-            #         #     "link": reverse_lazy("admin:django_celery_results_groupresult_changelist"),
-            #         #     "permission": lambda request: request.user.has_perm("django_celery_results.view_groupresult"),
-            #         # },
-            #         # {
-            #         #     "title": _("Crontabs"),
-            #         #     "icon": "update",
-            #         #     "link": reverse_lazy("admin:django_celery_beat_crontabschedule_changelist"),
-            #         #     "permission": lambda request: request.user.has_perm("django_celery_beat.view_crontabschedule"),
-            #         # },
-            #         # {
-            #         #     "title": _("Clocked"),
-            #         #     "icon": "hourglass_bottom",
-            #         #     "link": reverse_lazy("admin:django_celery_beat_clockedschedule_changelist"),
-            #         #     "permission": lambda request: request.user.has_perm("django_celery_beat.view_clockedschedule"),
-            #         # },
-            #         # {
-            #         #     "title": _("Intervals"),
-            #         #     "icon": "arrow_range",
-            #         #     "link": reverse_lazy("admin:django_celery_beat_intervalschedule_changelist"),
-            #         #     "permission": lambda request: request.user.has_perm("django_celery_beat.view_intervalschedule"),
-            #         # },
-            #         # {
-            #         #     "title": _("Solar"),
-            #         #     "icon": "event",
-            #         #     "link": reverse_lazy("admin:django_celery_beat_solarschedule_changelist"),
-            #         #     "permission": lambda request: request.user.has_perm("django_celery_beat.view_solarschedule"),
-            #         # },
-            #     ],
-            #
-            # },
         ],
     },
-    "TABS": "solana.admin.tabs_callback",
-    # "TABS": [
-    #     {
-    #         "models": [
-    #             "solana.wallet",
-    #         ],
-    #         "items": [
-    #             {
-    #                 "title": _("Главная"),
-    #                 "link": lazy(get_wallets_all_tab_url, str)(),
-    #                 # "permission": "users.permission_callback",
-    #             },
-    #             {
-    #                 "title": _("Избранные"),
-    #                 "link": lazy(get_wallets_favorite_tab_url, str)(),
-    #                 # "permission": "users.permission_callback",
-    #             }
-    #         ],
-    #     }
-    # ],
+    "TABS": "core.settings.unfold.tabs_callback",
 }
+
+
+def tabs_callback(request: HttpRequest) -> list[dict[str, Any]]:
+    from solana.admin.wallet.filters import WalletFilterType
+    is_favorite = WalletFilterType.IS_FAVORITE
+    is_watch_later = WalletFilterType.IS_WATCH_LATER
+    is_blacklisted = WalletFilterType.IS_BLACKLISTED
+    is_bot = WalletFilterType.IS_BOT
+    is_scammer = WalletFilterType.IS_SCAMMER
+
+    default_period = "30d"
+
+    base_url = str(reverse_lazy("admin:solana_wallet_changelist"))  # Главная
+    base_url = f"{base_url}?period={default_period}"
+
+    main_url = f"{base_url}&{is_scammer}=0&{is_bot}=0&{is_blacklisted}=0"
+
+    favorite_url = f"{base_url}&{is_favorite}=1"  # Избранные
+    watch_later_url = f"{base_url}&{is_watch_later}=1"  # Смотреть позже
+    blacklist_url = f"{base_url}&{is_blacklisted}=1"  # Блеклист
+    bots_url = f"{base_url}&{is_bot}=1"  # Боты
+    scammers_url = f"{base_url}&{is_scammer}=1"  # Скамеры
+
+    # Разбираем параметры запроса
+    query_params = parse_qs(urlparse(request.get_full_path()).query)
+
+    # Определяем количество активных фильтров
+    active_filters = [
+        key
+        for key in [is_favorite, is_watch_later, is_blacklisted, is_bot, is_scammer]
+        if query_params.get(key) == ["1"]
+    ]
+
+    # Если ровно один фильтр → он становится активной вкладкой, иначе активна "Главная"
+    active_tab = active_filters[0] if len(active_filters) == 1 else "main"
+
+    base = [
+        {
+            "page": "custom_page",
+            "models": ["solana.wallet"],
+            "items": [
+                {
+                    "title": "Главная",
+                    "link": main_url,
+                    "active": active_tab == "main",
+                },
+                {
+                    "title": "Избранные",
+                    "link": favorite_url,
+                    "active": active_tab == is_favorite,
+                },
+                {
+                    "title": "Смотреть позже",
+                    "link": watch_later_url,
+                    "active": active_tab == is_watch_later,
+                },
+                {
+                    "title": "Блеклист",
+                    "link": blacklist_url,
+                    "active": active_tab == is_blacklisted,
+                },
+                {
+                    "title": "Боты",
+                    "link": bots_url,
+                    "active": active_tab == is_bot,
+                },
+                {
+                    "title": "Скамеры",
+                    "link": scammers_url,
+                    "active": active_tab == is_scammer,
+                },
+            ],
+        },
+    ]
+
+    return base

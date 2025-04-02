@@ -16,6 +16,4 @@ class GetWalletActivitiesHandler:
         pagination: Pagination,
         filters: GetWalletActivitiesFilters,
     ) -> WalletActivitiesPageDTO:
-        return await self._reader.get_wallet_activities(
-            address=address, pagination=pagination
-        )
+        return await self._reader.get_wallet_activities(address=address, pagination=pagination)

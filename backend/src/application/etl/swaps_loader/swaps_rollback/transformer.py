@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
 from typing import List, Tuple
 
+from uuid6 import uuid7
+
 from src.domain.entities.swap import Swap
 from src.domain.entities.token import Token
 from src.domain.entities.wallet import Wallet, WalletToken
-from uuid6 import uuid7
 
 from .common import calculations
 

@@ -1,17 +1,19 @@
 import asyncio
 import logging
 from datetime import datetime, timedelta
+from uuid import UUID
 
 import pytz
 import requests
+from uuid6 import uuid7
+
 from src.domain.constants import SOL_ADDRESS
 from src.domain.entities.token import TokenPrice as TokenPrice
 from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyTokenPriceRepository,
     SQLAlchemyTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
-from uuid6 import uuid7
+from src.infra.db.sqlalchemy.setup import AsyncSessionLocal, engine
 
 logger = logging.getLogger("tasks.collect_sol_prices")
 
@@ -20,6 +22,10 @@ BINANCE_API_KLINES_URL = "https://api.binance.com/api/v3/klines"
 
 
 async def collect_prices_async():
+    global engine
+
+    logger.info(f"AsyncSessionLocal ID: {id(AsyncSessionLocal)}")
+    logger.info(f"Engine ID: {id(engine)}")
     token = await get_sol_token()
     if not token:
         raise ValueError("Токен WSOL не найден в БД!")
@@ -31,9 +37,7 @@ async def collect_prices_async():
     current_time = start_time
     all_candles = []
     while current_time < end_time:
-        next_time = min(
-            current_time + timedelta(minutes=1000), end_time
-        )  # Максимальный диапазон за запрос
+        next_time = min(current_time + timedelta(minutes=1000), end_time)  # Максимальный диапазон за запрос
         logger.info(f"Собираем цены с {current_time} до {next_time}...")
         try:
             candles = fetch_candles(
@@ -43,7 +47,7 @@ async def collect_prices_async():
                 next_time,
             )
             all_candles.extend(candles)
-            logger.debug(f"Собираем за период {current_time} - {next_time}")
+            logger.debug(f"Получили цены за период {current_time} - {next_time}")
         except Exception as e:
             logger.error(f"Ошибка при получении цен: {e}")
             raise e
@@ -107,11 +111,9 @@ async def get_sol_token():
         )
 
 
-async def get_latest_token_price(token_id: str) -> TokenPrice | None:
+async def get_latest_token_price(token_id: UUID) -> TokenPrice | None:
     async with AsyncSessionLocal() as session:
-        return await SQLAlchemyTokenPriceRepository(session).get_latest_by_token(
-            token_id
-        )
+        return await SQLAlchemyTokenPriceRepository(session).get_latest_by_token(token_id)
 
 
 async def load_prices_to_db(prices: list[TokenPrice]):
@@ -121,3 +123,12 @@ async def load_prices_to_db(prices: list[TokenPrice]):
             ignore_conflicts=True,
         )
         await session.commit()
+
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",  # Формат даты
+    )
+    asyncio.run(collect_prices_async())

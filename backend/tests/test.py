@@ -15,12 +15,16 @@ from sqlalchemy import (
     Table,
     Text,
     select,
+    Join,
 )
-from sqlalchemy.orm import registry
+from sqlalchemy.orm import registry, joinedload
+
+from src.application.wallet.dto import GetWalletsFilters
 from src.domain.entities import Swap as SwapEntity
 from src.domain.entities import SwapEventType
-from src.infra.db.sqlalchemy.models import Swap
-from src.infra.db.sqlalchemy.repositories import SQLAlchemySwapRepository
+from src.infra.db.sqlalchemy.models import Swap, Wallet, WalletStatistic30d, WalletStatisticAll
+from src.infra.db.sqlalchemy.readers.wallet import GetWalletsFilterSet
+from src.infra.db.sqlalchemy.repositories import SQLAlchemyWalletRepository, SQLAlchemyWalletStatisticAllRepository
 from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
 
 
@@ -33,20 +37,54 @@ def init_orm_mappers():
     )
 
 
+from sqlalchemy.orm import contains_eager
+
+
 async def main():
-    # init_orm_mappers()
-    # async with AsyncSessionLocal() as session:
-    #     res = await SQLAlchemySwapRepository(session).get_list(100_000)
-    #     print(res[0])
     async with AsyncSessionLocal() as session:
-        query = select(*Swap.__table__.columns).limit(100000)
-        connection = await session.connection()
-        res = await session.execute(query)
-        swaps = [SwapEntity(**s) for s in res.mappings().all()]
-        print(swaps[0])
+        query = select(Wallet)
+        query = query.options(
+            # joinedload(Wallet.stats_all, innerjoin=True),
+            #     contains_eager(Wallet.stats_30d)
+        )
+        # query = query.join(Wallet.stats_30d, isouter=True).filter(WalletStatistic30d.winrate >= 50.0)
+        # print(list(query.get_final_froms()))
+        filters = GetWalletsFilters(stats_all__winrate__gte=99, stats_all__winrate__lte=100)
+        print(GetWalletsFilterSet.get_filters())
+
+        filter_set = GetWalletsFilterSet(session, query)
+        count_query = filter_set.count_query(filters.model_dump(exclude_none=True))
+        print(count_query)
+        query = filter_set.filter_query(filters.model_dump(exclude_none=True))
+        print(list(query.get_final_froms()))
+        return
+        joined_before = False
+        to_check = list(query.get_final_froms())
+        print(to_check)
+        while to_check:
+            element = to_check.pop()
+            if not isinstance(element, Join):
+                continue
+            if element.right == WalletStatisticAll.__table__ and element.onclause is not None:
+                print("VOT ONA")
+                joined_before = True
+
+            to_check.append(element.left)
+            to_check.append(element.right)
+
+        if joined_before:
+            query = query.options(contains_eager(Wallet.stats_all))
+        else:
+            query = query.options(joinedload(Wallet.stats_all))
+
+        print(query)
+
+        res = (await session.scalars(query.limit(1))).all()
+
+        print(res[0].stats_all.total_token)
 
 
 if __name__ == "__main__":
     start = datetime.now()
     asyncio.run(main())
-    print(datetime.now() - start)
+    # print(datetime.now() - start)

@@ -3,6 +3,8 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from typing import List, Tuple
 
+from uuid6 import uuid7
+
 from src.domain.constants import OKX_WALLET_ADDRESS, SOL_ADDRESS
 from src.domain.entities.swap import Swap, SwapEventType
 from src.domain.entities.token import Token
@@ -13,7 +15,6 @@ from src.domain.entities.wallet import (
     WalletStatisticAll,
     WalletToken,
 )
-from uuid6 import uuid7
 
 from .common import calculations
 
@@ -36,11 +37,7 @@ def populate_swaps_data(swaps: list):
         swappers = defaultdict(lambda: defaultdict(list))
         swaps_count = len(_swaps)
         for swap in _swaps:
-            token = (
-                swap["swap_from_mint"]
-                if swap["swap_to_mint"] == SOL_ADDRESS
-                else swap["swap_to_mint"]
-            )
+            token = swap["swap_from_mint"] if swap["swap_to_mint"] == SOL_ADDRESS else swap["swap_to_mint"]
             event_type = "buy" if swap["swap_to_mint"] == token else "sell"
             swappers[swap["swapper"]][token].append(event_type)
         swappers_list = [swapper for swapper in swappers.keys()]
@@ -53,11 +50,7 @@ def populate_swaps_data(swaps: list):
                             swap["is_part_of_arbitrage_swap_event"] = True
             elif swappers_count == 2:
                 if OKX_WALLET_ADDRESS in swappers_list:
-                    real_swapper = (
-                        swappers_list[0]
-                        if swappers_list[1] == OKX_WALLET_ADDRESS
-                        else swappers_list[1]
-                    )
+                    real_swapper = swappers_list[0] if swappers_list[1] == OKX_WALLET_ADDRESS else swappers_list[1]
                     for swap in _swaps:
                         swap["swapper"] = real_swapper
             elif swappers_count >= 3:
@@ -87,16 +80,8 @@ def builds_objects(
         is_buy_swap = swap["swap_from_mint"] == SOL_ADDRESS
         token_address = swap["swap_to_mint"] if is_buy_swap else swap["swap_from_mint"]
         event_type = SwapEventType.BUY if is_buy_swap else SwapEventType.SELL
-        quote_amount = (
-            Decimal(str(swap["swap_from_amount"]))
-            if is_buy_swap
-            else Decimal(str(swap["swap_to_amount"]))
-        )
-        token_amount = (
-            Decimal(str(swap["swap_to_amount"]))
-            if is_buy_swap
-            else Decimal(str(swap["swap_from_amount"]))
-        )
+        quote_amount = Decimal(str(swap["swap_from_amount"])) if is_buy_swap else Decimal(str(swap["swap_to_amount"]))
+        token_amount = Decimal(str(swap["swap_to_amount"])) if is_buy_swap else Decimal(str(swap["swap_from_amount"]))
 
         iso_string = swap["block_timestamp"].replace("Z", "+00:00")
 
@@ -116,12 +101,8 @@ def builds_objects(
             )
             build_wallet_relations(wallet, created_at)
             wallets[wallet_address] = wallet
-        wallet.last_activity_timestamp = max(
-            swap_timestamp, wallet.last_activity_timestamp or swap_timestamp
-        )
-        wallet.first_activity_timestamp = min(
-            swap_timestamp, wallet.first_activity_timestamp or swap_timestamp
-        )
+        wallet.last_activity_timestamp = max(swap_timestamp, wallet.last_activity_timestamp or swap_timestamp)
+        wallet.first_activity_timestamp = min(swap_timestamp, wallet.first_activity_timestamp or swap_timestamp)
 
         token = tokens.get(token_address)
         if not token:
@@ -156,12 +137,8 @@ def builds_objects(
                 False,
             ),
         )
-        activity.wallet_address = (
-            wallet_address  # Для идентификации ибо ID из БД еще нету
-        )
-        activity.token_address = (
-            token_address  # Для идентификации ибо ID из БД еще нету
-        )
+        activity.wallet_address = wallet_address  # Для идентификации ибо ID из БД еще нету
+        activity.token_address = token_address  # Для идентификации ибо ID из БД еще нету
         activities_list.append(activity)
 
         if (wallet_address, token_address) not in wallet_tokens:
@@ -172,12 +149,8 @@ def builds_objects(
                 created_at=created_at,
                 updated_at=created_at,
             )
-            wallet_token.wallet_address = (
-                wallet_address  # Для идентификации ибо ID из БД еще нету
-            )
-            wallet_token.token_address = (
-                token_address  # Для идентификации ибо ID из БД еще нету
-            )
+            wallet_token.wallet_address = wallet_address  # Для идентификации ибо ID из БД еще нету
+            wallet_token.token_address = token_address  # Для идентификации ибо ID из БД еще нету
             wallet_tokens[(wallet_address, token_address)] = wallet_token
 
     wallets_list = [wallet for wallet in wallets.values()]

@@ -21,6 +21,7 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from src.infra.db.sqlalchemy.models.common import (
     Base,
     IntIDMixin,
@@ -41,19 +42,11 @@ class Wallet(Base, UUIDIDMixin, TimestampsMixin):
     wallet = None
     __tablename__ = "wallet"
 
-    last_stats_check: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    last_activity_timestamp: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    first_activity_timestamp: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
+    last_stats_check: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_activity_timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    first_activity_timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    is_scammer: Mapped[bool] = mapped_column(
-        Boolean, default=False, server_default="false"
-    )
+    is_scammer: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     is_bot: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     sol_balance: Mapped[Decimal] = mapped_column(DECIMAL(50, 20), nullable=True)
 
@@ -92,22 +85,11 @@ class Wallet(Base, UUIDIDMixin, TimestampsMixin):
         return f"{self.address}"
 
 
-from dataclasses import dataclass, field
-
-from sqlalchemy.orm import registry
-from src.domain.entities import Wallet as WalletEntity
-
-mapper_registry = registry()
-mapper_registry.map_imperatively(WalletEntity, Wallet.__table__)
-
-
 class AbstractWalletStatistic(Base, WalletFKPKMixin, TimestampsMixin):
     __abstract__ = True
 
     token_buy_sell_duration_avg: Mapped[Optional[int]] = mapped_column(BigInteger)
-    token_buy_sell_duration_median: Mapped[Optional[int]] = mapped_column(
-        BigInteger, index=True
-    )
+    token_buy_sell_duration_median: Mapped[Optional[int]] = mapped_column(BigInteger, index=True)
 
     total_profit_multiplier: Mapped[Optional[float]] = mapped_column(Float, index=True)
     pnl_lt_minus_dot5_percent: Mapped[Optional[float]] = mapped_column(Float)
@@ -131,28 +113,14 @@ class AbstractWalletStatistic(Base, WalletFKPKMixin, TimestampsMixin):
     pnl_gt_5x_num: Mapped[Optional[int]] = mapped_column(Integer)
 
     winrate: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(40, 5), index=True)
-    token_avg_profit_usd: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20), index=True
-    )
-    total_token_buy_amount_usd: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20)
-    )
-    total_token_sell_amount_usd: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20)
-    )
-    total_profit_usd: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20), index=True
-    )
-    token_avg_buy_amount: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20), index=True
-    )
+    token_avg_profit_usd: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20), index=True)
+    total_token_buy_amount_usd: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20))
+    total_token_sell_amount_usd: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20))
+    total_profit_usd: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20), index=True)
+    token_avg_buy_amount: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20), index=True)
     token_median_buy_amount: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20))
-    token_first_buy_avg_price_usd: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20)
-    )
-    token_first_buy_median_price_usd: Mapped[Optional[Decimal]] = mapped_column(
-        DECIMAL(50, 20), index=True
-    )
+    token_first_buy_avg_price_usd: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20))
+    token_first_buy_median_price_usd: Mapped[Optional[Decimal]] = mapped_column(DECIMAL(50, 20), index=True)
 
     @property
     def total_buys_and_sales_count(self) -> int:
@@ -240,34 +208,20 @@ class WalletStatisticBuyPriceGt15kAll(AbstractWalletStatistic):
 class WalletToken(Base, UUIDIDMixin, TimestampsMixin):
     __tablename__ = "wallet_token"
 
-    wallet_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("wallet.id", ondelete="CASCADE"), sort_order=-999
-    )
-    token_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("token.id", ondelete="CASCADE"), sort_order=-999
-    )
+    wallet_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("wallet.id", ondelete="CASCADE"), sort_order=-999)
+    token_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("token.id", ondelete="CASCADE"), sort_order=-999)
 
-    first_buy_timestamp: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    first_sell_timestamp: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    last_activity_timestamp: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
+    first_buy_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    first_sell_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_activity_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     total_profit_percent: Mapped[float] = mapped_column(Float, nullable=True)
     first_buy_sell_duration: Mapped[int] = mapped_column(Integer, nullable=True)
     total_buys_count: Mapped[int] = mapped_column(Integer, default=0)
     total_sales_count: Mapped[int] = mapped_column(Integer, default=0)
 
-    total_swaps_from_txs_with_mt_3_swappers: Mapped[int] = mapped_column(
-        Integer, default=0
-    )
-    total_swaps_from_arbitrage_swap_events: Mapped[int] = mapped_column(
-        Integer, default=0
-    )
+    total_swaps_from_txs_with_mt_3_swappers: Mapped[int] = mapped_column(Integer, default=0)
+    total_swaps_from_arbitrage_swap_events: Mapped[int] = mapped_column(Integer, default=0)
 
     total_buy_amount_usd: Mapped[Decimal] = mapped_column(DECIMAL(40, 20), default=0)
     total_buy_amount_token: Mapped[Decimal] = mapped_column(DECIMAL(40, 20), default=0)
@@ -275,9 +229,7 @@ class WalletToken(Base, UUIDIDMixin, TimestampsMixin):
     total_profit_usd: Mapped[Decimal] = mapped_column(DECIMAL(40, 20), default=0)
     total_sell_amount_usd: Mapped[Decimal] = mapped_column(DECIMAL(40, 20), default=0)
     total_sell_amount_token: Mapped[Decimal] = mapped_column(DECIMAL(40, 20), default=0)
-    first_sell_price_usd: Mapped[Decimal] = mapped_column(
-        DECIMAL(40, 20), nullable=True
-    )
+    first_sell_price_usd: Mapped[Decimal] = mapped_column(DECIMAL(40, 20), nullable=True)
 
     wallet = relationship("Wallet", backref="tokens")
     token = relationship("Token", backref="wallets")

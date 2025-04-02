@@ -1,12 +1,15 @@
 import uuid
+from datetime import datetime
 from typing import Any, Optional, TypeVar, Union
 
 import jwt
+import pytz
 from fastapi import Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import BaseUserManager, models
 from fastapi_users.jwt import SecretType, decode_jwt, generate_jwt
 from fastapi_users.password import PasswordHelper, PasswordHelperProtocol
+
 from src.application.interfaces.repositories.user import UserRepositoryInterface
 from src.application.user.dto import UserCreateDTO, UserUpdateDTO
 from src.domain.entities.base_entity import BaseEntity
@@ -78,14 +81,11 @@ class UserService(IntegerIDMixin):
         self,
         uow: UnitOfWorkInterface,
         user_repository: UserRepositoryInterface,
-        password_helper: Optional[PasswordHelperProtocol] = None,
+        password_helper: PasswordHelperProtocol,
     ):
         self._uow = uow
         self._user_repository = user_repository
-        if password_helper is None:
-            self.password_helper = PasswordHelper()
-        else:
-            self.password_helper = password_helper  # pragma: no cover
+        self.password_helper = password_helper  # pragma: no cover
 
     async def get(self, id_: ID) -> User:
         """
@@ -149,7 +149,7 @@ class UserService(IntegerIDMixin):
             return created_user
 
     async def oauth_callback(
-        self: "BaseUserManager[models.UOAP, models.ID]",
+        self,
         oauth_name: str,
         access_token: str,
         account_id: str,
@@ -207,9 +207,7 @@ class UserService(IntegerIDMixin):
                 user = await self.get_by_email(account_email)
                 if not associate_by_email:
                     raise UserAlreadyExistsException(email=account_email)
-                user = await self._user_repository.add_oauth_account(
-                    user, oauth_account_dict
-                )
+                user = await self._user_repository.add_oauth_account(user, oauth_account_dict)
             except UserDoesNotExistsException:
                 # Create account
                 password = self.password_helper.generate()
@@ -219,17 +217,12 @@ class UserService(IntegerIDMixin):
                     "is_verified": is_verified_by_default,
                 }
                 user = await self._user_repository.create(user_dict)
-                user = await self._user_repository.add_oauth_account(
-                    user, oauth_account_dict
-                )
+                user = await self._user_repository.add_oauth_account(user, oauth_account_dict)
                 await self.on_after_register(user, request)
         else:
             # Update oauth
             for existing_oauth_account in user.oauth_accounts:
-                if (
-                    existing_oauth_account.account_id == account_id
-                    and existing_oauth_account.oauth_name == oauth_name
-                ):
+                if existing_oauth_account.account_id == account_id and existing_oauth_account.oauth_name == oauth_name:
                     user = await self._user_repository.update_oauth_account(
                         user,
                         existing_oauth_account,
@@ -239,7 +232,7 @@ class UserService(IntegerIDMixin):
         return user
 
     async def oauth_associate_callback(
-        self: "BaseUserManager[models.UOAP, models.ID]",
+        self,
         user: models.UOAP,
         oauth_name: str,
         access_token: str,
@@ -702,10 +695,13 @@ class UserService(IntegerIDMixin):
             return None
         # Update password hash to a more robust one if needed
         if updated_password_hash is not None:
-            await self._user_repository.update(
-                user,
-                {"hashed_password": updated_password_hash},
-            )
+            print(updated_password_hash)
+            user.hashed_password = updated_password_hash
+            async with self._uow:
+                await self._user_repository.update(
+                    user,
+                    # {"hashed_password": updated_password_hash},
+                )
 
         return user
 
@@ -725,9 +721,7 @@ class UserService(IntegerIDMixin):
                     validated_update_dict["is_verified"] = False
             elif field == "password" and value is not None:
                 await self.validate_password(value, user)
-                validated_update_dict["hashed_password"] = self.password_helper.hash(
-                    value
-                )
+                validated_update_dict["hashed_password"] = self.password_helper.hash(value)
             else:
                 validated_update_dict[field] = value
         return await self._user_repository.update(user, validated_update_dict)

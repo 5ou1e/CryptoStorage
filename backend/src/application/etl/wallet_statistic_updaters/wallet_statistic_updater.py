@@ -5,17 +5,16 @@ from asyncio import Queue
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
 from sqlalchemy.exc import DBAPIError
+from tortoise.timezone import now
+
 from src.application.etl.wallet_statistic_updaters import calculations
 from src.domain.entities.wallet import (
     Wallet,
     WalletStatistic7d,
     WalletStatistic30d,
     WalletStatisticAll,
-    WalletToken,
 )
-from src.infra.db.sqlalchemy.models import WalletToken as WalletTokenModel
 from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletRepository,
     SQLAlchemyWalletStatistic7dRepository,
@@ -23,18 +22,9 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletStatisticAllRepository,
     SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
-from src.infra.db.tortoise.setup import init_db_async
-from tortoise import Tortoise
-from tortoise.timezone import now
+from src.infra.db.sqlalchemy.setup import AsyncSessionLocal, engine
 
 logger = logging.getLogger("tasks.update_wallet_statistics")
-
-
-async def update_single_wallet_statistics(
-    wallet_id,
-):
-    raise NotImplementedError
 
 
 async def receive_wallets_from_db(
@@ -45,9 +35,7 @@ async def receive_wallets_from_db(
     logger.info(f"Начинаем получение кошельков из БД")
     t1 = datetime.now()
     async with AsyncSessionLocal() as session:
-        wallets: list[Wallet] = await SQLAlchemyWalletRepository(
-            session
-        ).get_wallets_for_update_stats(count=count)
+        wallets: list[Wallet] = await SQLAlchemyWalletRepository(session).get_wallets_for_update_stats(count=count)
     t2 = datetime.now()
     logger.info(f"Получили {len(wallets)} кошельков из БД | Время: {t2 - t1}")
     for wallet in wallets:
@@ -85,7 +73,7 @@ async def fetch_wallets_related_data(
             # Создаём копию батча для передачи в задачу
             tasks.append(
                 asyncio.create_task(
-                    _fetch_related_data(
+                    fetch_related_data_and_put_in_queue(
                         batch.copy(),
                         fetched_wallets_queue,
                     )
@@ -108,22 +96,29 @@ async def fetch_wallets_related_data(
             return
 
 
-async def _fetch_related_data(
+async def fetch_related_data_and_put_in_queue(
     wallets: list[Wallet],
     fetched_wallets_queue: Queue,
 ):
     # Загружаем токены для кошельков
+    await _fetch_related_data(wallets)
+
+    for wallet in wallets:
+        await fetched_wallets_queue.put(wallet)
+
+
+async def _fetch_related_data(
+    wallets: list[Wallet],
+):
+    # Загружаем токены для кошельков
     start = datetime.now()
     async with AsyncSessionLocal() as session:
-        wallet_tokens = await SQLAlchemyWalletTokenRepository(
-            session
-        ).get_wallet_tokens_by_wallets_list([wallet.id for wallet in wallets])
+        wallet_tokens = await SQLAlchemyWalletTokenRepository(session).get_wallet_tokens_by_wallets_list(
+            [wallet.id for wallet in wallets]
+        )
     end = datetime.now()
     wt_count = len(wallet_tokens)
-    logger.debug(
-        f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}"
-    )
-    start = datetime.now()
+    logger.debug(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
 
     wallet_tokens_map = defaultdict(list)
     for wt in wallet_tokens:
@@ -134,11 +129,6 @@ async def _fetch_related_data(
         wallet.stats_30d = WalletStatistic30d(wallet_id=wallet.id)
         wallet.stats_all = WalletStatisticAll(wallet_id=wallet.id)
         wallet.tokens = [wt for wt in wallet_tokens_map[wallet.id]]
-
-    end = datetime.now()
-    logger.debug(f"Время создания обьектов токенов: {end-start}")
-    for wallet in wallets:
-        await fetched_wallets_queue.put(wallet)
 
 
 async def calculate_wallets(
@@ -205,9 +195,8 @@ async def update_wallets(
 
 async def _update_wallets_data(wallets):
     logger.debug(f"Начинаем обновление кошельков")
-    last_check = start = now()
-    for wallet in wallets:
-        wallet.last_stats_check = last_check
+    start = now()
+
     excluded_fields = [
         "id",
         "wallet_id",
@@ -216,18 +205,13 @@ async def _update_wallets_data(wallets):
 
     await asyncio.gather(
         _update_wallets(wallets),
-        _update_wallet_stats_7d(
-            [wallet.stats_7d for wallet in wallets], excluded_fields
-        ),
-        _update_wallet_stats_30d(
-            [wallet.stats_30d for wallet in wallets], excluded_fields
-        ),
-        _update_wallet_stats_all(
-            [wallet.stats_all for wallet in wallets], excluded_fields
-        ),
+        _update_wallet_stats_7d([wallet.stats_7d for wallet in wallets], excluded_fields),
+        _update_wallet_stats_30d([wallet.stats_30d for wallet in wallets], excluded_fields),
+        _update_wallet_stats_all([wallet.stats_all for wallet in wallets], excluded_fields),
     )
 
     elapsed_time = now() - start
+
     logger.debug(f"Обновили {len(wallets)} кошельков в базе! | Время: {elapsed_time}")
 
 
@@ -259,6 +243,9 @@ async def _update_wallet_stats_all(stats, excluded_fields):
 
 
 async def _update_wallets(wallets):
+    last_check = now()
+    for wallet in wallets:
+        wallet.last_stats_check = last_check
     for i in range(5):
         try:
             async with AsyncSessionLocal() as session:
@@ -328,7 +315,7 @@ async def process_update_wallet_statistics():
     received_wallets_queue = Queue()
     fetched_wallets_queue = Queue()
     calculated_wallets_queue = Queue()
-    wallets_count = 300_000
+    wallets_count = 100_000
     total_wallets_processed = 0
     total_tokens_processed = 0
     total_elapsed_time = 0
@@ -345,7 +332,7 @@ async def process_update_wallet_statistics():
                 fetch_wallets_related_data(
                     received_wallets_queue,
                     fetched_wallets_queue,
-                    batch_size=1000,
+                    batch_size=500,
                     max_parallel=5,
                 )
             )
@@ -380,5 +367,28 @@ async def process_update_wallet_statistics():
         )
 
 
+async def update_single_wallet_statistics(
+    address,
+):
+    global engine
+
+    logger.info(f"AsyncSessionLocal ID: {id(AsyncSessionLocal)}")
+    logger.info(f"Engine ID: {id(engine)}")
+
+    async with AsyncSessionLocal() as session:
+        wallet = await SQLAlchemyWalletRepository(session).get_by_address(address)
+        if not wallet:
+            return
+        await _fetch_related_data([wallet])
+        calculations.calculate_wallet_stats(wallet)
+        await _update_wallets_data([wallet])
+
+
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
     asyncio.run(process_update_wallet_statistics())
+    # asyncio.run(update_single_wallet_statistics(address='3i6EBeC47tDt2S1dRAYKim4HQf9TYbTSZ3uQ4AXjeN8d'))

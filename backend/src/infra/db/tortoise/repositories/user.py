@@ -1,13 +1,14 @@
 from typing import Any, Dict, Optional, Type, TypeVar
 
+from tortoise.expressions import F, Q
+from tortoise.models import Model
+
 from src.application.interfaces.repositories.user import UserRepositoryInterface
 from src.domain.entities.user import User as UserEntity
 from src.infra.db.tortoise.models import User
 from src.infra.db.tortoise.repositories.generic_repository import (
     TortoiseGenericRepository,
 )
-from tortoise.expressions import F, Q
-from tortoise.models import Model
 
 ID = TypeVar("ID", bound=Any)
 
@@ -30,14 +31,10 @@ class TortoiseUserRepository(TortoiseGenericRepository, UserRepositoryInterface)
     async def get_by_email(self, email: str) -> Optional[UserEntity]:
         from tortoise import functions
 
-        condition = Q(email=functions.Lower(F("email"))) & Q(
-            email__iexact=email.lower()
-        )
+        condition = Q(email=functions.Lower(F("email"))) & Q(email__iexact=email.lower())
         return await self.model_class.filter(condition).first()
 
-    async def get_by_oauth_account(
-        self, oauth: str, account_id: str
-    ) -> Optional[UserEntity]:
+    async def get_by_oauth_account(self, oauth: str, account_id: str) -> Optional[UserEntity]:
         if self.oauth_account_model_class is None:
             raise NotImplementedError
 

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
-from solana.admin.shared.base_admin_model import BaseAdminModel
+from solana.admin.common.base_admin_model import BaseAdminModel
 from solana.models import (WalletStatistic7d, WalletStatistic30d,
                            WalletStatisticAll)
 
@@ -16,6 +16,6 @@ class WalletStatistic30dAdmin(BaseAdminModel):
     search_fields = ("wallet__address",)
 
 
-@admin.register(WalletStatisticAll)
+# @admin.register(WalletStatisticAll)
 class WalletStatisticAllAdmin(BaseAdminModel):
     search_fields = ("wallet__address",)

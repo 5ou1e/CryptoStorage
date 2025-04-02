@@ -32,7 +32,7 @@ def update_wallet_status(
     user_wallet.save()
 
 
-class WalletActions:
+class BaseWalletActionsMixin:
     @action(description="Выгрузить адреса кошельков")
     def export_wallets_to_file(self, request, queryset):
         data = "\n".join(str(obj.address) for obj in queryset)
@@ -40,32 +40,32 @@ class WalletActions:
         response["Content-Disposition"] = 'attachment; filename="wallets_export.txt"'
         return response
 
-    @action(description="Добавить в блек-лист")
+    @action(description="Добавить в «Блэк-лист»")
     def add_wallets_to_blacklist(self, request, queryset):
         for obj in queryset:
             update_wallet_status(request.user, obj, is_blacklisted=True)
 
-    @action(description="Убрать из блек-листа")
+    @action(description="Убрать из «Блэк-лист»")
     def remove_wallets_from_blacklist(self, request, queryset):
         for obj in queryset:
             update_wallet_status(request.user, obj, is_blacklisted=False)
 
-    @action(description="Добавить в избранное")
+    @action(description="Добавить в «Избранные»")
     def add_wallets_to_favorites(self, request, queryset):
         for obj in queryset:
             update_wallet_status(request.user, obj, is_favorite=True)
 
-    @action(description="Убрать из избранных")
+    @action(description="Убрать из «Избранные»")
     def remove_wallets_from_favorites(self, request, queryset):
         for obj in queryset:
             update_wallet_status(request.user, obj, is_favorite=False)
 
-    @action(description="Добавить в 'Смотреть позже'")
+    @action(description="Добавить в «Смотреть позже»")
     def add_wallets_to_watch_later(self, request, queryset):
         for obj in queryset:
             update_wallet_status(request.user, obj, is_watch_later=True)
 
-    @action(description="Убрать из 'Смотреть позже'")
+    @action(description="Убрать из «Смотреть позже»")
     def remove_wallets_from_watch_later(self, request, queryset):
         for obj in queryset:
             update_wallet_status(request.user, obj, is_watch_later=False)
@@ -77,9 +77,7 @@ class WalletActions:
     )
     def open_stats(self, request: HttpRequest, object_id: int):
         obj = self.model.objects.get(pk=object_id)
-        new_url = (
-            reverse("admin:solana_wallet_changelist") + f"{obj.address}/statistics/"
-        )
+        new_url = reverse("admin:solana_wallet_changelist") + f"{obj.address}/"
         return redirect(new_url)
 
     @action(
@@ -111,3 +109,21 @@ class WalletActions:
         obj = self.model.objects.get(pk=object_id)
         wallet_address = obj.address
         return redirect(f"https://solscan.io/account/{wallet_address}")
+
+
+class WalletActionsMixin(BaseWalletActionsMixin):
+    pass
+
+
+class WalletBuyPriceGt15kActionsMixin(BaseWalletActionsMixin):
+    @action(
+        description=_("Статистика"),
+        url_path="changelist-wallet-open-stats",
+        attrs={"target": "_blank"},
+    )
+    def open_stats(self, request: HttpRequest, object_id: int):
+        obj = self.model.objects.get(pk=object_id)
+        new_url = (
+            reverse("admin:solana_walletbuypricegt15k_changelist") + f"{obj.address}/"
+        )
+        return redirect(new_url)

@@ -1,7 +1,10 @@
 import logging
 from typing import Annotated
 
+from dishka import FromDishka
+from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Depends
+
 from src.application.common.dto import Pagination
 from src.application.wallet.dto import (
     GetWalletActivitiesFilters,
@@ -13,13 +16,12 @@ from src.application.wallet.dto import (
     WalletsPageDTO,
     WalletTokensPageDTO,
 )
-from src.presentation.api.dependencies.services import (
-    GetWalletActivitiesHandlerDep,
-    GetWalletByAddressHandlerDep,
-    GetWalletRelatedWalletsHandlerDep,
-    GetWalletsHandlerDep,
-    GetWalletTokensHandlerDep,
-)
+from src.application.wallet.dto.wallet import GetWalletsSorting
+from src.application.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
+from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
+from src.application.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
+from src.application.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
+from src.application.wallet.queries.get_wallets import GetWalletsHandler
 from src.presentation.api.schemas.response import ApiResponse
 
 logger = logging.getLogger(__name__)
@@ -27,7 +29,6 @@ logger = logging.getLogger(__name__)
 router = APIRouter(
     prefix="/wallets",
     tags=["Кошельки"],
-    # dependencies=[Depends(get_current_user),]
 )
 
 
@@ -37,29 +38,26 @@ router = APIRouter(
     summary="Получить кошелек по адресу",
     response_description="Детальная информация о кошельке.",
 )
-async def get_wallet_by_address(
-    address: str,
-    handler: GetWalletByAddressHandlerDep,
-) -> ApiResponse[WalletDTO]:
+@inject
+async def get_wallet_by_address(address: str, handler: FromDishka[GetWalletByAddressHandler]) -> ApiResponse[WalletDTO]:
     result = await handler(address)
     return ApiResponse(result=result)
 
 
 @router.get(
     "",
-    description="Возвращает список всех кошельков с использованием limit и offset",
+    description="Возвращает список кошельков",
     summary="Получить список кошельков",
     response_description="Список кошельков с их детальной информацией.",
 )
+@inject
 async def get_wallets(
     pagination: Annotated[Pagination, Depends()],
+    sorting: Annotated[GetWalletsSorting, Depends()],
     filters: Annotated[GetWalletsFilters, Depends()],
-    handler: GetWalletsHandlerDep,
+    handler: FromDishka[GetWalletsHandler],
 ) -> ApiResponse[WalletsPageDTO]:
-    result: WalletsPageDTO = await handler(
-        pagination,
-        filters,
-    )
+    result: WalletsPageDTO = await handler(pagination, filters, sorting)
     return ApiResponse(result=result)
 
 
@@ -69,11 +67,12 @@ async def get_wallets(
     summary="Получить токены кошелька по его адресу",
     response_description="Токены кошелька с детальной информацией",
 )
+@inject
 async def get_wallet_tokens(
     address: str,
     pagination: Annotated[Pagination, Depends()],
     filters: Annotated[GetWalletTokensFilters, Depends()],
-    handler: GetWalletTokensHandlerDep,
+    handler: FromDishka[GetWalletTokensHandler],
 ) -> ApiResponse[WalletTokensPageDTO]:
     result: WalletTokensPageDTO = await handler(
         address,
@@ -89,11 +88,12 @@ async def get_wallet_tokens(
     summary="Получить активности кошелька по его адресу",
     response_description="Активности с детальной информацией",
 )
+@inject
 async def get_wallet_activities(
     address: str,
     pagination: Annotated[Pagination, Depends()],
     filters: Annotated[GetWalletActivitiesFilters, Depends()],
-    handler: GetWalletActivitiesHandlerDep,
+    handler: FromDishka[GetWalletActivitiesHandler],
 ) -> ApiResponse[WalletActivitiesPageDTO]:
     result: WalletActivitiesPageDTO = await handler(
         address,
@@ -105,13 +105,14 @@ async def get_wallet_activities(
 
 @router.get(
     "/{address}/related_wallets",
-    description="Возвращает связанные кошельки для кошелька по адресу",
+    description="Возвращает связанные кошельки для кошелька",
     summary="Получить связанные кошельки по адресу кошелька",
     response_description="Список связанных кошельков",
 )
+@inject
 async def get_wallet_related_wallets(
     address: str,
-    handler: GetWalletRelatedWalletsHandlerDep,
+    handler: FromDishka[GetWalletRelatedWalletsHandler],
 ) -> ApiResponse[WalletRelatedWalletsDTO]:
     result: WalletRelatedWalletsDTO = await handler(address)
     return ApiResponse(result=result)

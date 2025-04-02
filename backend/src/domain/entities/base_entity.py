@@ -9,7 +9,7 @@ from mashumaro.types import SerializationStrategy
 
 class TsSerializationStrategy(SerializationStrategy, use_annotations=False):
     def serialize(self, value: datetime) -> datetime:
-        """Для сериализации datetime -> datetime а не в str"""
+        """Для сериализации datetime -> datetime вместо datetime -> str"""
         return value
 
 

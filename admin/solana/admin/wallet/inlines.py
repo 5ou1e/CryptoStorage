@@ -3,11 +3,11 @@ from unfold.admin import StackedInline, TabularInline
 from solana.models import (WalletStatistic7d, WalletStatistic30d,
                            WalletStatisticAll, WalletTokenStatistic)
 
-from ..shared.misc import LimitModelFormset
+from ..common.misc import LimitModelFormset
 
 
 class WalletTokenStatisticInline(TabularInline):
-    verbose_name = "Wallet-Token Stat"
+    verbose_name = "Wallet-Token"
     model = WalletTokenStatistic
     formset = LimitModelFormset
     readonly_fields = ("wallet", "token")

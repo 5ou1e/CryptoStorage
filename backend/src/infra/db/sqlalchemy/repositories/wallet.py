@@ -4,6 +4,7 @@ from uuid import UUID
 
 from sqlalchemy import and_, select, text
 from sqlalchemy.orm import selectinload
+
 from src.application.interfaces.repositories.wallet import (
     WalletRepositoryInterface,
     WalletStatistic7dRepositoryInterface,
@@ -18,15 +19,9 @@ from src.domain.entities.wallet import Wallet as WalletEntity
 from src.domain.entities.wallet import WalletStatistic7d as WalletStatistic7dEntity
 from src.domain.entities.wallet import WalletStatistic30d as WalletStatistic30dEntity
 from src.domain.entities.wallet import WalletStatisticAll as WalletStatisticAllEntity
-from src.domain.entities.wallet import (
-    WalletStatisticBuyPriceGt15k7d as WalletStatisticBuyPriceGt15k7dEntity,
-)
-from src.domain.entities.wallet import (
-    WalletStatisticBuyPriceGt15k30d as WalletStatisticBuyPriceGt15k30dEntity,
-)
-from src.domain.entities.wallet import (
-    WalletStatisticBuyPriceGt15kAll as WalletStatisticBuyPriceGt15kAllEntity,
-)
+from src.domain.entities.wallet import WalletStatisticBuyPriceGt15k7d as WalletStatisticBuyPriceGt15k7dEntity
+from src.domain.entities.wallet import WalletStatisticBuyPriceGt15k30d as WalletStatisticBuyPriceGt15k30dEntity
+from src.domain.entities.wallet import WalletStatisticBuyPriceGt15kAll as WalletStatisticBuyPriceGt15kAllEntity
 from src.domain.entities.wallet import WalletToken as WalletTokenEntity
 from src.infra.db import queries
 from src.infra.db.sqlalchemy.models import (
@@ -102,18 +97,14 @@ class SQLAlchemyWalletTokenRepository(
     entity_class = WalletTokenEntity
 
     async def get_wallet_tokens_by_wallets_list(self, wallet_ids: list[UUID]):
-        query = select(*self.model_class.__table__.columns).where(
-            self.model_class.wallet_id.in_([id_ for id_ in wallet_ids])
-        )
+        query = select(self.model_class).where(self.model_class.wallet_id.in_([id_ for id_ in wallet_ids]))
 
         connection = await self._session.connection()
         result = await connection.execute(query)
         return [self.entity_class(**row) for row in result.mappings().all()]
 
-    async def get_wallet_tokens_by_wallet_for_buygt15k_statistic(
-        self, wallet_id: UUID
-    ) -> list[WalletTokenEntity]:
-        query = select(*self.model_class.__table__.columns).where(
+    async def get_wallet_tokens_by_wallet_for_buygt15k_statistic(self, wallet_id: UUID) -> list[WalletTokenEntity]:
+        query = select(self.model_class).where(
             WalletToken.wallet_id == wallet_id,
             self.model_class.first_buy_price_usd >= 0.000008,
             self.model_class.total_buy_amount_usd >= 100,
@@ -136,10 +127,7 @@ class SQLAlchemyWalletTokenRepository(
         connection = await self._session.connection()
 
         if batch_size:
-            [
-                await connection.execute(stmt, values[i : i + batch_size])
-                for i in range(0, len(objects), batch_size)
-            ]
+            [await connection.execute(stmt, values[i : i + batch_size]) for i in range(0, len(objects), batch_size)]
         else:
             await connection.execute(stmt, values)
         return objects
@@ -155,7 +143,10 @@ class SQLAlchemyWalletRepository(
     async def get_by_address(self, address: str) -> WalletEntity | None:
         stmt = select(self.model_class).where(self.model_class.address == address)
         result = await self._session.execute(stmt)
-        return result.scalars().first()
+        instance = result.scalars().first()
+        if not instance:
+            return None
+        return self.model_to_entity(instance)
 
     async def get_wallets_for_update_stats(self, count: int = 1) -> list[WalletEntity]:
         _query = queries.GET_WALLETS_FOR_UPDATE_STATS.format(count=count)

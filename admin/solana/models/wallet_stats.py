@@ -3,7 +3,7 @@ from django.db import models
 
 class AbstractWalletPeriodStatistic(models.Model):
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="wallet_statistic_period_abstract",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -147,7 +147,7 @@ class AbstractWalletPeriodStatistic(models.Model):
 
 class WalletStatistic7d(AbstractWalletPeriodStatistic):
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="stats_7d",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -166,7 +166,7 @@ class WalletStatistic7d(AbstractWalletPeriodStatistic):
 
 class WalletStatistic30d(AbstractWalletPeriodStatistic):
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="stats_30d",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -186,7 +186,7 @@ class WalletStatistic30d(AbstractWalletPeriodStatistic):
 class WalletStatisticAll(AbstractWalletPeriodStatistic):
 
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="stats_all",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -205,7 +205,7 @@ class WalletStatisticAll(AbstractWalletPeriodStatistic):
 
 class WalletStatisticBuyPriceGt15k7d(AbstractWalletPeriodStatistic):
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="stats_buy_price_gt_15k_7d",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -224,7 +224,7 @@ class WalletStatisticBuyPriceGt15k7d(AbstractWalletPeriodStatistic):
 
 class WalletStatisticBuyPriceGt15k30d(AbstractWalletPeriodStatistic):
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="stats_buy_price_gt_15k_30d",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -243,7 +243,7 @@ class WalletStatisticBuyPriceGt15k30d(AbstractWalletPeriodStatistic):
 
 class WalletStatisticBuyPriceGt15kAll(AbstractWalletPeriodStatistic):
     wallet = models.OneToOneField(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="stats_buy_price_gt_15k_all",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",

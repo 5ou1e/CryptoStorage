@@ -1,4 +1,5 @@
 import uvicorn
+
 from src.presentation.api.builder import AppBuilder
 
 app = AppBuilder.create_app()

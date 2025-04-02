@@ -8,8 +8,8 @@ Create Date: 2025-03-27 00:15:43.953406
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
@@ -30,9 +30,7 @@ def upgrade() -> None:
         ),
     )
     op.drop_column("flipsidecrypto_config", "swaps_parsed_until_block_timestamp")
-    op.create_index(
-        "idx_token_is_metadata_parsed", "token", ["is_metadata_parsed"], unique=False
-    )
+    op.create_index("idx_token_is_metadata_parsed", "token", ["is_metadata_parsed"], unique=False)
     # ### end Alembic commands ###
 
 

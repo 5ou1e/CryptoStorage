@@ -3,14 +3,16 @@ from unfold.contrib.filters.admin import FieldTextFilter, RangeNumericFilter
 
 from solana.models import WalletTokenStatistic
 
-from ..shared.base_admin_model import BaseAdminModel
-from ..shared.filters import TokenAddressFilter, WalletAddressFilter
-from .displays import WalletTokenDisplays
+from ..common.base_admin_model import BaseAdminModel
+from ..common.filters import TokenAddressFilter, WalletAddressFilter
+from .displays import WalletTokenDisplaysMixin
 from .filters import IsTokenSellAmountGtBuyAmountFilter
+from .table_sections import SwapsTableSection
 
 
 @admin.register(WalletTokenStatistic)
 class WalletTokenStatisticAdmin(BaseAdminModel):
+
     autocomplete_fields = ["token", "wallet"]
     list_display = [
         "token__symbol",
@@ -32,10 +34,11 @@ class WalletTokenStatisticAdmin(BaseAdminModel):
 
 
 class WalletTokenStatisticForWalletStatsPageAdmin(
-    WalletTokenDisplays, WalletTokenStatisticAdmin
+    WalletTokenDisplaysMixin, WalletTokenStatisticAdmin
 ):
-    """ Админ-модель для таблицы кошелек-токен на странице статистики кошелька"""
-
+    date_hierarchy = "last_activity_timestamp"
+    """Админ-модель для таблицы кошелек-токен на странице статистики кошелька"""
+    list_sections = [SwapsTableSection]
     actions = None
     list_editable = ()
     ordering = ["-last_activity_timestamp"]
@@ -75,5 +78,5 @@ class WalletTokenStatisticForWalletStatsPageAdmin(
         return "#"
 
     def has_change_permission(*args, **kwargs):
-        """ Отключаем возможность изменений (возможно это не работает как ожидается) """
+        """Отключаем возможность изменений (возможно это не работает как ожидается)"""
         return False

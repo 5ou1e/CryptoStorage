@@ -8,24 +8,13 @@ class User(AbstractUser):  # Название модели "User"
     first_name = models.CharField(max_length=150, blank=True, null=True)
     last_name = models.CharField(max_length=150, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
-    hashed_password = models.CharField(max_length=128, verbose_name="password")
-    password = models.CharField(
-        max_length=128, verbose_name="password"
-    )  # Оставляем поле
-    wallets = models.ManyToManyField("solana.Wallet", through="UserWallet")
-
-    def set_password(self, raw_password):
-        from django.contrib.auth.hashers import make_password
-
-        self.hashed_password = make_password(raw_password)
-
-    def check_password(self, raw_password):
-        from django.contrib.auth.hashers import check_password
-
-        return check_password(raw_password, self.hashed_password)
+    password = models.CharField(max_length=128, db_column="hashed_password")
+    wallets = models.ManyToManyField("solana.WalletBase", through="UserWallet")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "auth_user"  # Задаем имя таблицы как у стандартной модели Django
+        db_table = "user"  # Задаем имя таблицы как у стандартной модели Django
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
 
@@ -36,22 +25,26 @@ class UserWallet(models.Model):
         "User",
         on_delete=models.CASCADE,
         related_name="user_wallet",
-        verbose_name="Пользователь",
+        verbose_name="пользователь",
     )
     wallet = models.ForeignKey(
-        "solana.Wallet",
+        "solana.WalletBase",
         on_delete=models.CASCADE,
         related_name="user_wallet",
-        verbose_name="Кошелек",
+        verbose_name="кошелек",
     )
-    is_favorite = models.BooleanField(default=False, verbose_name="Кошелек в избранном")
+    is_favorite = models.BooleanField(
+        default=False, verbose_name="Кошелек в «Избранное»"
+    )
     is_blacklisted = models.BooleanField(
-        default=False, verbose_name="Кошелек в блек-листе"
+        default=False, verbose_name="Кошелек добавлен в «Блек-лист»"
     )
     is_watch_later = models.BooleanField(
-        default=False, verbose_name="Кошелек в 'посмотреть позже'"
+        default=False, verbose_name="Кошелек добавлен в «Посмотреть позже»"
     )
-    remark = models.TextField(null=True, blank=True, verbose_name="Заметка")
+    remark = models.TextField(
+        null=True, blank=True, verbose_name="Пользовательская заметка"
+    )
     # дополнительные поля, если нужно, например:
     created_at = models.DateTimeField(auto_now_add=True)
 

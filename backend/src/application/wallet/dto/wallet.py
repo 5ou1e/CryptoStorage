@@ -1,8 +1,11 @@
+from enum import StrEnum
 from typing import List, Optional
 
 from fastapi import Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, create_model
+
 from src.application.common.dto import PaginationResult
+
 
 from .wallet_stats import WalletStats7dDTO, WalletStats30dDTO, WalletStatsAllDTO
 
@@ -27,7 +30,26 @@ class WalletsPageDTO(WalletsDTO):
     pagination: PaginationResult
 
 
-class GetWalletsFilters(BaseModel):
+class GetWalletsSortingFields(StrEnum):
+    CREATED_AT_ASC = "created_at"
+    CREATED_AT_DESC = "-created_at"
+
+
+class GetWalletsSorting(BaseModel):
+    order_by: Optional[List[GetWalletsSortingFields]] = Field(
+        Query(None),
+        description="Sorting fields",
+    )
+
+    @field_validator("order_by", mode="before")  # noqa
+    @classmethod
+    def remove_duplicates(cls, value):
+        if value is None:
+            return value
+        return list(dict.fromkeys(value))  # Убираем дубликаты, сохраняя порядок
+
+
+class GetWalletsFiltersBase(BaseModel):
     is_bot: Optional[bool] = Field(
         Query(
             None,
@@ -40,74 +62,53 @@ class GetWalletsFilters(BaseModel):
             description="Является ли кошелек скамерским",
         )
     )
-    stats_all__winrate__gte: Optional[float] = Field(
-        Query(
-            None,
-            description="(All) Винрейт в % больше",
-        )
-    )
-    stats_all__winrate__lte: Optional[float] = Field(
-        Query(
-            None,
-            description="(All) Винрейт в % меньше",
-        )
-    )
 
-    # is_bot__in: Optional[List[bool]] = Field(Query(None), description="")
-    # stats_all__total_profit_usd__gte: Optional[float] = Field(None, description="")
-    # stats_all__total_profit_usd__lte: Optional[float] = Field(None, description="")
-    # stats_all__total_profit_multiplier__gte: Optional[float] = Field(None, description="")
-    # stats_all__total_profit_multiplier__lte: Optional[float] = Field(None, description="")
-    stats_all__total_token__gte: Optional[int] = Field(
-        Query(
-            None,
-            description="(All) Всего токенов",
-        )
-    )
-    # stats_all__total_token__lte: Optional[int] = Field(None, description="")
-    # stats_all__token_avg_buy_amount__gte: Optional[float] = Field(None, description="")
-    # stats_all__token_avg_buy_amount__lte: Optional[float] = Field(None, description="")
-    # stats_all__token_avg_profit_usd__gte: Optional[float] = Field(None, description="")
-    # stats_all__token_avg_profit_usd__lte: Optional[float] = Field(None, description="")
-    # stats_all__pnl_gt_5x_percent__gte: Optional[float] = Field(None, description="")
-    # stats_all__pnl_gt_5x_percent__lte: Optional[float] = Field(None, description="")
-    # stats_all__token_first_buy_median_price_usd__gte: Optional[float] = Field(None, description="")
-    # stats_all__token_first_buy_median_price_usd__lte: Optional[float] = Field(None, description="")
-    # stats_all__token_buy_sell_duration_median__gte: Optional[float] = Field(None, description="")
-    # stats_all__token_buy_sell_duration_median__lte: Optional[float] = Field(None, description="")
-    # stats_7d__winrate__gte: Optional[float] = Field(None, description="")
-    # stats_7d__winrate__lte: Optional[float] = Field(None, description="")
-    # stats_7d__total_profit_usd__gte: Optional[float] = Field(None, description="")
-    # stats_7d__total_profit_usd__lte: Optional[float] = Field(None, description="")
-    # stats_7d__total_profit_multiplier__gte: Optional[float] = Field(None, description="")
-    # stats_7d__total_profit_multiplier__lte: Optional[float] = Field(None, description="")
-    # stats_7d__total_token__gte: Optional[int] = Field(None, description="")
-    # stats_7d__total_token__lte: Optional[int] = Field(None, description="")
-    # stats_7d__token_avg_buy_amount__gte: Optional[float] = Field(None, description="")
-    # stats_7d__token_avg_buy_amount__lte: Optional[float] = Field(None, description="")
-    # stats_7d__token_avg_profit_usd__gte: Optional[float] = Field(None, description="")
-    # stats_7d__token_avg_profit_usd__lte: Optional[float] = Field(None, description="")
-    # stats_7d__pnl_gt_5x_percent__gte: Optional[float] = Field(None, description="")
-    # stats_7d__pnl_gt_5x_percent__lte: Optional[float] = Field(None, description="")
-    # stats_7d__token_first_buy_median_price_usd__gte: Optional[float] = Field(None, description="")
-    # stats_7d__token_first_buy_median_price_usd__lte: Optional[float] = Field(None, description="")
-    # stats_7d__token_buy_sell_duration_median__gte: Optional[float] = Field(None, description="")
-    # stats_7d__token_buy_sell_duration_median__lte: Optional[float] = Field(None, description="")
-    # stats_30d__winrate__gte: Optional[float] = Field(None, description="")
-    # stats_30d__winrate__lte: Optional[float] = Field(None, description="")
-    # stats_30d__total_profit_usd__gte: Optional[float] = Field(None, description="")
-    # stats_30d__total_profit_usd__lte: Optional[float] = Field(None, description="")
-    # stats_30d__total_profit_multiplier__gte: Optional[float] = Field(None, description="")
-    # stats_30d__total_profit_multiplier__lte: Optional[float] = Field(None, description="")
-    # stats_30d__total_token__gte: Optional[int] = Field(None, description="")
-    # stats_30d__total_token__lte: Optional[int] = Field(None, description="")
-    # stats_30d__token_avg_buy_amount__gte: Optional[float] = Field(None, description="")
-    # stats_30d__token_avg_buy_amount__lte: Optional[float] = Field(None, description="")
-    # stats_30d__token_avg_profit_usd__gte: Optional[float] = Field(None, description="")
-    # stats_30d__token_avg_profit_usd__lte: Optional[float] = Field(None, description="")
-    # stats_30d__pnl_gt_5x_percent__gte: Optional[float] = Field(None, description="")
-    # stats_30d__pnl_gt_5x_percent__lte: Optional[float] = Field(None, description="")
-    # stats_30d__token_first_buy_median_price_usd__gte: Optional[float] = Field(None, description="")
-    # stats_30d__token_first_buy_median_price_usd__lte: Optional[float] = Field(None, description="")
-    # stats_30d__token_buy_sell_duration_median__gte: Optional[float] = Field(None, description="")
-    # stats_30d__token_buy_sell_duration_median__lte: Optional[float] = Field(None, description="")
+
+def generate_wallet_stats_filter_fields(prefix: str):
+    return {
+        f"{prefix}__winrate__gte": (Optional[int], Field(Query(None, description=f""))),
+        f"{prefix}__winrate__lte": (Optional[int], Field(Query(None, description=f""))),
+        f"{prefix}__total_profit_usd__gte": (Optional[int], Field(Query(None, description=f""))),
+        f"{prefix}__total_profit_usd__lte": (Optional[int], Field(Query(None, description=f""))),
+        f"{prefix}__total_profit_multiplier__gte": (Optional[int], Field(Query(None, description=f""))),
+        f"{prefix}__total_profit_multiplier__lte": (Optional[int], Field(Query(None, description=f""))),
+        f"{prefix}__total_token__gte": (
+            Optional[int],
+            Field(Query(None, description=f"({prefix.upper()}) Всего токенов ≥")),
+        ),
+        f"{prefix}__total_token__lte": (
+            Optional[int],
+            Field(Query(None, description=f"({prefix.upper()}) Всего токенов ≤")),
+        ),
+        f"{prefix}__token_avg_buy_amount__gte": (
+            Optional[float],
+            Field(Query(None, description=f"({prefix.upper()}) Средний объем покупки ≥")),
+        ),
+        f"{prefix}__token_avg_buy_amount__lte": (
+            Optional[float],
+            Field(Query(None, description=f"({prefix.upper()}) Средний объем покупки ≤")),
+        ),
+        f"{prefix}__token_avg_profit_usd__gte": (
+            Optional[float],
+            Field(Query(None, description=f"({prefix.upper()}) Средний профит (USD) ≥")),
+        ),
+        f"{prefix}__token_avg_profit_usd__lte": (
+            Optional[float],
+            Field(Query(None, description=f"({prefix.upper()}) Средний профит (USD) ≤")),
+        ),
+        f"{prefix}__pnl_gt_5x_percent__gte": (Optional[float], Field(Query(None, description=f""))),
+        f"{prefix}__pnl_gt_5x_percent__lte": (Optional[float], Field(Query(None, description=f""))),
+        f"{prefix}__token_first_buy_median_price_usd__gte": (Optional[float], Field(Query(None, description=f""))),
+        f"{prefix}__token_first_buy_median_price_usd__lte": (Optional[float], Field(Query(None, description=f""))),
+        f"{prefix}__token_buy_sell_duration_median__gte": (Optional[float], Field(Query(None, description=f""))),
+        f"{prefix}__token_buy_sell_duration_median__lte": (Optional[float], Field(Query(None, description=f""))),
+    }
+
+
+GetWalletsFilters = create_model(
+    "GetWalletsFilters",
+    **generate_wallet_stats_filter_fields("stats_all"),
+    **generate_wallet_stats_filter_fields("stats_7d"),
+    **generate_wallet_stats_filter_fields("stats_30d"),
+    __base__=GetWalletsFiltersBase,
+)

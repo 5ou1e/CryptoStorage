@@ -73,7 +73,7 @@ CELERY_LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "tasks.collect_sol_prices": {
+        "collect_sol_prices_task": {
             "handlers": [
                 "console",
                 "task_collect_sol_prices_file",
@@ -81,7 +81,7 @@ CELERY_LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
-        "tasks.parse_tokens_metadata": {
+        "parse_tokens_metadata_task": {
             "handlers": [
                 "console",
                 "task_parse_tokens_metadata_file",
@@ -89,7 +89,7 @@ CELERY_LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
-        "tasks.update_wallet_statistics": {
+        "update_wallet_statistics_task": {
             "handlers": [
                 "console",
                 "task_update_wallet_statistics",
@@ -97,7 +97,7 @@ CELERY_LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "tasks.update_wallet_statistics_buy_price_gt_15k": {
+        "update_wallet_statistics_buy_price_gt_15k_task": {
             "handlers": [
                 "console",
                 "task_update_wallet_statistics_buy_price_gt_15k",
@@ -105,7 +105,7 @@ CELERY_LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "tasks.send_wallets_in_tg": {
+        "tasks.send_wallets_in_tg_task": {
             "handlers": [
                 "console",
                 "task_send_wallets_in_tg",
@@ -121,7 +121,7 @@ def setup_celery_logging():
     logging.config.dictConfig(CELERY_LOGGING)
 
 
-def setup_logging(level=logging.INFO):
+def setup_logging(level=logging.DEBUG):
     logging.basicConfig(
         format="%(asctime)s [%(levelname)s] %(message)s",
         level=level,

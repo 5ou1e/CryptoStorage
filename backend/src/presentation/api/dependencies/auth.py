@@ -1,6 +1,8 @@
 from typing import Annotated
 from uuid import UUID
 
+from dishka import FromDishka
+from dishka.integrations.fastapi import inject
 from fastapi import Depends
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import (
@@ -8,9 +10,9 @@ from fastapi_users.authentication import (
     BearerTransport,
     JWTStrategy,
 )
+
+from src.application.user.service import UserService
 from src.domain.entities.user import User
-from src.infra.db.tortoise.models import User
-from src.presentation.api.dependencies.services import get_user_service
 from src.settings import config
 
 bearer_transport = BearerTransport(tokenUrl="v1/auth/jwt/login")
@@ -28,6 +30,11 @@ auth_backend = AuthenticationBackend(
     transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
+
+
+@inject
+def get_user_service(service: FromDishka[UserService]):
+    return service
 
 
 fastapi_users = FastAPIUsers[User, UUID](

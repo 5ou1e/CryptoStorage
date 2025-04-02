@@ -1,4 +1,5 @@
 from collections import defaultdict
+from enum import StrEnum
 
 from django.utils.translation import gettext_lazy as _
 from unfold.contrib.filters.admin import (DropdownFilter, RangeNumericFilter,
@@ -6,6 +7,14 @@ from unfold.contrib.filters.admin import (DropdownFilter, RangeNumericFilter,
 
 from solana.models import Token, WalletTokenStatistic
 from users.models import UserWallet
+
+
+class WalletFilterType(StrEnum):
+    IS_FAVORITE = "is_favorite"
+    IS_WATCH_LATER = "is_watch_later"
+    IS_BLACKLISTED = "is_blacklisted"
+    IS_BOT = "is_bot__exact"
+    IS_SCAMMER = "is_scammer"
 
 
 class PeriodFilter(DropdownFilter):
@@ -26,8 +35,7 @@ class PeriodFilter(DropdownFilter):
 
 class IsScammerFilter(DropdownFilter):
     title = _("Скамеркие кошельки")  # Название фильтра, отображаемое в админке
-    parameter_name = "is_scammer"
-    horizontal = True  # Enable horizontal layout
+    parameter_name = WalletFilterType.IS_SCAMMER
 
     def lookups(self, request, model_admin):
         # Определяем доступные значения фильтра
@@ -47,7 +55,7 @@ class IsScammerFilter(DropdownFilter):
 
 class IsBotFilter(DropdownFilter):
     title = _("Бот кошельки")  # Название фильтра, отображаемое в админке
-    parameter_name = "is_bot"
+    parameter_name = WalletFilterType.IS_BOT
 
     def lookups(self, request, model_admin):
         # Определяем доступные значения фильтра
@@ -65,151 +73,102 @@ class IsBotFilter(DropdownFilter):
         return queryset
 
 
-class IsFavoriteFilter(DropdownFilter):
-    title = _("Избранные")  # Заголовок фильтра
-    parameter_name = "is_my_favorite"  # Название параметра в URL
+class UserWalletFilter(DropdownFilter):
+    """Базовый фильтр для связи с UserWallet"""
+
+    user_wallet_field = None  # Должно быть переопределено в наследниках
+    title = None  # Должно быть переопределено в наследниках
+    parameter_name = None  # Должно быть переопределено в наследниках
 
     def lookups(self, request, model_admin):
         return (
-            ("1", _("Избранные")),  # Параметры фильтра
-            ("0", _("Кроме избранных")),
+            ("1", self.title),
+            ("0", _(f"Кроме {self.title.lower()}")),
         )
 
     def queryset(self, request, queryset):
+        if not self.user_wallet_field:
+            return queryset
+
         user = request.user
+        filtered_wallet_ids = UserWallet.objects.filter(
+            user_id=user.id, **{self.user_wallet_field: True}
+        ).values_list("wallet_id", flat=True)
+
         if self.value() == "1":
-            return queryset.filter(
-                user_wallet__user=user,  # связь с моделью user_wallet через внешний ключ user
-                user_wallet__is_favorite=True,  # фильтрация по избранному кошельку
-            )
-        if self.value() == "0":
-            return queryset.exclude(
-                user_wallet__is_favorite=True  # исключение избранных кошельков
-            )
-        return queryset
-
-
-class IsWatchLaterFilter(DropdownFilter):
-    title = _("Смотреть позже")  # Заголовок фильтра
-    parameter_name = "is_watch_later"  # Название параметра в URL
-
-    def lookups(self, request, model_admin):
-        return (
-            ("1", _("Смотреть позже")),  # Параметры фильтра
-            ("0", _("Кроме")),
-        )
-
-    def queryset(self, request, queryset):
-        user = request.user
-        if self.value() == "1":
-            return queryset.filter(
-                user_wallet__user=user,  # связь с моделью user_wallet через внешний ключ user
-                user_wallet__is_watch_later=True,  # фильтрация по избранному кошельку
-            )
-        if self.value() == "0":
-            return queryset.exclude(
-                user_wallet__is_watch_later=True  # исключение избранных кошельков
-            )
-        return queryset
-
-
-class IsBlacklistedFilter(DropdownFilter):
-    title = _("Блеклист")  # Заголовок фильтра
-    parameter_name = "is_blacklisted"  # Название параметра в URL
-
-    def lookups(self, request, model_admin):
-        return (
-            ("0", _("Кроме блеклиста")),
-            ("1", _("Блеклист")),  # Параметры фильтра
-        )
-
-    def queryset(self, request, queryset):
-        user = request.user
-        if self.value() in ["1", "0"]:  # Проверяем, если фильтр активен
-            # Получаем все ID кошельков с нужным пользователем и флагом is_blacklisted
-            blacklisted_wallet_ids = UserWallet.objects.filter(
-                user_id=user.id, is_blacklisted=True
-            ).values_list("wallet_id", flat=True)
-            if self.value() == "1":
-                # Фильтруем основной queryset, используя только полученные ID кошельков
-                return queryset.filter(id__in=blacklisted_wallet_ids)
-
-            if self.value() == "0":
-                # Исключаем кошельки, которые находятся в черном списке
-                return queryset.exclude(id__in=blacklisted_wallet_ids)
+            return queryset.filter(id__in=filtered_wallet_ids)
+        elif self.value() == "0":
+            return queryset.exclude(id__in=filtered_wallet_ids)
 
         return queryset
 
 
-class CustomRangeFilter(RangeNumericFilter):
+class IsFavoriteFilter(UserWalletFilter):
+    title = _("Избранные")
+    parameter_name = WalletFilterType.IS_FAVORITE
+    user_wallet_field = WalletFilterType.IS_FAVORITE
+
+
+class IsWatchLaterFilter(UserWalletFilter):
+    title = _("Смотреть позже")
+    parameter_name = WalletFilterType.IS_WATCH_LATER
+    user_wallet_field = WalletFilterType.IS_WATCH_LATER
+
+
+class IsBlacklistedFilter(UserWalletFilter):
+    title = _("Блеклист")
+    parameter_name = WalletFilterType.IS_BLACKLISTED
+    user_wallet_field = WalletFilterType.IS_BLACKLISTED
+
+
+class GenericRangeFilter(RangeNumericFilter):
+
+    BASE_KEYS = {
+        "winrate": "Винрейт",
+        "total_profit_usd": "Профит в USD",
+        "total_profit_multiplier": "Профит в %",
+        "total_token": "Токенов",
+        "token_avg_buy_amount": "Ср. сумма покупки 1 токена",
+        "token_avg_profit_usd": "Ср. профит с токена в USD",
+        "pnl_gt_5x_percent": "% Токенов с профитом > 500%",
+        "token_first_buy_median_price_usd": "Средняя цена 1й покупки",
+        "token_buy_sell_duration_median": "Медиана времени 1-ой покупки-продажи (в секундах)",
+    }
+
+    PREFIXES = {
+        "": "",
+        "stats_7d__": "7️⃣ ",
+        "stats_30d__": "3️⃣0️⃣ ",
+        "stats_all__": "",
+        "stats_buy_price_gt_15k_all__": "",
+        "stats_buy_price_gt_15k_7d__": "7️⃣ ",
+        "stats_buy_price_gt_15k_30d__": "3️⃣0️⃣ ",
+    }
+
+    DIRECT_NAMES = {
+        "sol_balance": "SOL Баланс",
+    }
+
     def __init__(self, field, request, params, model, model_admin, field_path=None):
         super().__init__(field, request, params, model, model_admin, field_path)
-        self.title = self.get_custom_title()
+        self.title = self.get_title()
 
-    def get_custom_title(self):
-        custom_titles = {
-            "sol_balance": "SOL Баланс",
-            "stats_all__winrate": "Винрейт",
-            "stats_all__total_profit_usd": "Профит в USD",
-            "stats_all__total_profit_multiplier": "Профит в %",
-            "stats_all__total_token": "Токенов",
-            "stats_all__token_avg_buy_amount": "Ср. сумма покупки 1 токена",
-            "stats_all__token_avg_profit_usd": "Ср. профит с токена в USD",
-            "stats_all__pnl_gt_5x_percent": "% Токенов с профитом > 500%",
-            "stats_all__token_first_buy_median_price_usd": "Средняя цена 1й покупки",
-            "stats_all__token_buy_sell_duration_median": "Медиана времени 1-ой покупки-продажи в секундах",
-            "stats_7d__winrate": "7️⃣ Винрейт",
-            "stats_7d__total_profit_usd": "7️⃣ Профит в USD",
-            "stats_7d__total_profit_multiplier": "7️⃣ Профит в %",
-            "stats_7d__total_token": "7️⃣ Токенов",
-            "stats_7d__token_avg_buy_amount": "7️⃣ Ср. сумма покупки 1 токена",
-            "stats_7d__token_avg_profit_usd": "7️⃣ Ср. профит с токена в USD",
-            "stats_7d__pnl_gt_5x_percent": "7️⃣ % Токенов с профитом > 500%",
-            "stats_7d__token_first_buy_median_price_usd": "7️⃣ Средняя цена 1й покупки",
-            "stats_7d__token_buy_sell_duration_median": "7️⃣ Медиана времени 1-ой покупки-продажи в секундах",
-            "stats_30d__winrate": "3️⃣0️⃣ Винрейт",
-            "stats_30d__total_profit_usd": "3️⃣0️⃣ Профит в USD",
-            "stats_30d__total_profit_multiplier": "3️⃣0️⃣ Профит в %",
-            "stats_30d__total_token": "3️⃣0️⃣ Токенов",
-            "stats_30d__token_avg_buy_amount": "3️⃣0️⃣ Ср. сумма покупки 1 токена",
-            "stats_30d__token_avg_profit_usd": "3️⃣0️⃣ Ср. профит с токена в USD",
-            "stats_30d__pnl_gt_5x_percent": "3️⃣0️⃣ % Токенов с профитом > 500%",
-            "stats_30d__token_first_buy_median_price_usd": "3️⃣0️⃣ Средняя цена 1й покупки",
-            "stats_30d__token_buy_sell_duration_median": "3️⃣0️⃣ Медиана времени 1-ой покупки-продажи в секунда",
-            "stats_buy_price_gt_15k_all__winrate": "Винрейт",
-            "stats_buy_price_gt_15k_all__total_profit_usd": "Профит в USD",
-            "stats_buy_price_gt_15k_all__total_profit_multiplier": "Профит в %",
-            "stats_buy_price_gt_15k_all__total_token": "Токенов",
-            "stats_buy_price_gt_15k_all__token_avg_buy_amount": "Ср. сумма покупки 1 токена",
-            "stats_buy_price_gt_15k_all__token_avg_profit_usd": "Ср. профит с токена в USD",
-            "stats_buy_price_gt_15k_all__pnl_gt_5x_percent": "% Токенов с профитом > 500%",
-            "stats_buy_price_gt_15k_all__token_first_buy_median_price_usd": "Средняя цена 1й покупки",
-            "stats_buy_price_gt_15k_all__token_buy_sell_duration_median": "Медиана времени 1-ой покупки-продажи в секундах",
-            "stats_buy_price_gt_15k_7d__winrate": "7️⃣ Винрейт",
-            "stats_buy_price_gt_15k_7d__total_profit_usd": "7️⃣ Профит в USD",
-            "stats_buy_price_gt_15k_7d__total_profit_multiplier": "7️⃣ Профит в %",
-            "stats_buy_price_gt_15k_7d__total_token": "7️⃣ Токенов",
-            "stats_buy_price_gt_15k_7d__token_avg_buy_amount": "7️⃣ Ср. сумма покупки 1 токена",
-            "stats_buy_price_gt_15k_7d__token_avg_profit_usd": "7️⃣ Ср. профит с токена в USD",
-            "stats_buy_price_gt_15k_7d__pnl_gt_5x_percent": "7️⃣ % Токенов с профитом > 500%",
-            "stats_buy_price_gt_15k_7d__token_first_buy_median_price_usd": "7️⃣ Средняя цена 1й покупки",
-            "stats_buy_price_gt_15k_7d__token_buy_sell_duration_median": "7️⃣ Медиана времени 1-ой покупки-продажи в секундах",
-            "stats_buy_price_gt_15k_30d__winrate": "3️⃣0️⃣ Винрейт",
-            "stats_buy_price_gt_15k_30d__total_profit_usd": "3️⃣0️⃣ Профит в USD",
-            "stats_buy_price_gt_15k_30d__total_profit_multiplier": "3️⃣0️⃣ Профит в %",
-            "stats_buy_price_gt_15k_30d__total_token": "3️⃣0️⃣ Токенов",
-            "stats_buy_price_gt_15k_30d__token_avg_buy_amount": "3️⃣0️⃣ Ср. сумма покупки 1 токена",
-            "stats_buy_price_gt_15k_30d__token_avg_profit_usd": "3️⃣0️⃣ Ср. профит с токена в USD",
-            "stats_buy_price_gt_15k_30d__pnl_gt_5x_percent": "3️⃣0️⃣ % Токенов с профитом > 500%",
-            "stats_buy_price_gt_15k_30d__token_first_buy_median_price_usd": "3️⃣0️⃣ Средняя цена 1й покупки",
-            "stats_buy_price_gt_15k_30d__token_buy_sell_duration_median": "3️⃣0️⃣ Медиана времени 1-ой покупки-продажи в секунда",
-        }
-        return custom_titles.get(self.field_path, self.field_path)
+    def get_title(self):
+        if self.field_path in self.DIRECT_NAMES:
+            return self.DIRECT_NAMES[self.field_path]
+
+        for prefix, prefix_value in self.PREFIXES.items():
+            if self.field_path.startswith(prefix):
+                base_key = self.field_path[len(prefix) :]
+                if base_key in self.BASE_KEYS:
+                    return f"{prefix_value}{self.BASE_KEYS[base_key]}"
+
+        return self.field_path
 
 
 class TokensIntersectionFilter(TextFilter):
     title = _("С токенами (Адреса токенов через запятую)")
-    parameter_name = "tokens_intercection"
+    parameter_name = "tokens_intersection"
 
     def lookups(self, request, model_admin):
         return []

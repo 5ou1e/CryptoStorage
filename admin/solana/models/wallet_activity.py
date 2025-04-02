@@ -17,6 +17,7 @@ class WalletActivity(models.Model):
     timestamp = models.BigIntegerField(
         db_index=True, null=True, blank=True, verbose_name="Дата транзакции"
     )
+    block_id = models.BigIntegerField(db_index=True, verbose_name="BLOCK_ID")
     event_type = models.CharField(
         max_length=15, null=True, blank=True, verbose_name="Тип активности"
     )
@@ -39,7 +40,7 @@ class WalletActivity(models.Model):
         decimal_places=20,
         null=True,
         blank=True,
-        verbose_name="Цена токена в USD",
+        verbose_name="Цена SOL в USD",
     )
     is_part_of_transaction_with_mt_3_swappers = models.BooleanField(
         default=False,
@@ -50,7 +51,7 @@ class WalletActivity(models.Model):
     )
 
     wallet = models.ForeignKey(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="activities",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -68,6 +69,3 @@ class WalletActivity(models.Model):
         db_table = "swap"
         verbose_name = "Свапы"
         verbose_name_plural = "Свапы"
-
-    def get_absolute_url(self):
-        return "#"

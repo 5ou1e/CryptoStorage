@@ -1,4 +1,5 @@
 from sqlalchemy import select
+
 from src.application.common.dto import Pagination, PaginationResult
 from src.application.interfaces.readers import TokenReaderInterface
 from src.application.token.dto import TokenDTO, TokensPageDTO
@@ -17,12 +18,10 @@ class SQLAlchemyTokenReader(SQLAlchemyGenericReader, TokenReaderInterface):
         instances = await self._session.scalars(query)
         tokens = [TokenDTO.from_orm(instance) for instance in instances]
         count = len(tokens)
-        total_count = await self._get_count_for_query(query_for_count)
+        total_count = await self._get_count(query_for_count)
         return TokensPageDTO(
             tokens=tokens,
-            pagination=PaginationResult.from_pagination(
-                pagination, count=count, total_count=total_count
-            ),
+            pagination=PaginationResult.from_pagination(pagination, count=count, total_count=total_count),
         )
 
     async def get_token_by_address(self, address: str) -> TokenDTO:

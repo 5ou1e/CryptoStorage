@@ -44,9 +44,7 @@ class Token(Base, UUIDIDMixin, TimestampsMixin):
 class TokenPrice(Base, UUIDIDMixin, TimestampsMixin):
     __tablename__ = "token_price"
 
-    token_id: Mapped["Token.id.type"] = mapped_column(
-        ForeignKey("token.id"), nullable=False, sort_order=-999
-    )
+    token_id: Mapped["Token.id.type"] = mapped_column(ForeignKey("token.id"), nullable=False, sort_order=-999)
     minute: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     price_usd: Mapped[Decimal | None] = mapped_column(DECIMAL(40, 20), nullable=True)
 

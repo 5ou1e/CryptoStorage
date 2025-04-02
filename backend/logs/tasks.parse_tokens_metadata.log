@@ -1,0 +1,1 @@
+2025-03-29 14:31:18,190 - INFO - Запуск задачи parse_tokens_metadata_task с параметрами: args=(<@task: src.infra.celery.tasks.parse_tokens_metadata_task of core at 0x7f9d3aa2b910>,), kwargs={}

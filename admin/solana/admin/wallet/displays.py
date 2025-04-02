@@ -4,8 +4,9 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from unfold.decorators import display
 
+from solana.models import Wallet
 from utils.number_utils import formatted_number, round_to_first_non_zero
-from utils.time_utils import formatted_duration
+from utils.time_utils import format_duration
 
 PERIODS = {"7d": "7 дней", "30d": "30 дней", "all": "Все время"}
 
@@ -17,12 +18,12 @@ DISPLAY_LABELS = {
 }
 
 
-class WalletDisplays:
+class WalletDisplaysMixin:
     @display(
-        description=_("Кошелек"),
+        description=_("Адрес"),
         ordering="-address",
     )
-    def wallet_display(self, obj):
+    def wallet_display(self, obj: Wallet):
         copy_button = render_to_string(
             "admin/copy_button.html",
             {
@@ -31,7 +32,7 @@ class WalletDisplays:
         )
         value = f"""
                     <div class="flex gap-1 font-semibold text-font-default-light dark:text-font-default-dark">
-                        <a href="{obj.get_absolute_url()} " title="{obj.address}" target="_blank">{obj.address[:5]}...{obj.address[-2:]}</a>
+                        <a href="{obj.get_stats_url()} " title="{obj.address}" target="_blank">{obj.address[:5]}...{obj.address[-2:]}</a>
                         <span class="text-font-subtle-light dark:text-font-subtle-dark">{copy_button}</span>
                     </div>
                 """
@@ -44,7 +45,7 @@ class WalletDisplays:
     def last_update_display(self, obj):
         last_stats_update_title = obj.last_stats_check
         last_stats_update_value = (
-            formatted_duration(now() - obj.last_stats_check) + " наз."
+            format_duration(now() - obj.last_stats_check) + " наз."
             if obj.last_stats_check
             else "-"
         )
@@ -137,7 +138,7 @@ class WalletStatsDisplayMethods:
             return None
         value = obj.token_buy_sell_duration_median
         label = "ok" if value > 30 else "warning" if value > 5 else "bad"
-        return label, formatted_duration(value)
+        return label, format_duration(value)
 
     @classmethod
     def token_avg_profit_usd_display(cls, obj):
@@ -270,14 +271,13 @@ class WalletStatsDisplaysConfigurator:
 
         return result_methods
 
+    def configure_displays(cls):
+        extra_methods = WalletStatsDisplaysConfigurator.generate_methods()
+        for name, method in extra_methods.items():
+            setattr(cls, name, method)
+        return cls
 
-def configure_displays(cls):
-    extra_methods = WalletStatsDisplaysConfigurator.generate_methods()
-    for name, method in extra_methods.items():
-        setattr(cls, name, method)
-    return cls
 
-
-@configure_displays
-class WalletStatsDisplays:
+@WalletStatsDisplaysConfigurator.configure_displays
+class WalletStatsDisplaysMixin:
     pass

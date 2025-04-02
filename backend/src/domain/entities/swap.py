@@ -19,10 +19,10 @@ class Swap(BaseEntity, TimestampMixinEntity):
     token_id: UUID
     tx_hash: str
     block_id: int
-    timestamp: datetime | None = None
-    event_type: SwapEventType | None = None
-    quote_amount: Decimal | None = None
-    token_amount: Decimal | None = None
-    price_usd: Decimal | None = None
+    timestamp: datetime
+    event_type: SwapEventType
+    quote_amount: Decimal
+    token_amount: Decimal
+    price_usd: Decimal
     is_part_of_transaction_with_mt_3_swappers: bool = False
     is_part_of_arbitrage_swap_event: bool = False

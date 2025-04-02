@@ -14,7 +14,7 @@ admin.site.unregister(Group)
 
 
 @admin.register(User)
-class CustomUserAdmin(BaseUserAdmin, ModelAdmin):
+class UserAdmin(BaseUserAdmin, ModelAdmin):
     list_filter_submit = True  # Submit button at the bottom of the filter
     list_filter = [("username", FieldTextFilter), ("date_joined", RangeDateTimeFilter)]
     search_fields = ("id", "username", "email")
@@ -29,6 +29,7 @@ class GroupAdmin(BaseGroupAdmin, ModelAdmin):
 class UserWalletAdmin(ModelAdmin):
     inlines = []
     list_display = ("id", "user_id", "wallet_id")
+    autocomplete_fields = ["user", "wallet"]
 
     def get_urls(self):
         return [

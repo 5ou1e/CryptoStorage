@@ -1,6 +1,7 @@
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
 from src.settings import config
 
 engine = create_async_engine(
@@ -17,6 +18,7 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
+async def get_db_session(test=None) -> AsyncGenerator[AsyncSession, None]:
+    # TODO : посмотреть почему прилетает аргумент с контейнером дишка
     async with AsyncSessionLocal() as session:
         yield session

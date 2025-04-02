@@ -1,15 +1,18 @@
+from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
+
 from src.infra.db.tortoise.setup import register_db
 from src.presentation.api.exceptions import setup_exception_handlers
 from src.presentation.api.middlewares import setup_middlewares
 from src.presentation.api.routers import setup_routers
 from src.settings import config
+from src.settings.ioc.container import create_async_container
 from src.settings.logging import setup_logging
 
 
 class AppBuilder:
-    """Создает и настраивает приложение."""
+    """Создаем приложение FastAPI"""
 
     @staticmethod
     def create_app() -> FastAPI:
@@ -28,4 +31,7 @@ class AppBuilder:
         setup_middlewares(app)
         setup_exception_handlers(app)
         setup_logging()
+        container = create_async_container()
+        setup_dishka(container, app)
+
         return app

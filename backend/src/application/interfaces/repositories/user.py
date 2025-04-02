@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
+from tortoise.models import Model
+
 from src.application.interfaces.repositories.generic_repository import (
     GenericRepositoryInterface,
 )
 from src.domain.entities.user import User
-from tortoise.models import Model
 
 
 class UserRepositoryInterface(GenericRepositoryInterface[User], ABC):

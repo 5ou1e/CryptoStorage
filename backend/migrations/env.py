@@ -5,6 +5,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+
 from src.infra.db.sqlalchemy.models import *
 from src.settings import config as app_config
 
@@ -63,6 +64,8 @@ IGNORE_TABLES = [
     "auth_group",
     "auth_group_permissions",
     "django_migrations",
+    "user_groups",
+    "user_user_permissions",
 ]
 
 
@@ -71,9 +74,7 @@ def include_object(object, name, type_, reflected, compare_to):
     Should you include this table or not?
     """
 
-    if type_ == "table" and (
-        name in IGNORE_TABLES or object.info.get("skip_autogenerate", False)
-    ):
+    if type_ == "table" and (name in IGNORE_TABLES or object.info.get("skip_autogenerate", False)):
         return False
 
     elif type_ == "column" and object.info.get("skip_autogenerate", False):

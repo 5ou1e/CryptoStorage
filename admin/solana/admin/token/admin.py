@@ -9,8 +9,8 @@ from unfold.sections import TableSection, TemplateSection
 
 from solana.models import Token, TokenPrice
 
-from ..shared.base_admin_model import BaseAdminModel
-from ..shared.misc import LargeTablePaginator
+from ..common.base_admin_model import BaseAdminModel
+from ..common.misc import LargeTablePaginator
 from .inlines import WalletTokenStatisticInline
 
 

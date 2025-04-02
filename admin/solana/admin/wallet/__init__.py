@@ -1,6 +1,6 @@
-from .admin import WalletAdmin, WalletProxyAdmin
+from .admin import WalletAdmin, WalletBaseAdmin
 
 __all__ = [
+    "WalletBaseAdmin",
     "WalletAdmin",
-    "WalletProxyAdmin",
 ]

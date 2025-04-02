@@ -2,15 +2,16 @@ import logging
 from dataclasses import asdict
 from typing import Any, Dict, Iterable, List, Optional, Sequence, TypeVar
 
+from tortoise import BaseDBAsyncClient, Tortoise
+from tortoise.models import Model
+from tortoise.queryset import QuerySet
+from tortoise.transactions import in_transaction
+
 from src.application.common.dto import Pagination
 from src.application.interfaces.repositories import GenericRepositoryInterface
 from src.domain.entities.base_entity import BaseEntity
 from src.infra.db import queries
 from src.infra.db.tortoise.repositories.utils import get_bulk_update_records_query
-from tortoise import BaseDBAsyncClient, Tortoise
-from tortoise.models import Model
-from tortoise.queryset import QuerySet
-from tortoise.transactions import in_transaction
 
 logger = logging.getLogger(__name__)
 

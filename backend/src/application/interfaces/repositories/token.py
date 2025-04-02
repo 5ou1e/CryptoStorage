@@ -16,7 +16,7 @@ class TokenRepositoryInterface(GenericRepositoryInterface[Token], ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_tokens_without_metadata(self, limit=100) -> list[Token]:
+    async def get_tokens_with_no_metadata_parsed(self, limit=100) -> list[Token]:
         raise NotImplemented
 
 
@@ -24,11 +24,9 @@ class TokenPriceRepositoryInterface(GenericRepositoryInterface[TokenPrice], ABC)
     """Интерфейс репозитория Token-price"""
 
     @abstractmethod
-    async def get_latest_by_token(self, token_id: str) -> TokenPrice | None:
+    async def get_latest_by_token(self, token_id: UUID) -> TokenPrice | None:
         raise NotImplementedError
 
     @abstractmethod
-    async def get_prices_by_token(
-        self, token_id: UUID, minute_from: datetime, minute_to: datetime
-    ) -> list[TokenPrice]:
+    async def get_prices_by_token(self, token_id: UUID, minute_from: datetime, minute_to: datetime) -> list[TokenPrice]:
         raise NotImplementedError

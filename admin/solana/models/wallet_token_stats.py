@@ -28,10 +28,9 @@ class WalletTokenStatistic(models.Model):
         decimal_places=20,
         verbose_name="Цена токена в момент 1-й покупки",
     )
-    first_buy_timestamp = models.BigIntegerField(
+    first_buy_timestamp = models.DateTimeField(
         null=True, blank=True, verbose_name="Время 1-й покупки"
     )
-
     total_sales_count = models.IntegerField(
         null=True, blank=True, verbose_name="Всего продаж"
     )
@@ -56,14 +55,12 @@ class WalletTokenStatistic(models.Model):
         decimal_places=20,
         verbose_name="Цена токена в момент 1-й продажи",
     )
-    first_sell_timestamp = models.BigIntegerField(
+    first_sell_timestamp = models.DateTimeField(
         null=True, blank=True, verbose_name="Время 1-й продажи"
     )
-
-    last_activity_timestamp = models.BigIntegerField(
+    last_activity_timestamp = models.DateTimeField(
         null=True, blank=True, verbose_name="Последняя активность"
     )
-
     total_profit_usd = models.DecimalField(
         null=True,
         blank=True,
@@ -87,7 +84,7 @@ class WalletTokenStatistic(models.Model):
     )
 
     wallet = models.ForeignKey(
-        "solana.wallet",
+        "solana.WalletBase",
         related_name="wallet_token_statistic",
         on_delete=models.CASCADE,
         verbose_name="Кошелек",
@@ -115,3 +112,11 @@ class WalletTokenStatistic(models.Model):
 
     def __str__(self):
         return f"Токен - {self.token.address}, Кошелек - {self.wallet.address}"
+
+    @property
+    def swaps_for_table_section(self):
+        from solana.models import WalletActivity
+
+        return WalletActivity.objects.filter(
+            wallet=self.wallet, token=self.token
+        ).order_by("-block_id")

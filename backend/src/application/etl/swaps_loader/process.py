@@ -1,3 +1,4 @@
+import logging
 import warnings
 
 warnings.filterwarnings(
@@ -5,9 +6,10 @@ warnings.filterwarnings(
     message=".*pydantic.error_wrappers:ValidationError.*",
     category=UserWarning,
 )
+
 import asyncio
 from asyncio import Queue
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from functools import partial
 
@@ -17,10 +19,10 @@ from flipside.errors.query_run_errors import (
 )
 from pydantic.error_wrappers import ValidationError
 
-from . import config, extractor, loader, transformer
-from .common import utils
-from .common.logger import logger
-from .extractor import FlipsideClientException
+from src.application.etl.swaps_loader import config, extractor, loader, transformer
+from src.application.etl.swaps_loader.common import utils
+from src.application.etl.swaps_loader.common.logger import logger
+from src.application.etl.swaps_loader.extractor import FlipsideClientException
 
 
 async def extract_process(
@@ -53,9 +55,7 @@ async def extract_process(
         try:
             logger.info(f"Начинаем сбор свапов за {current_time} - {next_time}")
             start = datetime.now()
-            extracted_data = await extract_data_for_period(
-                current_time, next_time, flipside_account.api_key
-            )
+            extracted_data = await extract_data_for_period(current_time, next_time, flipside_account.api_key)
             total_count = len(extracted_data)
             end = datetime.now()
             logger.info(
@@ -136,19 +136,13 @@ async def transform_process(
             swaps, period_start, period_end, sol_prices = data
             logger.info(f"Начинаем преобразование данных")
             start = datetime.now()
-            objects_to_load = await asyncio.to_thread(
-                transformer.transform_data, swaps, sol_prices
-            )
+            objects_to_load = await asyncio.to_thread(transformer.transform_data, swaps, sol_prices)
             end = datetime.now()
             logger.info(f"Время преобразования: {end-start}")
-            await transformed_data_queue.put(
-                [objects_to_load, period_start, period_end]
-            )
+            await transformed_data_queue.put([objects_to_load, period_start, period_end])
         else:
             break
-    await transformed_data_queue.put(
-        None
-    )  # Кладем None чтобы остальные процессы завершали работу
+    await transformed_data_queue.put(None)  # Кладем None чтобы остальные процессы завершали работу
     logger.info(f"Преобразователь завершил работу!")
 
 
@@ -178,9 +172,7 @@ async def process():
 
     extracted_data_queue = Queue()
     transformed_data_queue = Queue()
-    loader_signals_queue = (
-        Queue()
-    )  # Очередь сигналов, чтобы подгружать новые, только когда загрузчик забрал предыдущие
+    loader_signals_queue = Queue()  # Очередь сигналов, чтобы подгружать новые, только когда загрузчик забрал предыдущие
 
     await loader_signals_queue.put("EXTRACT NEXT")
 
@@ -194,9 +186,7 @@ async def process():
                     end_time,
                 )
             )
-            tg.create_task(
-                transform_process(extracted_data_queue, transformed_data_queue)
-            )
+            tg.create_task(transform_process(extracted_data_queue, transformed_data_queue))
             tg.create_task(load_process(transformed_data_queue, loader_signals_queue))
     except Exception as e:
         logger.critical(f"Неизвестная ошибка, завершаем работу: {e}")
@@ -214,4 +204,9 @@ async def main():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
     asyncio.run(main())

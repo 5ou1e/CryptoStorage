@@ -16,23 +16,21 @@ class LimitModelFormset(BaseInlineFormSet):
 
 class IntEstimate(int):
     def __str__(self):
-        return "{}+".format(int.__str__(self))
+        return "{}~".format(int.__str__(self))
 
 
 class LargeTablePaginator(Paginator):
 
     @cached_property
     def count(self):
-        """Changed to use an estimate if the estimate is greater than 10,000
-        Returns the total number of objects, across all pages."""
-        limit = 50000
-        self._count = self.object_list.order_by()[:limit].count()
-        if self._count < limit:
-            return self._count
-        with connection.cursor() as cursor:
-            sql, params = self.object_list.query.sql_with_params()
-            query = cursor.mogrify(sql, params)
-            print(query)
-            cursor.execute("SELECT count_estimate(%s)", [query])
-            result = cursor.fetchone()
-            return IntEstimate(result[0])
+        """Переопределяет базовый метод count, если более 10.000 записей используется функция estimate"""
+        limit = 10000
+        count = self.object_list.order_by()[:limit].count()
+        if count >= limit:
+            with connection.cursor() as cursor:
+                sql, params = self.object_list.query.sql_with_params()
+                query = cursor.mogrify(sql, params)
+                cursor.execute("SELECT count_estimate(%s)", [query])
+                result = cursor.fetchone()
+                count = IntEstimate(result[0])
+        return count

@@ -4,6 +4,7 @@ from asyncio import Semaphore
 from datetime import datetime
 
 import pytz
+
 from src.domain.entities import (
     Wallet,
     WalletStatisticBuyPriceGt15k7d,
@@ -40,9 +41,7 @@ async def get_wallets_for_update():
     logger.debug(f"Начинаем получение кошельков из БД")
     t1 = datetime.now()
     async with AsyncSessionLocal() as session:
-        wallets = await SQLAlchemyWalletRepository(
-            session
-        ).get_wallets_for_buygt15k_statistic()
+        wallets = await SQLAlchemyWalletRepository(session).get_wallets_for_buygt15k_statistic()
     t2 = datetime.now()
     logger.info(f"Получили {len(wallets)} кошельков из БД | Время: {t2-t1}")
     return wallets
@@ -65,9 +64,7 @@ async def process_wallets(wallets):
     end_time = datetime.now()
     elapsed_time = end_time - start
 
-    logger.info(
-        f"Обновили кошельки в базе! Кошельков: {wallets_count} | Время: {elapsed_time}"
-    )
+    logger.info(f"Обновили кошельки в базе! Кошельков: {wallets_count} | Время: {elapsed_time}")
 
 
 async def update_wallet_stats_in_db(wallets):
@@ -81,25 +78,19 @@ async def update_wallet_stats_in_db(wallets):
 
 async def _update_stats_7d(stats):
     async with AsyncSessionLocal() as session:
-        await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).bulk_create(
-            stats
-        )
+        await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).bulk_create(stats)
         await session.commit()
 
 
 async def _update_stats_30d(stats):
     async with AsyncSessionLocal() as session:
-        await SQLAlchemyWalletStatisticBuyPriceGt15k30dRepository(session).bulk_create(
-            stats
-        )
+        await SQLAlchemyWalletStatisticBuyPriceGt15k30dRepository(session).bulk_create(stats)
         await session.commit()
 
 
 async def _update_stats_all(stats):
     async with AsyncSessionLocal() as session:
-        await SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(session).bulk_create(
-            stats
-        )
+        await SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(session).bulk_create(stats)
         await session.commit()
 
 

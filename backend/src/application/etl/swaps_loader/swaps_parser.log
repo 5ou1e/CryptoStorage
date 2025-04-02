@@ -1,0 +1,29 @@
+2025-03-29 14:31:26 - src.application.etl.swaps_loader.common.logger - INFO - Запущен процесс для периода c 2025-02-27 20:00:00+00:00 до 2025-02-27 20:30:00+00:00
+2025-03-29 14:31:26 - src.application.etl.swaps_loader.common.logger - INFO - Получили сигнал NEXT
+2025-03-29 14:31:26 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем сбор свапов за 2025-02-27 20:00:00+00:00 - 2025-02-27 20:30:00+00:00
+2025-03-29 14:32:03 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 17, 21
+2025-03-29 14:32:06 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 91943 | Время запроса: 17, 23
+2025-03-29 14:32:10 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 92567 | Время запроса: 15, 20
+2025-03-29 14:32:12 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 78372 | Время запроса: 24, 28
+2025-03-29 14:32:20 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 18, 22
+2025-03-29 14:32:31 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 100000 | Время запроса: 27, 30
+2025-03-29 14:32:38 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 7274 | Время запроса: 25, 26
+2025-03-29 14:32:41 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 3226 | Время запроса: 17, 17
+2025-03-29 14:32:41 - src.application.etl.swaps_loader.common.logger - INFO - Кол-во записей: 5380 | Время запроса: 7, 8
+2025-03-29 14:32:41 - src.application.etl.swaps_loader.common.logger - INFO - Собраны свапы за период 2025-02-27 20:00:00+00:00 - 2025-02-27 20:30:00+00:00 | Кол-во: 578762 | Время 0:01:15.816164
+2025-03-29 14:32:41 - src.application.etl.swaps_loader.common.logger - INFO - Сборщик свапов завершил работу
+2025-03-29 14:32:41 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем преобразование данных
+2025-03-29 14:32:51 - src.application.etl.swaps_loader.common.logger - INFO - Время преобразования: 0:00:09.770337
+2025-03-29 14:32:51 - src.application.etl.swaps_loader.common.logger - INFO - Преобразователь завершил работу!
+2025-03-29 14:32:51 - src.application.etl.swaps_loader.common.logger - INFO - Начинаем импорт данных в БД
+2025-03-29 14:32:53 - src.application.etl.swaps_loader.common.logger - INFO - Токены импортированы
+2025-03-29 14:34:24 - src.application.etl.swaps_loader.common.logger - INFO - Кошельки импортированы
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Активности и WalletToken импортированы
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Свапов: 578762
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Кошельков: 60700
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Токенов: 8131
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Кошелек-токен: 100980
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Данные импортированы за 2025-02-27 20:00:00+00:00 - 2025-02-27 20:30:00+00:00
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Время импорта: 0:02:07.750801
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Загрузчик завершил работу!
+2025-03-29 14:34:59 - src.application.etl.swaps_loader.common.logger - INFO - Процесс для периода c 2025-02-27 20:00:00+00:00 до 2025-02-27 20:30:00+00:00 завершен!

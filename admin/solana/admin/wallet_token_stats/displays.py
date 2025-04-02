@@ -6,18 +6,18 @@ from django.utils.translation import gettext_lazy as _
 from unfold.decorators import display
 
 from utils.number_utils import formatted_number
-from utils.time_utils import formatted_duration
+from utils.time_utils import format_duration
 
 
-class WalletTokenDisplays:
+class WalletTokenDisplaysMixin:
     @display(
         description=_("Токен"),
         ordering="-last_activity_timestamp",
     )
     def token_name_display(self, obj):
         last_activity_ago = (
-            formatted_duration(now() - obj.last_activity_timestamp)
-                if obj.last_activity_timestamp
+            format_duration(now() - obj.last_activity_timestamp)
+            if obj.last_activity_timestamp
             else None
         )
         last_activity_dt = obj.last_activity_timestamp
@@ -59,7 +59,7 @@ class WalletTokenDisplays:
                 warning_title += f"\nСумма продаж > суммы покупок"
         if obj.total_swaps_from_txs_with_mt_3_swappers:
             show_warning = True
-            warning_title += f"\nОбнаружены свапы с >3 трейдерами в транзакции: {obj.total_swaps_from_txs_with_mt_3_swappers} шт"
+            warning_title += f"\nОбнаружены свапы с 3+ трейдерами в транзакции: {obj.total_swaps_from_txs_with_mt_3_swappers} шт"
         if obj.total_swaps_from_arbitrage_swap_events:
             show_warning = True
             warning_title += f"\nОбнаружены арбитраж-свапы: {obj.total_swaps_from_arbitrage_swap_events} шт"
@@ -154,7 +154,7 @@ class WalletTokenDisplays:
         if not value:
             return None
         return mark_safe(
-            f'<span title="{value}">{formatted_duration(now() - value)}</span>'
+            f'<span title="{value}">{format_duration(now() - value)}</span>'
         )
 
     @display(
@@ -166,7 +166,7 @@ class WalletTokenDisplays:
         if not value:
             return None
         return mark_safe(
-            f'<span title="{value}">{formatted_duration(now() - value)}</span>'
+            f'<span title="{value}">{format_duration(now() - value)}</span>'
         )
 
     @display(
@@ -178,7 +178,7 @@ class WalletTokenDisplays:
         if not value:
             return None
         return mark_safe(
-            f'<span title="{value}">{formatted_duration(now() - value)}</span>'
+            f'<span title="{value}">{format_duration(now() - value)}</span>'
         )
 
     @display(
@@ -194,7 +194,7 @@ class WalletTokenDisplays:
     def first_buy_sell_duration_display(self, obj):
         # Форматируем строку, возвращая HTML
         value = obj.first_buy_sell_duration
-        tooltip = f'<span title="Разница во времени между 1-й покупкой и 1-й продажей">{formatted_duration(value)}</span>'
+        tooltip = f'<span title="Разница во времени между 1-й покупкой и 1-й продажей">{format_duration(value)}</span>'
         if value is None:
             return None, mark_safe(tooltip)
         return "ok" if value >= 30 else "warning" if value >= 5 else "bad", mark_safe(

@@ -39,9 +39,7 @@ def get_bulk_update_records_query(
             if field_info:
                 field_type = field_info.__class__.__name__.lower()
             else:
-                raise ValueError(
-                    f"Ошибка - у модели {model_cls} не задано поле {field}"
-                )
+                raise ValueError(f"Ошибка - у модели {model_cls} не задано поле {field}")
             value = getattr(obj, field)
             d[field] = cast_value(value, field_type, field_info)
         updates.append(d)
@@ -103,6 +101,4 @@ def cast_value(value, field_type=None, field_info=None):
     elif field_type == "charfield":
         return f"'{value}'"
 
-    raise ValueError(
-        f"Ошибка при попытке кастинга - Неизвестный тип {field_type} поля {field_info}"
-    )
+    raise ValueError(f"Ошибка при попытке кастинга - Неизвестный тип {field_type} поля {field_info}")

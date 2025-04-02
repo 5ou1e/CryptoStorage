@@ -1,5 +1,6 @@
 networks:
   dev:
+    driver: bridge
 
 services:
   db:
@@ -46,7 +47,7 @@ services:
     container_name: celery_worker
     env_file:
       - ./backend/.env
-    command: sh -c "celery -A src.infra.celery.setup worker --concurrency=10 -l info"
+    command: sh -c "celery -A src.infra.celery.worker worker --concurrency=10 -l info"
     volumes:
       - ./backend:/app
       - ./backend/logs:/app/logs

@@ -13,7 +13,7 @@ class DatabaseConfig(BaseModel):
     name: str
     min_size: int = 10
     max_size: int = 200
-    max_queries: int = 1000
+    max_queries: int = 50000  # for tortoise
 
     @property
     def url_tortoise(self) -> str:
@@ -38,12 +38,8 @@ class AccessTokenConfig(BaseModel):
 
 class CeleryTasksConfig(BaseModel):
     collect_sol_prices_task_interval: int = 60  # интервал запуска сбора цен Соланы
-    parse_tokens_metadata_task: int = (
-        60  # интервал запуска парсинга метаданных токена в секундах
-    )
-    send_wallets_in_tg_task_interval: int = (
-        3600  # интервал отправки тг-алертов с кошельками в секундах
-    )
+    parse_tokens_metadata_task: int = 60  # интервал запуска парсинга метаданных токена в секундах
+    send_wallets_in_tg_task_interval: int = 3600  # интервал отправки тг-алертов с кошельками в секундах
     update_wallet_statistics_buy_price_gt_15k_task_interval: int = (
         3600  # интервал обновления walletstatsgt15k в секундах
     )

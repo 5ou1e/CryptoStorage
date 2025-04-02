@@ -22,9 +22,7 @@ class PaginationResult(BaseModel):
     total_pages: int
 
     @classmethod
-    def from_pagination(
-        cls, pagination: Pagination, count: int, total_count: int
-    ) -> "PaginationResult":
+    def from_pagination(cls, pagination: Pagination, count: int, total_count: int) -> "PaginationResult":
         total_pages = math.ceil(total_count / pagination.page_size)
         return cls(
             page=pagination.page,

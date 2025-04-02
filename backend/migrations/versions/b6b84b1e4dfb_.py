@@ -24,12 +24,8 @@ def upgrade() -> None:
     op.drop_index("idx_wallet_detail_is_bot", table_name="wallet_detail")
     op.drop_index("idx_wallet_detail_is_scammer", table_name="wallet_detail")
     op.drop_table("wallet_detail")
-    op.drop_constraint(
-        "tg_sent_wallet_wallet_id_fkey", "tg_sent_wallet", type_="foreignkey"
-    )
-    op.create_foreign_key(
-        None, "tg_sent_wallet", "wallet", ["wallet_id"], ["id"], ondelete="CASCADE"
-    )
+    op.drop_constraint("tg_sent_wallet_wallet_id_fkey", "tg_sent_wallet", type_="foreignkey")
+    op.create_foreign_key(None, "tg_sent_wallet", "wallet", ["wallet_id"], ["id"], ondelete="CASCADE")
     op.add_column(
         "wallet",
         sa.Column("is_scammer", sa.Boolean(), server_default="false", nullable=False),
@@ -69,12 +65,8 @@ def upgrade() -> None:
         ["id"],
         ondelete="CASCADE",
     )
-    op.drop_constraint(
-        "wallet_statistic_7d_wallet_id_fkey", "wallet_statistic_7d", type_="foreignkey"
-    )
-    op.create_foreign_key(
-        None, "wallet_statistic_7d", "wallet", ["wallet_id"], ["id"], ondelete="CASCADE"
-    )
+    op.drop_constraint("wallet_statistic_7d_wallet_id_fkey", "wallet_statistic_7d", type_="foreignkey")
+    op.create_foreign_key(None, "wallet_statistic_7d", "wallet", ["wallet_id"], ["id"], ondelete="CASCADE")
     op.drop_constraint(
         "wallet_statistic_all_wallet_id_fkey",
         "wallet_statistic_all",
@@ -158,9 +150,7 @@ def downgrade() -> None:
         type_=sa.INTEGER(),
         existing_nullable=False,
     )
-    op.drop_constraint(
-        None, "wallet_statistic_buy_price_gt_15k_all", type_="foreignkey"
-    )
+    op.drop_constraint(None, "wallet_statistic_buy_price_gt_15k_all", type_="foreignkey")
     op.create_foreign_key(
         "wallet_statistic_buy_price_gt_15k_all_wallet_id_fkey",
         "wallet_statistic_buy_price_gt_15k_all",
@@ -176,9 +166,7 @@ def downgrade() -> None:
         ["wallet_id"],
         ["id"],
     )
-    op.drop_constraint(
-        None, "wallet_statistic_buy_price_gt_15k_30d", type_="foreignkey"
-    )
+    op.drop_constraint(None, "wallet_statistic_buy_price_gt_15k_30d", type_="foreignkey")
     op.create_foreign_key(
         "wallet_statistic_buy_price_gt_15k_30d_wallet_id_fkey",
         "wallet_statistic_buy_price_gt_15k_30d",
@@ -250,15 +238,9 @@ def downgrade() -> None:
             autoincrement=False,
             nullable=True,
         ),
-        sa.ForeignKeyConstraint(
-            ["wallet_id"], ["wallet.id"], name="wallet_detail_wallet_id_fkey"
-        ),
+        sa.ForeignKeyConstraint(["wallet_id"], ["wallet.id"], name="wallet_detail_wallet_id_fkey"),
         sa.PrimaryKeyConstraint("wallet_id", name="wallet_detail_pkey"),
     )
-    op.create_index(
-        "idx_wallet_detail_is_scammer", "wallet_detail", ["is_scammer"], unique=False
-    )
-    op.create_index(
-        "idx_wallet_detail_is_bot", "wallet_detail", ["is_bot"], unique=False
-    )
+    op.create_index("idx_wallet_detail_is_scammer", "wallet_detail", ["is_scammer"], unique=False)
+    op.create_index("idx_wallet_detail_is_bot", "wallet_detail", ["is_bot"], unique=False)
     # ### end Alembic commands ###

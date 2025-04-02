@@ -1,6 +1,7 @@
 from fastapi import APIRouter
-from src.settings import config
 from starlette.responses import RedirectResponse
+
+from src.settings import config
 
 router = APIRouter()
 

@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 
-class Wallet(models.Model):
+class WalletBase(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid6.uuid7, editable=False)
     address = models.CharField(max_length=90, unique=True, verbose_name="Адрес")
     last_stats_check = models.DateTimeField(
@@ -25,8 +25,8 @@ class Wallet(models.Model):
     class Meta:
 
         db_table = "wallet"
-        verbose_name = "кошелек"
-        verbose_name_plural = "кошельки"
+        verbose_name = "кошелек (базовая)"
+        verbose_name_plural = "кошельки (базовая)"
         indexes = [
             models.Index(
                 F("last_stats_check").asc(nulls_first=True),
@@ -37,8 +37,8 @@ class Wallet(models.Model):
     def __str__(self):
         return f"{self.address}"
 
-    def get_absolute_url(self):
-        return reverse("admin:solana_wallet_changelist") + f"{self.address}/statistics/"
+    def get_stats_url(self):
+        return reverse("admin:solana_wallet_changelist") + f"{self.address}/"
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
@@ -54,7 +54,7 @@ class Wallet(models.Model):
 
 class TgSentWallet(models.Model):
     wallet = models.OneToOneField(
-        "Wallet", related_name="tg_sent", on_delete=models.CASCADE, primary_key=True
+        "WalletBase", related_name="tg_sent", on_delete=models.CASCADE, primary_key=True
     )
     created_at = models.DateTimeField(
         db_index=True, auto_now_add=True, verbose_name="Создан"
@@ -65,21 +65,24 @@ class TgSentWallet(models.Model):
         db_table = "tg_sent_wallet"
 
 
-class WalletBuyPriceGt15k(Wallet):
-    def get_absolute_url(self):
+class Wallet(WalletBase):
+    """Прокси-модель основной таблицы кошельков"""
+
+    class Meta:
+        proxy = True
+        verbose_name = "кошелек"
+        verbose_name_plural = "кошельки"
+
+
+class WalletBuyPriceGt15k(WalletBase):
+    """Прокси-модель таблицы кошельков со статой по токенам с покупкой от 15к+"""
+
+    def get_stats_url(self):
         return (
-            reverse("admin:solana_walletbuypricegt15k_changelist")
-            + f"{self.address}/statistics/"
+            reverse("admin:solana_walletbuypricegt15k_changelist") + f"{self.address}/"
         )
 
     class Meta:
         proxy = True
         verbose_name = "кошелек (Buy price gt 15k)"
         verbose_name_plural = "кошельки (Buy price gt 15k)"
-
-
-class WalletProxy(Wallet):
-    class Meta:
-        proxy = True
-        verbose_name = "кошелек (базовая)"
-        verbose_name_plural = "кошельки (базовая)"

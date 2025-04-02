@@ -1,18 +1,18 @@
 from dataclasses import asdict
 from typing import Any, Iterable, List, Optional, Type, TypeVar
 
-from sqlalchemy import delete, func, inspect, select, text
+from sqlalchemy import bindparam, delete, func, inspect, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import class_mapper
-from src.application.common.dto import Pagination
+
 from src.application.interfaces.repositories.generic_repository import (
     GenericRepositoryInterface,
 )
 from src.domain.entities.base_entity import BaseEntity
 from src.infra.db.sqlalchemy.models import Base
 
-from .common.queries import build_bulk_update_query
+from ...exceptions import RepositoryException
 
 Entity = TypeVar("Entity", bound=BaseEntity)
 
@@ -60,7 +60,7 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         return entity
 
     async def update(self, entity: Entity):
-        instance = self.model_class(**asdict(entity))
+        instance = self.entity_to_model(entity)
         await self._session.merge(instance)
 
     async def delete(self, entity: Entity) -> None:
@@ -87,18 +87,11 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         elif update_fields and on_conflict:
             stmt = stmt.on_conflict_do_update(
                 index_elements=on_conflict,
-                set_={
-                    field: getattr(stmt.excluded, field)
-                    for field in update_fields
-                    if hasattr(stmt.excluded, field)
-                },
+                set_={field: getattr(stmt.excluded, field) for field in update_fields if hasattr(stmt.excluded, field)},
             )
         connection = await self._session.connection()
         if batch_size:
-            [
-                await connection.execute(stmt, values[i : i + batch_size])
-                for i in range(0, len(objects), batch_size)
-            ]
+            [await connection.execute(stmt, values[i : i + batch_size]) for i in range(0, len(objects), batch_size)]
         else:
             await connection.execute(stmt, values)
         return objects
@@ -111,32 +104,50 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         id_column: Optional[Any] = None,
         batch_size: Optional[int] = None,
     ) -> list[Entity]:
-        """
-        Массовое обновление записей с оптимизацией стандартного метода.
-        Данная реализация использует подход с FROM VALUES WHERE
-        """
+
         if not objects:
             return objects
-        fields = (
-            set(fields)
-            if fields
-            else {column.name for column in inspect(self.model_class).columns}
-        )
-        excluded_fields = set(excluded_fields) if excluded_fields else set()
-        fields_to_update = fields - excluded_fields  # Поля для обновления
 
-        values = [self.entity_to_dict(obj) for obj in objects]
+        model_columns = {column.name for column in inspect(self.model_class).columns}
 
-        _query = build_bulk_update_query(
-            self.model_class,
-            values,
-            fields_to_update,
-            id_column=id_column,
+        # Проверка, какие поля обновляются
+        if fields:
+            for field in fields:
+                if field not in model_columns:
+                    raise RepositoryException(f"Поле '{field}' не существует в модели {self.model_class}")
+            fields_to_update = set(fields)
+        else:
+            fields_to_update = model_columns
+
+        excluded_fields = set(excluded_fields or [])
+        fields_to_update -= excluded_fields  # Исключаем ненужные поля
+
+        # Если id_column не передан, пытаемся найти первичный ключ модели
+        if not id_column:
+            primary_key_column = next(iter(self.model_class.__table__.primary_key))
+            id_column = primary_key_column.name  # Используем имя первичного ключа
+        if not id_column:
+            raise RepositoryException(f"Не удалось определить id_column")
+
+        # Убираем id_column из списка полей для обновления
+        fields_to_update.discard(id_column)
+
+        values = []
+        for obj in objects:
+            obj_dict = self.entity_to_dict(obj)
+            update_values = {field: obj_dict[field] for field in fields_to_update if field in obj_dict}
+            update_values["_id"] = obj_dict[id_column]  # Используем id_column
+            values.append(update_values)
+
+        # Строим запрос
+        query = (
+            update(self.model_class)
+            .where(getattr(self.model_class, id_column) == bindparam("_id"))  # Динамически выбираем колонку
+            .values({field: bindparam(field) for field in fields_to_update})
         )
-        query = text(_query)
 
         connection = await self._session.connection()
-        await connection.execute(query)
+        await connection.execute(query, values)
 
         return objects
 
@@ -151,9 +162,7 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         if hasattr(self.model_class, field_name):
             column = getattr(self.model_class, field_name).property.columns[0]
             if not (column.unique or column.primary_key):
-                raise ValueError(
-                    f"Поле {field_name} не является уникальным в модели {self.model_class}"
-                )
+                raise RepositoryException(f"Поле {field_name} не является уникальным в модели {self.model_class}")
 
         batch_size = 32_000  # Лимит PostgreSQL на кол-во аргументов
         conn = await self._session.connection()
@@ -161,36 +170,24 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
 
         for i in range(0, len(id_list), batch_size):
             batch = id_list[i : i + batch_size]
-            stmt = select(self.model_class).where(
-                getattr(self.model_class, field_name).in_(batch)
-            )
+            stmt = select(self.model_class).where(getattr(self.model_class, field_name).in_(batch))
             result = await conn.execute(stmt)
             instances = result.mappings().all()
 
-            result_dict.update(
-                {
-                    instance[field_name]: self.entity_class(**instance)
-                    for instance in instances
-                }
-            )
+            result_dict.update({instance[field_name]: self.entity_class(**instance) for instance in instances})
 
         return result_dict
 
     def model_to_entity(self, instance: Base) -> Entity:
         """Конвертация ORM Model -> Entity"""
-        instance_dict = {
-            column.key: getattr(instance, column.key)
-            for column in class_mapper(self.model_class).columns
-        }
+        instance_dict = {column.key: getattr(instance, column.key) for column in class_mapper(self.model_class).columns}
         return self.entity_class(**instance_dict)
 
-    def dataclass_to_model(self, entity: Entity) -> Base:
+    def entity_to_model(self, entity: Entity) -> Base:
         """Конвертация Entity -> ORM Model"""
         data = entity.to_dict()
         mapper = class_mapper(self.model_class)
-        model_data = {
-            col.key: data[col.key] for col in mapper.columns if col.key in data
-        }
+        model_data = {col.key: data[col.key] for col in mapper.columns if col.key in data}
         return self.model_class(**model_data)
 
     # noinspection PyMethodMayBeStatic
