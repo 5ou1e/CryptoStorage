@@ -10,8 +10,8 @@ from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 @dataclass(kw_only=True)
 class User(BaseEntity, TimestampMixinEntity):
     id: UUID | None = None  # Generates in DB
-    username: str | None = None
-    email: str | None = None
+    username: str
+    email: str
     hashed_password: str
     first_name: str | None = None
     last_name: str | None = None

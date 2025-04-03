@@ -19,7 +19,7 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository,
     SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 from .calculations import filter_period_tokens, recalculate_wallet_period_stats
 
@@ -27,7 +27,7 @@ logger = logging.getLogger("tasks.update_wallet_statistics")
 
 
 async def update_wallet_statistics_buygt15k_async():
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).delete_all()
         await SQLAlchemyWalletStatisticBuyPriceGt15k30dRepository(session).delete_all()
         await SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(session).delete_all()
@@ -40,7 +40,7 @@ async def update_wallet_statistics_buygt15k_async():
 async def get_wallets_for_update():
     logger.debug(f"Начинаем получение кошельков из БД")
     t1 = datetime.now()
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         wallets = await SQLAlchemyWalletRepository(session).get_wallets_for_buygt15k_statistic()
     t2 = datetime.now()
     logger.info(f"Получили {len(wallets)} кошельков из БД | Время: {t2-t1}")
@@ -77,19 +77,19 @@ async def update_wallet_stats_in_db(wallets):
 
 
 async def _update_stats_7d(stats):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).bulk_create(stats)
         await session.commit()
 
 
 async def _update_stats_30d(stats):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15k30dRepository(session).bulk_create(stats)
         await session.commit()
 
 
 async def _update_stats_all(stats):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(session).bulk_create(stats)
         await session.commit()
 
@@ -106,7 +106,7 @@ async def calculate_wallet(wallet: Wallet, semaphore):
         wallet.stats_buy_price_gt_15k_all = WalletStatisticBuyPriceGt15kAll(
             wallet_id=wallet.id, updated_at=dt_now, created_at=dt_now
         )
-        async with AsyncSessionLocal() as session:
+        async with AsyncSessionMaker() as session:
             wallet_tokens = await SQLAlchemyWalletTokenRepository(
                 session
             ).get_wallet_tokens_by_wallet_for_buygt15k_statistic(wallet_id=wallet.id)

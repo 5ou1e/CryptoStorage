@@ -13,7 +13,7 @@ from src.infra.celery.tasks import update_single_wallet_statistics_task
 from src.infra.db.sqlalchemy.models import Wallet, WalletStatistic30d
 from src.infra.db.sqlalchemy.readers import SQLAlchemyWalletReader
 from src.infra.db.sqlalchemy.repositories import SQLAlchemyWalletRepository
-from src.infra.db.sqlalchemy.setup import get_db_session, AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 from src.presentation.api.schemas.response import ApiResponse
 from pydantic import parse_obj_as
 
@@ -25,51 +25,8 @@ from sqlalchemy_filterset.types import ModelAttribute
 
 from src.infra.db.sqlalchemy.models import Swap, Wallet, WalletToken, WalletStatistic30d
 
-from sqlalchemy_filterset import (
-    Filter,
-    InFilter,
-    JoinStrategy,
-    LimitOffsetFilter,
-    MultiJoinStrategy,
-    OrderingField,
-    OrderingFilter,
-    RangeFilter,
-    SearchFilter,
-    AsyncFilterSet,
-    BaseFilter,
-    BaseStrategy,
-)
 
 import operator as op
-
-
-class GreaterThanOrEqualFilter(BaseFilter):
-    """Фильтр для значений больше или равно (>=)."""
-
-    def __init__(
-        self,
-        field: ModelAttribute,
-        strategy: Optional[BaseStrategy] = None,
-    ) -> None:
-        super().__init__()
-        self.field = field
-        self.strategy = strategy if strategy is not None else BaseStrategy()
-
-    def filter(self, query: Select, value: Optional[Any], values: Dict[str, Any]) -> Select:
-        if value is None:
-            return query
-        return self.strategy.filter(query, op.ge(self.field, value))
-
-
-class WalletFilterSet(AsyncFilterSet):
-    address = Filter(Wallet.address)
-    stats_30d__total_token = GreaterThanOrEqualFilter(
-        WalletStatistic30d.total_token,
-        strategy=JoinStrategy(
-            WalletStatistic30d,
-            Wallet.id == WalletStatistic30d.wallet_id,
-        ),
-    )
 
 
 class WalletFilterSchema(BaseModel):
@@ -88,7 +45,7 @@ async def test(
         # address=None,
         stats_30d__total_token=100,
     )
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         filter_set = WalletFilterSet(session, select(Wallet))
         # filter_params = parse_obj_as(WalletFilterSchema, filters)
         filtered_wallets_query = filter_set.filter_query(filter_params.dict(exclude_none=True))

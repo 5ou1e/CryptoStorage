@@ -3,9 +3,11 @@ from typing import Annotated
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Body, Query
 
 from src.application.common.dto import Pagination
+from src.application.wallet.commands.refresh_wallet_stats import RefreshWalletStatsCommandHandler, \
+    RefreshWalletStatsResponse
 from src.application.wallet.dto import (
     GetWalletActivitiesFilters,
     GetWalletsFilters,
@@ -17,6 +19,10 @@ from src.application.wallet.dto import (
     WalletTokensPageDTO,
 )
 from src.application.wallet.dto.wallet import GetWalletsSorting
+from src.application.wallet.dto.wallet_activity import GetWalletActivitiesSorting
+from src.application.wallet.dto.wallet_token import GetWalletTokensSorting
+from src.application.wallet.queries.get_refresh_wallet_stats_status import GetRefreshWalletStatsStatusHandler, \
+    GetRefreshWalletStatsStatusResponse
 from src.application.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
 from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
 from src.application.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
@@ -39,7 +45,10 @@ router = APIRouter(
     response_description="Детальная информация о кошельке.",
 )
 @inject
-async def get_wallet_by_address(address: str, handler: FromDishka[GetWalletByAddressHandler]) -> ApiResponse[WalletDTO]:
+async def get_wallet_by_address(
+    address: str,
+    handler: FromDishka[GetWalletByAddressHandler]
+) -> ApiResponse[WalletDTO]:
     result = await handler(address)
     return ApiResponse(result=result)
 
@@ -71,6 +80,7 @@ async def get_wallets(
 async def get_wallet_tokens(
     address: str,
     pagination: Annotated[Pagination, Depends()],
+    sorting: Annotated[GetWalletTokensSorting, Depends()],
     filters: Annotated[GetWalletTokensFilters, Depends()],
     handler: FromDishka[GetWalletTokensHandler],
 ) -> ApiResponse[WalletTokensPageDTO]:
@@ -78,6 +88,7 @@ async def get_wallet_tokens(
         address,
         pagination,
         filters,
+        sorting,
     )
     return ApiResponse(result=result)
 
@@ -92,6 +103,7 @@ async def get_wallet_tokens(
 async def get_wallet_activities(
     address: str,
     pagination: Annotated[Pagination, Depends()],
+    sorting: Annotated[GetWalletActivitiesSorting, Depends()],
     filters: Annotated[GetWalletActivitiesFilters, Depends()],
     handler: FromDishka[GetWalletActivitiesHandler],
 ) -> ApiResponse[WalletActivitiesPageDTO]:
@@ -99,6 +111,7 @@ async def get_wallet_activities(
         address,
         pagination,
         filters,
+        sorting,
     )
     return ApiResponse(result=result)
 
@@ -116,3 +129,32 @@ async def get_wallet_related_wallets(
 ) -> ApiResponse[WalletRelatedWalletsDTO]:
     result: WalletRelatedWalletsDTO = await handler(address)
     return ApiResponse(result=result)
+
+
+@router.post(
+    "/refresh_stats",
+    description="Запросить обновление статистики кошелька",
+    summary="Запросить обновление статистики кошелька",
+)
+@inject
+async def create_refresh_wallet_stats_task(
+    address: Annotated[str, Body(embed=True)],
+    handler: FromDishka[RefreshWalletStatsCommandHandler],
+) -> ApiResponse[RefreshWalletStatsResponse]:
+    result = await handler(address)
+    return ApiResponse(result=result)
+
+
+@router.get(
+    "/refresh_stats/{task_id}/status",
+    description="Получить статус задачи обновления статистики кошелька",
+    summary="Получить статус задачи обновления статистики кошелька",
+)
+@inject
+async def get_wallet_refresh_stats_task_status(
+    task_id: str,
+    handler: FromDishka[GetRefreshWalletStatsStatusHandler],
+) -> ApiResponse[GetRefreshWalletStatsStatusResponse]:
+    result = await handler(task_id)
+    return ApiResponse(result=result)
+

@@ -1,7 +1,8 @@
 import math
+from typing import TypeVar, Optional, List, Generic
 
 from fastapi import Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 
 
 class Pagination(BaseModel):
@@ -12,6 +13,12 @@ class Pagination(BaseModel):
         le=100,
         description="Кол-во элементов на странице",
     )
+
+    @property
+    def limit_offset(self) -> tuple[int, int]:
+        offset = (max(self.page, 1) - 1) * self.page_size
+        limit = self.page_size
+        return limit, offset
 
 
 class PaginationResult(BaseModel):
@@ -31,3 +38,20 @@ class PaginationResult(BaseModel):
             total_count=total_count,
             total_pages=total_pages,
         )
+
+
+SortingEnumType = TypeVar("SortingEnumType")
+
+
+class BaseSorting(BaseModel, Generic[SortingEnumType]):
+    order_by: Optional[List[SortingEnumType]] = Field(
+        Query(None),
+        description="Поля для сортировки",
+    )
+
+    @field_validator("order_by", mode="before")  # noqa
+    @classmethod
+    def remove_duplicates(cls, value):
+        if value is None:
+            return value
+        return list(dict.fromkeys(value))  # Убираем дубликаты, сохраняя порядок

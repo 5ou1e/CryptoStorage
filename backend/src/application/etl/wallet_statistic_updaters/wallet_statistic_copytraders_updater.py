@@ -25,7 +25,7 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository,
     SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 from .calculations import filter_period_tokens, recalculate_wallet_period_stats
 
@@ -33,7 +33,7 @@ logger = logging.getLogger("tasks.update_wallet_statistics")
 
 
 async def update_wallet_statistics_copytraders_async():
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).delete_all()
         await SQLAlchemyWalletStatisticBuyPriceGt15k30dRepository(session).delete_all()
         await SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(session).delete_all()
@@ -48,7 +48,7 @@ async def get_wallets_for_update():
     t1 = datetime.now()
     from src.infra.db.sqlalchemy.models import Wallet as WalletModel
 
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         _wallets = await SQLAlchemyWalletRepository(session).get_wallets_for_copytraders_statistic()
         logger.info(f"Всего кошельков к обработке: {len(_wallets)}")
         unique_addresses = set()
@@ -62,7 +62,6 @@ async def get_wallets_for_update():
             logger.info(data)
             copying_wallets = data["result"]["copying_wallets"]
             for w in copying_wallets:
-                print(w["address"])
                 if w["address"] not in unique_addresses:
                     unique_addresses.add(w["address"])
             logger.info(f"Обработано {i} кошельков")
@@ -93,7 +92,7 @@ async def process_wallets(wallets):
 
 
 async def load_tokens(wallets):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         wallet_tokens = await SQLAlchemyWalletTokenRepository(session).get_wallet_tokens_by_wallets_list(
             [wallet.id for wallet in wallets]
         )
@@ -125,19 +124,19 @@ async def update_wallet_stats_in_db(wallets):
 
 
 async def _update_stats_7d(stats):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15k7dRepository(session).bulk_create(stats)
         await session.commit()
 
 
 async def _update_stats_30d(stats):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15k30dRepository(session).bulk_create(stats)
         await session.commit()
 
 
 async def _update_stats_all(stats):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(session).bulk_create(stats)
         await session.commit()
 

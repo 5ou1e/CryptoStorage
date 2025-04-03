@@ -7,12 +7,13 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from unfold.views import UnfoldModelAdminViewMixin
 
+from core import settings
 from solana.admin.wallet_token_stats.admin import \
     WalletTokenStatisticForWalletStatsPageAdmin
 from solana.models import Wallet, WalletTokenStatistic
 
 from .services import get_wallet_statistics_data
-
+from core.settings.config import config
 
 class WalletStatisticView(UnfoldModelAdminViewMixin, TemplateView):
     title = "Статистика кошелька"
@@ -51,12 +52,15 @@ class WalletStatisticView(UnfoldModelAdminViewMixin, TemplateView):
             return redirect("/")
 
         context = super().get_context_data(**kwargs)
+
         context.update(
             {
                 "cl": cl,
                 "opts": cl.opts,
-                "actions_on_top": True,
+                # "actions_on_top": True,
                 "wallet": wallet_data,
+                "admin_base_url": config.admin.base_url,
+                "backend_base_url": config.backend.base_url
             }
         )
         return context

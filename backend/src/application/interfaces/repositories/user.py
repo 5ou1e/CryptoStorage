@@ -28,7 +28,7 @@ class UserRepositoryInterface(GenericRepositoryInterface[User], ABC):
         self,
         user: User,
         create_dict: Dict[str, Any],
-    ) -> User:
+    ) -> Any:
         raise NotImplementedError
 
     @abstractmethod

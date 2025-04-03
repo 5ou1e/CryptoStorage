@@ -9,7 +9,6 @@ from src.infra.db.sqlalchemy.models.common import Base, UUIDIDMixin
 class FlipsideConfig(Base, UUIDIDMixin):
     __tablename__ = "flipsidecrypto_config"
 
-    # TODO: swaps_parsed_until_block_timestamp - сейчас это BLOCK_TIMESTAMP
     swaps_parsed_until_block_timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     __table_args__ = {"comment": "Конфиг FlipsideCrypto"}

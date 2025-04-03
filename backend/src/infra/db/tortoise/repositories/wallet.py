@@ -115,7 +115,6 @@ class TortoiseWalletRepository(
 
     # noinspection PyMethodMayBeStatic
     async def get_by_address(self, address: str) -> WalletEntity | None:
-        print("HELLO")
         return await Wallet.filter(address=address).first()
 
     async def get_wallets_for_update_stats(self, count: int = 1) -> list[WalletEntity]:

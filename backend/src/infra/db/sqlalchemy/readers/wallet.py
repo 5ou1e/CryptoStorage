@@ -9,8 +9,15 @@ from src.application.wallet.dto.wallet import GetWalletsSorting
 from src.application.wallet.dto.wallet_activity import (
     WalletActivitiesPageDTO,
     WalletActivityDTO,
+    GetWalletActivitiesSorting,
+    GetWalletActivitiesFilters,
 )
-from src.application.wallet.dto.wallet_token import WalletTokenDTO, WalletTokensPageDTO
+from src.application.wallet.dto.wallet_token import (
+    WalletTokenDTO,
+    WalletTokensPageDTO,
+    GetWalletTokensFilters,
+    GetWalletTokensSorting,
+)
 from src.application.wallet.exceptions import WalletNotFoundException
 from src.infra.db.sqlalchemy.models import (
     Swap,
@@ -19,14 +26,12 @@ from src.infra.db.sqlalchemy.models import (
     WalletStatistic30d,
     WalletStatisticAll,
     WalletStatistic7d,
+    Token,
 )
-from src.infra.db.sqlalchemy.readers.generic_reader import SQLAlchemyGenericReader
+from src.infra.db.sqlalchemy.readers.generic_reader import SQLAlchemyBaseReader
 
 
-from dataclass_sqlalchemy_mixins.base import utils
-
-
-class SQLAlchemyWalletReader(SQLAlchemyGenericReader, WalletReaderInterface):
+class SQLAlchemyWalletReader(SQLAlchemyBaseReader, WalletReaderInterface):
 
     async def get_wallet_by_address(self, address: str) -> WalletDTO:
         query = select(Wallet).where(Wallet.address == address)
@@ -42,7 +47,10 @@ class SQLAlchemyWalletReader(SQLAlchemyGenericReader, WalletReaderInterface):
         return WalletDTO.from_orm(wallet)
 
     async def get_wallets(
-        self, pagination: Pagination, filters: GetWalletsFilters, sorting: GetWalletsSorting
+        self,
+        pagination: Pagination,
+        filters: GetWalletsFilters,
+        sorting: GetWalletsSorting
     ) -> WalletsPageDTO:
         query = select(Wallet)
         query = (
@@ -54,15 +62,8 @@ class SQLAlchemyWalletReader(SQLAlchemyGenericReader, WalletReaderInterface):
             )
         )
 
-        query = utils.apply_filters(query=query, filters=filters.model_dump(exclude_none=True), model=Wallet)
-        if order_by := sorting.order_by:
-            query = utils.apply_order_by(query=query, order_by=order_by, model=Wallet)
-
-        count_query = query
-        print(query)
-
-        limit, offset = self._get_limit_offset_from_pagination(pagination)
-        query = query.limit(limit).offset(offset)
+        limit, offset = pagination.limit_offset
+        query, count_query = self._apply_filters_sorting_limit_offset(query, Wallet, filters, sorting, limit, offset)
 
         instances = await self._session.scalars(query)
         wallets = [WalletDTO.from_orm(instance) for instance in instances]
@@ -75,42 +76,62 @@ class SQLAlchemyWalletReader(SQLAlchemyGenericReader, WalletReaderInterface):
             pagination=PaginationResult.from_pagination(pagination, count=count, total_count=total_count),
         )
 
-    async def get_wallet_activities(self, address: str, pagination: Pagination) -> WalletActivitiesPageDTO:
+    async def get_wallet_activities(
+        self,
+        address: str,
+        pagination: Pagination,
+        filters: GetWalletActivitiesFilters,
+        sorting: GetWalletActivitiesSorting,
+    ) -> WalletActivitiesPageDTO:
         wallet_id = await self._get_wallet_id_by_address(address)
         if not wallet_id:
             raise WalletNotFoundException(address)
 
-        offset = (max(pagination.page, 1) - 1) * pagination.page_size
-        limit = pagination.page_size
-        query = query_for_count = select(Swap).where(Swap.wallet_id == wallet_id)
-        query = query.options(joinedload(Swap.token))
-        query = query.offset(offset).limit(limit)
+        query = select(Swap).where(Swap.wallet_id == wallet_id)
+        query = query.join(Token).options(contains_eager(Swap.token))
+
+        limit, offset = pagination.limit_offset
+        query, count_query = self._apply_filters_sorting_limit_offset(query, Swap, filters, sorting, limit, offset)
+
         instances = await self._session.scalars(query)
         activities = [WalletActivityDTO.from_orm(instance) for instance in instances]
         count = len(activities)
-        total_count = await self._get_count(query_for_count)
+        total_count = await self._get_count(count_query)
+
         return WalletActivitiesPageDTO(
             activities=activities,
             pagination=PaginationResult.from_pagination(pagination, count=count, total_count=total_count),
         )
 
-    async def get_wallet_tokens(self, address: str, pagination: Pagination) -> WalletTokensPageDTO:
+    async def get_wallet_tokens(
+        self,
+        address: str,
+        pagination: Pagination,
+        filters: GetWalletTokensFilters,
+        sorting: GetWalletTokensSorting,
+    ) -> WalletTokensPageDTO:
         wallet_id = await self._get_wallet_id_by_address(address)
         if not wallet_id:
             raise WalletNotFoundException(address)
 
-        offset = (max(pagination.page, 1) - 1) * pagination.page_size
-        limit = pagination.page_size
-        query = query_for_count = select(WalletToken).where(WalletToken.wallet_id == wallet_id)
-        query = query.options(
-            joinedload(WalletToken.wallet),
-            joinedload(WalletToken.token),
+        query = select(WalletToken).where(WalletToken.wallet_id == wallet_id)
+        query = (
+            query
+            .join(Token)
+            # .join(Wallet)
+            .options(
+                contains_eager(WalletToken.token),
+                # contains_eager(WalletToken.wallet)
+            )
         )
-        query = query.offset(offset).limit(limit)
+
+        limit, offset = pagination.limit_offset
+        query, count_query = self._apply_filters_sorting_limit_offset(query, WalletToken, filters, sorting, limit, offset)
+
         instances = await self._session.scalars(query)
         wallet_tokens = [WalletTokenDTO.from_orm(instance) for instance in instances]
         count = len(wallet_tokens)
-        total_count = await self._get_count(query_for_count)
+        total_count = await self._get_count(count_query)
 
         return WalletTokensPageDTO(
             wallet_tokens=wallet_tokens,

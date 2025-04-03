@@ -13,7 +13,7 @@ log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 formatter = logging.Formatter(log_format, datefmt="%Y-%m-%d %H:%M:%S")
 
 # Создаем обработчик для записи в файл
-file_handler = logging.FileHandler("swaps_parser.log", encoding="utf-8")
+file_handler = logging.FileHandler("logs/swaps_loader.log", encoding="utf-8")
 file_handler.setLevel(logging.INFO)  # Уровень логирования для файла
 file_handler.setFormatter(formatter)
 

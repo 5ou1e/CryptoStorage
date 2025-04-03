@@ -44,7 +44,8 @@ async def get_wallets_to_send():
         )
         .prefetch_related(
             "stats_all",
-        ).all()
+        )
+        .all()
     )
 
 

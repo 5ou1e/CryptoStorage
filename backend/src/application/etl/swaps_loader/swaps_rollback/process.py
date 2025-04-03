@@ -2,7 +2,7 @@ import warnings
 
 from sqlalchemy import select
 
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 warnings.filterwarnings(
     "ignore",
@@ -116,7 +116,7 @@ async def extract_process(
 async def load_swaps_from_db(start, end):
     from src.infra.db.sqlalchemy.models import Swap as SwapModel
 
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         query = select(*SwapModel.__table__.columns).where((SwapModel.timestamp >= start) & (SwapModel.timestamp < end))
         result = await session.execute(query)
         # for row in result.mappings().all():

@@ -1,9 +1,13 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, AsyncIterable
 
-from dishka import AsyncContainer, Provider, Scope, make_async_container, provide
+from dishka import Provider, Scope, provide
+from fastapi_users.authentication import JWTStrategy
 from fastapi_users.password import PasswordHelperProtocol
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from src.application.wallet.commands.refresh_wallet_stats import RefreshWalletStatsCommandHandler
+from src.application.wallet.queries.get_refresh_wallet_stats_status import GetRefreshWalletStatsStatusHandler
+from src.settings import config
 from src.application.interfaces.readers import TokenReaderInterface, WalletReaderInterface
 from src.application.interfaces.repositories import (
     SwapRepositoryInterface,
@@ -29,7 +33,7 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletRepository,
     SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal, get_db_session
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 from src.infra.db.sqlalchemy.uow import SQLAlchemyUnitOfWork
 from src.infra.db.tortoise.repositories import (
     TortoiseSwapRepository,
@@ -42,16 +46,30 @@ from src.infra.providers.password_hasher_argon import ArgonPasswordHasher
 class AppProvider(Provider):
     scope = Scope.REQUEST
 
-    async def get_db_session2(self) -> AsyncGenerator[AsyncSession, None]:
-        # TODO : посмотреть почему прилетает аргумент с контейнером дишка
-        async with AsyncSessionLocal() as session:
+    # Db
+    @provide(scope=Scope.APP)
+    def provide_sessionmaker(
+        self,
+    ) -> async_sessionmaker[AsyncSession]:
+        return AsyncSessionMaker
+
+    @provide(scope=Scope.REQUEST, provides=AsyncSession)
+    async def provide_session(
+        self, sessionmaker: async_sessionmaker[AsyncSession]
+    ) -> AsyncIterable[AsyncSession]:
+        async with sessionmaker() as session:
             yield session
 
-    # Db
-    db_session = provide(get_db_session2, provides=AsyncSession)
     uow = provide(SQLAlchemyUnitOfWork, provides=UnitOfWorkInterface)
 
-    # Password-hasher
+    # Auth
+    @provide(scope=Scope.APP)
+    def get_jwt_strategy(self) -> JWTStrategy:
+        return JWTStrategy(
+            secret=config.access_token.secret_key,
+            lifetime_seconds=config.access_token.expire_minutes,
+        )
+
     password_hasher_argon = provide(ArgonPasswordHasher, provides=PasswordHelperProtocol)
 
     # Repositories
@@ -78,17 +96,13 @@ class AppProvider(Provider):
     get_token_by_address_handler = provide(GetTokenByAddressHandler)
     get_tokens_handler = provide(GetTokensHandler)
 
+    # Command Handlers
+    refresh_wallet_stats_handler = provide(RefreshWalletStatsCommandHandler)
+    get_refresh_wallet_stats_status_handler = provide(GetRefreshWalletStatsStatusHandler)
+
 
 class GetWalletRelatedWalletsHandlerProvider(Provider):
     scope = Scope.REQUEST
-
-    async def get_db_session2(self) -> AsyncGenerator[AsyncSession, None]:
-        async with AsyncSessionLocal() as session:
-            yield session
-
-    # Db
-    db_session = provide(get_db_session2, provides=AsyncSession)
-    uow = provide(SQLAlchemyUnitOfWork, provides=UnitOfWorkInterface)
 
     tortoise_swap_repository = provide(TortoiseSwapRepository, provides=SwapRepositoryInterface)
     tortoise_wallet_repository = provide(TortoiseWalletRepository, provides=WalletRepositoryInterface)
@@ -96,8 +110,3 @@ class GetWalletRelatedWalletsHandlerProvider(Provider):
 
     get_wallet_related_wallets_handler = provide(GetWalletRelatedWalletsHandler)
 
-
-def create_async_container() -> AsyncContainer:
-    provider = AppProvider()
-    get_wallet_related_wallets_handler_provider = GetWalletRelatedWalletsHandlerProvider()
-    return make_async_container(provider, get_wallet_related_wallets_handler_provider)

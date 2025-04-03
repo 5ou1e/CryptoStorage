@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+
 from typing import Any, Optional, TypeVar, Union
 
 import jwt
@@ -33,7 +33,7 @@ ID = TypeVar("ID")
 
 
 class UUIDIDMixin:
-    def parse_id(self, value: Any) -> uuid.UUID:
+    def parse_id(self, value: Any) -> uuid.UUID: # noqa
         if isinstance(value, uuid.UUID):
             return value
         try:
@@ -43,7 +43,7 @@ class UUIDIDMixin:
 
 
 class IntegerIDMixin:
-    def parse_id(self, value: Any) -> int:
+    def parse_id(self, value: Any) -> int: # noqa
         if isinstance(value, float):
             raise InvalidUserIDException()
         try:
@@ -52,7 +52,7 @@ class IntegerIDMixin:
             raise InvalidUserIDException() from e
 
 
-class UserService(IntegerIDMixin):
+class UserService(UUIDIDMixin):
     """
     User management logic.
 
@@ -73,9 +73,6 @@ class UserService(IntegerIDMixin):
     verification_token_secret: SecretType
     verification_token_lifetime_seconds: int = 3600
     verification_token_audience: str = VERIFY_USER_TOKEN_AUDIENCE
-
-    user_repository: UserRepositoryInterface
-    password_helper: PasswordHelperProtocol
 
     def __init__(
         self,
@@ -695,7 +692,6 @@ class UserService(IntegerIDMixin):
             return None
         # Update password hash to a more robust one if needed
         if updated_password_hash is not None:
-            print(updated_password_hash)
             user.hashed_password = updated_password_hash
             async with self._uow:
                 await self._user_repository.update(
@@ -710,18 +706,17 @@ class UserService(IntegerIDMixin):
         user: User,
         update_dict: dict[str, Any],
     ) -> User:
-        validated_update_dict = {}
         for field, value in update_dict.items():
             if field == "email" and value != user.email:
                 try:
                     await self.get_by_email(value)
                     raise UserAlreadyExistsException(email=value)
                 except UserDoesNotExistsException:
-                    validated_update_dict["email"] = value
-                    validated_update_dict["is_verified"] = False
+                    setattr(user, "email", value)
+                    setattr(user, "is_verified", False)
             elif field == "password" and value is not None:
                 await self.validate_password(value, user)
-                validated_update_dict["hashed_password"] = self.password_helper.hash(value)
+                setattr(user, "hashed_password", self.password_helper.hash(value))
             else:
-                validated_update_dict[field] = value
-        return await self._user_repository.update(user, validated_update_dict)
+                setattr(user, field, value)
+        return await self._user_repository.update(user)

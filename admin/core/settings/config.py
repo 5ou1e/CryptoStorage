@@ -41,10 +41,25 @@ class DatabaseConfig(BaseConfig):
     name: str = Field()
 
 
+class AdminConfig(BaseConfig):
+    model_config = SettingsConfigDict(
+        env_prefix="ADMIN_",  # Указываем префикс для переменных окружения
+    )
+    base_url: str = Field()
+
+
+class BackendConfig(BaseConfig):
+    model_config = SettingsConfigDict(
+        env_prefix="BACKEND_",  # Указываем префикс для переменных окружения
+    )
+    base_url: str = Field()
+
+
 class Config(BaseSettings):
     django: DjangoConfig = DjangoConfig()
     django_unfold: DjangoUnfoldConfig = DjangoUnfoldConfig()
     db: DatabaseConfig = DatabaseConfig()
-
+    backend: BackendConfig = BackendConfig()
+    admin: AdminConfig = AdminConfig()
 
 config = Config()

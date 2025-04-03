@@ -23,7 +23,7 @@ from src.infra.db.sqlalchemy.repositories import (
 from src.infra.db.sqlalchemy.repositories.flipside import (
     SQLAlchemyFlipsideConfigRepositoryInterface,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 from . import config
 from .common import utils
@@ -64,7 +64,7 @@ async def import_wallets_data_chunk(
     wallets,
 ) -> dict[str, Wallet]:
     """Импортируем кошельки со всеми связями в одной транзакции"""
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         repository = SQLAlchemyWalletRepository(session)
         # # !!!Сортируем по адресу, чтобы избежать дедлоков при массовом апдейте
         # wallets.sort(key=lambda w: w.address)
@@ -116,7 +116,7 @@ async def import_wallets_data_chunk(
 
 
 async def import_tokens(tokens) -> dict[str, Token]:
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         repository = SQLAlchemyTokenRepository(session)
         await repository.bulk_create(tokens, ignore_conflicts=True)
         created_addresses = list({token.address for token in tokens})
@@ -131,7 +131,7 @@ async def import_activities_and_wallet_tokens(
     wallet_tokens: List[WalletToken],
     end_time: datetime,
 ):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemySwapRepository(session).bulk_create(activities, batch_size=30000)
         await SQLAlchemyWalletTokenRepository(session).bulk_update_or_create_wallet_token_with_merge(
             wallet_tokens, batch_size=20000

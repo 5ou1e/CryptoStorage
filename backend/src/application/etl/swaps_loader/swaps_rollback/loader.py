@@ -23,7 +23,7 @@ from src.infra.db.sqlalchemy.repositories import (
 from src.infra.db.sqlalchemy.repositories.flipside import (
     SQLAlchemyFlipsideConfigRepositoryInterface,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 from . import config
 from .common import utils
@@ -44,7 +44,7 @@ async def import_activities_and_wallet_tokens(
 ):
     from src.infra.db.sqlalchemy.models import Swap as SwapModel
 
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         BATCH_SIZE = 30000
         target_ids = [activity.id for activity in activities]
         print(f"Удаляем {[a.tx_hash for a in activities[:10]]} ...")

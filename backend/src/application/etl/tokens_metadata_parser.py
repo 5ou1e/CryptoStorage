@@ -10,7 +10,7 @@ import pytz
 from solders.pubkey import Pubkey
 
 from src.infra.db.sqlalchemy.repositories import SQLAlchemyTokenRepository
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 from src.settings import config
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ async def parse_tokens_metadata_async():
 
 
 async def get_tokens_to_process():
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         return await SQLAlchemyTokenRepository(session).get_tokens_with_no_metadata_parsed(limit=100)
 
 
@@ -38,7 +38,7 @@ async def process_tokens(tokens):
 
 
 async def update_tokens_metadata(tokens):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         repo = SQLAlchemyTokenRepository(session)
         await repo.bulk_update_all_metadata_fields(
             tokens,
@@ -126,7 +126,6 @@ async def get_token_account_info(pubkey):
             headers=headers,
         ) as resp:
             data = await resp.text()
-            print(data)
             try:
                 result = json.loads(data)
             except Exception as e:

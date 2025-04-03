@@ -13,7 +13,7 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyTokenPriceRepository,
     SQLAlchemyTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal, engine
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker, engine
 
 logger = logging.getLogger("tasks.collect_sol_prices")
 
@@ -24,7 +24,7 @@ BINANCE_API_KLINES_URL = "https://api.binance.com/api/v3/klines"
 async def collect_prices_async():
     global engine
 
-    logger.info(f"AsyncSessionLocal ID: {id(AsyncSessionLocal)}")
+    logger.info(f"AsyncSessionLocal ID: {id(AsyncSessionMaker)}")
     logger.info(f"Engine ID: {id(engine)}")
     token = await get_sol_token()
     if not token:
@@ -105,19 +105,19 @@ async def transform_data(candles, token):
 
 
 async def get_sol_token():
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         return await SQLAlchemyTokenRepository(session).get_by_address(
             address=SOL_ADDRESS,
         )
 
 
 async def get_latest_token_price(token_id: UUID) -> TokenPrice | None:
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         return await SQLAlchemyTokenPriceRepository(session).get_latest_by_token(token_id)
 
 
 async def load_prices_to_db(prices: list[TokenPrice]):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyTokenPriceRepository(session).bulk_create(
             prices,
             ignore_conflicts=True,

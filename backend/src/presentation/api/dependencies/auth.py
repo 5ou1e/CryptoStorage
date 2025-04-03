@@ -13,16 +13,18 @@ from fastapi_users.authentication import (
 
 from src.application.user.service import UserService
 from src.domain.entities.user import User
-from src.settings import config
 
 bearer_transport = BearerTransport(tokenUrl="v1/auth/jwt/login")
 
 
-def get_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(
-        secret=config.access_token.secret_key,
-        lifetime_seconds=config.access_token.expire_minutes,
-    )
+@inject
+async def get_jwt_strategy(jwt_strategy: FromDishka[JWTStrategy]):
+    return jwt_strategy
+
+
+@inject
+def get_user_service(service: FromDishka[UserService]):
+    return service
 
 
 auth_backend = AuthenticationBackend(
@@ -30,11 +32,6 @@ auth_backend = AuthenticationBackend(
     transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
-
-
-@inject
-def get_user_service(service: FromDishka[UserService]):
-    return service
 
 
 fastapi_users = FastAPIUsers[User, UUID](

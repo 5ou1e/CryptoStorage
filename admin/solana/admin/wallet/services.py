@@ -147,7 +147,6 @@ def get_wallet_statistics_data(user, wallet, use_buy_price_gt_20k_stats=False):
             num = getattr(period_stats, f"{key}_num", None)
             percent = getattr(period_stats, f"{key}_percent", None)
             period_data[key] = f"{f_n(num)} ({f_n(percent, suffix=' %')})"
-            print(num, percent)
 
         # Исправленная обработка token_buy_sell_duration_avg
         token_duration_avg = period_stats.token_buy_sell_duration_avg

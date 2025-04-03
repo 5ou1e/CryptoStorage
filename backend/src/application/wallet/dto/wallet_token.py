@@ -1,12 +1,22 @@
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 from typing import List, Optional
 
 from fastapi import Query
 from pydantic import BaseModel
 
-from src.application.common.dto import PaginationResult
+from src.application.common.dto import PaginationResult, BaseSorting
 from src.application.token.dto import TokenDTO
+
+
+class GetWalletsSortingFields(StrEnum):
+    CREATED_AT_ASC = "created_at"
+    CREATED_AT_DESC = "-created_at"
+
+
+class GetWalletTokensSorting(BaseSorting[GetWalletsSortingFields]):
+    pass
 
 
 class GetWalletTokensFilters(BaseModel):

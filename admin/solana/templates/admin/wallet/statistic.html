@@ -520,11 +520,83 @@
 <!--            window.location.href = currentUrl.toString();-->
 <!--        }-->
 <!--    </script>-->
+
+<script>
+    // Логика обновления кошелька
+    function updateWalletStats() {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Получение CSRF токена
+        const updateWalletStatsUrl = "{{ backend_base_url }}/v1/wallets/refresh_stats"; // Новый эндпоинт для создания задачи
+        const walletAddress = '{{ wallet.address }}';
+        const data = { address: walletAddress };  // Ваш адрес кошелька
+
+        fetch(updateWalletStatsUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify(data) // Отправка данных в теле запроса
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showNotification('Обновление поставлено в очередь!', 'success');
+                console.log(data.result.task_id);  // Получение task_id из ответа
+                checkStatsUpdateTaskStatus(data.result.task_id);  // Проверка статуса задачи
+            } else {
+                showNotification('Ошибка! Попробуйте снова.', 'error');
+            }
+        })
+        .catch(error => {
+            alert('Ошибка: ' + error);
+        });
+    }
+
+    // Функция для формирования URL для проверки статуса задачи
+    function getUpdateTaskStatusUrl(taskId) {
+        return `{{ backend_base_url }}/v1/wallets/refresh_stats/${taskId}/status`;  // Новый эндпоинт для получения статуса задачи
+    }
+
+    // Функция для опроса статуса задачи
+    function checkStatsUpdateTaskStatus(taskId) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Получение CSRF токена
+        const interval = setInterval(function() {
+            const updateWalletStatsTaskStatusUrl = getUpdateTaskStatusUrl(taskId);  // Получаем URL для статуса
+
+            fetch(updateWalletStatsTaskStatusUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Если статус задачи успешен, останавливаем интервал и перезагружаем страницу
+                if (data.result.task_status === 'success') {
+                    clearInterval(interval);
+                    showNotification('Статистика обновлена!', 'success');
+                    location.reload(); // Полная перезагрузка страницы
+                }
+                // Если задача завершена с ошибкой
+                else if (data.result.task_status === 'failure') {
+                    clearInterval(interval);
+                    alert('Ошибка при выполнении задачи');
+                }
+                // Если задача всё ещё в процессе (PENDING), продолжаем проверку
+                else if (data.result.task_status === 'pending') {
+                    console.log('Задача в процессе...');
+                }
+            });
+        }, 1000); // Проверка статуса задачи каждые 2 секунды
+    }
+</script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const walletId = '{{ wallet.address }}';
-    const url = `https://cryptostorage.space/api/v1/wallets/${walletId}/related_wallets`;
-
+    const url = `{{ backend_base_url }}/v1/wallets/${walletId}/related_wallets`;
+    console.log(url);
     const spinner = document.getElementById("loading-spinner");
     const relatedWalletsContent = document.getElementById("related-wallets-content");
 
@@ -551,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 row.innerHTML = `
                     <td class="py-2 px-3">
-                        <a href="https://cryptostorage.space/solana/wallet/${wallet.address}/" target="_blank" rel="noopener noreferrer">
+                        <a href="{{ admin_base_url }}/solana/wallet/${wallet.address}/" target="_blank" rel="noopener noreferrer">
                             ${wallet.address.slice(0, 5)}...${wallet.address.slice(-2)}
                         </a>
                     </td>
@@ -762,7 +834,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Функция обновления иконок для каждого статуса
     function updateIcon(action, isActive) {
-        console.error(`Элементы с id ${action}-icon-outline или ${action}-icon-filled.`);
         document.getElementById(`${action}-icon-outline`).style.display = isActive ? 'none' : 'inline'; // Скрыть контур, если активен
         document.getElementById(`${action}-icon-filled`).style.display = isActive ? 'inline' : 'none'; // Показать заполненную, если активен
     }

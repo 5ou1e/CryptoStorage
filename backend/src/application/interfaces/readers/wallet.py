@@ -9,6 +9,8 @@ from src.application.wallet.dto import (
     GetWalletsFilters,
 )
 from src.application.wallet.dto.wallet import GetWalletsSorting
+from src.application.wallet.dto.wallet_activity import GetWalletActivitiesSorting, GetWalletActivitiesFilters
+from src.application.wallet.dto.wallet_token import GetWalletTokensSorting, GetWalletTokensFilters
 
 
 class WalletReaderInterface(ABC):
@@ -24,9 +26,21 @@ class WalletReaderInterface(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_wallet_activities(self, address: str, pagination: Pagination) -> WalletActivitiesPageDTO:
+    async def get_wallet_activities(
+        self,
+        address: str,
+        pagination: Pagination,
+        filters: GetWalletActivitiesFilters,
+        sorting: GetWalletActivitiesSorting,
+    ) -> WalletActivitiesPageDTO:
         raise NotImplementedError
 
     @abstractmethod
-    async def get_wallet_tokens(self, address: str, pagination: Pagination) -> WalletTokensPageDTO:
+    async def get_wallet_tokens(
+        self,
+        address: str,
+        pagination: Pagination,
+        filters: GetWalletTokensFilters,
+        sorting: GetWalletTokensSorting,
+    ) -> WalletTokensPageDTO:
         raise NotImplementedError

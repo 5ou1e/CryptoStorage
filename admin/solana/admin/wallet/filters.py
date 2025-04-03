@@ -13,7 +13,7 @@ class WalletFilterType(StrEnum):
     IS_FAVORITE = "is_favorite"
     IS_WATCH_LATER = "is_watch_later"
     IS_BLACKLISTED = "is_blacklisted"
-    IS_BOT = "is_bot__exact"
+    IS_BOT = "is_bot"
     IS_SCAMMER = "is_scammer"
 
 

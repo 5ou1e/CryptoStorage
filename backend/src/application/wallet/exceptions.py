@@ -10,3 +10,13 @@ class WalletNotFoundException(ApplicationException):
     @property
     def title(self) -> str:
         return f'Кошелек с адресом "{self.address}" не найден'
+
+
+@dataclass(eq=False)
+class RefreshWalletStatsTaskNotFoundException(ApplicationException):
+    task_id: str
+
+    @property
+    def title(self) -> str:
+        return f'Задача "{self.task_id}" не найдена'
+

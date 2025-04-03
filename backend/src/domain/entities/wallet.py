@@ -1,10 +1,8 @@
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 from uuid import UUID
-
-import pytz
 
 from src.domain.entities.base_entity import BaseEntity, TimestampMixinEntity
 

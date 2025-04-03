@@ -1,12 +1,21 @@
 from datetime import datetime
 from decimal import Decimal
+from enum import StrEnum
 from typing import List, Optional
 
 from fastapi import Query
 from pydantic import BaseModel, Field
 
-from src.application.common.dto import PaginationResult
+from src.application.common.dto import PaginationResult, BaseSorting
 from src.application.token.dto import TokenDTO
+from src.domain.entities import SwapEventType
+
+
+class GetWalletActivitiesSortingFields(StrEnum):
+    BLOCK_ID_AT_ASC = "block_id"
+    BLOCK_ID_DESC = "-block_id"
+    CREATED_AT_ASC = "created_at"
+    CREATED_AT_DESC = "-created_at"
 
 
 class WalletActivityDTO(BaseModel):
@@ -32,13 +41,19 @@ class WalletActivitiesPageDTO(WalletActivitiesDTO):
     pagination: PaginationResult
 
 
+class GetWalletActivitiesSorting(BaseSorting[GetWalletActivitiesSortingFields]):
+    pass
+
+
 class GetWalletActivitiesFilters(BaseModel):
     token__address: Optional[str] = Field(Query(None, description="Адрес токена"))
-    event_type__in: Optional[List[str]] = Field(
+    event_type__in: Optional[List[SwapEventType]] = Field(
         Query(
             None,
             description="Тип свапа - покупка\продажа",
         )
     )
+    block_id__gte: Optional[int] = Field(None, description="Дата создания >=")
+    block_id__lte: Optional[int] = Field(None, description="Дата создания <=")
     created_at__gte: Optional[datetime] = Field(None, description="Дата создания >=")
     created_at__lte: Optional[datetime] = Field(None, description="Дата создания <=")

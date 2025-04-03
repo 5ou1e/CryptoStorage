@@ -2,12 +2,16 @@ from enum import StrEnum
 from typing import List, Optional
 
 from fastapi import Query
-from pydantic import BaseModel, Field, field_validator, create_model
+from pydantic import BaseModel, Field, create_model
 
-from src.application.common.dto import PaginationResult
-
+from src.application.common.dto import PaginationResult, BaseSorting
 
 from .wallet_stats import WalletStats7dDTO, WalletStats30dDTO, WalletStatsAllDTO
+
+
+class GetWalletsSortingFields(StrEnum):
+    CREATED_AT_ASC = "created_at"
+    CREATED_AT_DESC = "-created_at"
 
 
 class WalletDTO(BaseModel):
@@ -30,23 +34,8 @@ class WalletsPageDTO(WalletsDTO):
     pagination: PaginationResult
 
 
-class GetWalletsSortingFields(StrEnum):
-    CREATED_AT_ASC = "created_at"
-    CREATED_AT_DESC = "-created_at"
-
-
-class GetWalletsSorting(BaseModel):
-    order_by: Optional[List[GetWalletsSortingFields]] = Field(
-        Query(None),
-        description="Sorting fields",
-    )
-
-    @field_validator("order_by", mode="before")  # noqa
-    @classmethod
-    def remove_duplicates(cls, value):
-        if value is None:
-            return value
-        return list(dict.fromkeys(value))  # Убираем дубликаты, сохраняя порядок
+class GetWalletsSorting(BaseSorting[GetWalletsSortingFields]):
+    pass
 
 
 class GetWalletsFiltersBase(BaseModel):
@@ -107,8 +96,8 @@ def generate_wallet_stats_filter_fields(prefix: str):
 
 GetWalletsFilters = create_model(
     "GetWalletsFilters",
-    **generate_wallet_stats_filter_fields("stats_all"),
-    **generate_wallet_stats_filter_fields("stats_7d"),
-    **generate_wallet_stats_filter_fields("stats_30d"),
+    # **generate_wallet_stats_filter_fields("stats_all"),
+    # **generate_wallet_stats_filter_fields("stats_7d"),
+    # **generate_wallet_stats_filter_fields("stats_30d"),
     __base__=GetWalletsFiltersBase,
 )

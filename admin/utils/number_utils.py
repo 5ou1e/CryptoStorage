@@ -8,10 +8,6 @@ def formatted_number(
     subscript=False,
     add_sign=False,
 ) -> str or None:
-
-    from django.utils.translation import gettext_lazy as _
-    test = _("Текст")
-    print(test)
     if value is None:
         return none_value
     if value == 0 and zero_value is not None:

@@ -16,13 +16,13 @@ from sqlalchemy import (
 from sqlalchemy.orm import registry, joinedload, contains_eager
 
 from src.infra.db.sqlalchemy.models import Swap, Wallet, WalletStatistic30d, WalletStatisticAll
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 from dataclass_sqlalchemy_mixins.base import utils
 
 
 async def main():
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         query = select(Wallet)
         query = query.options(
             # joinedload(Wallet.stats_all, innerjoin=True),

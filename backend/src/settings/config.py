@@ -11,8 +11,8 @@ class DatabaseConfig(BaseModel):
     host: str
     port: int
     name: str
-    min_size: int = 10
-    max_size: int = 200
+    min_size: int = 10  # Минимальное количество соединений в пуле
+    max_size: int = 200  # Максимальное количество соединений, которые могут быть "переполнены"
     max_queries: int = 50000  # for tortoise
 
     @property

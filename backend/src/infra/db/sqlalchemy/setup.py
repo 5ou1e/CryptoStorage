@@ -1,24 +1,18 @@
-from typing import AsyncGenerator
-
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine as sa_create_async_engine
 
 from src.settings import config
 
-engine = create_async_engine(
+
+engine = sa_create_async_engine(
     config.db.url_sa,
     echo=False,
-    pool_size=config.db.min_size,  # Минимальное количество соединений в пуле
-    max_overflow=config.db.max_size,  # Максимальное количество соединений, которые могут быть "переполнены"
+    pool_size=config.db.min_size,
+    max_overflow=config.db.max_size,
 )
 
-AsyncSessionLocal = async_sessionmaker(
+
+AsyncSessionMaker = async_sessionmaker(
     bind=engine,
     expire_on_commit=False,
     autoflush=False,
 )
-
-
-async def get_db_session(test=None) -> AsyncGenerator[AsyncSession, None]:
-    # TODO : посмотреть почему прилетает аргумент с контейнером дишка
-    async with AsyncSessionLocal() as session:
-        yield session

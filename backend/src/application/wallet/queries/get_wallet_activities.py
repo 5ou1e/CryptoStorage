@@ -4,6 +4,7 @@ from src.application.wallet.dto import (
     GetWalletActivitiesFilters,
     WalletActivitiesPageDTO,
 )
+from src.application.wallet.dto.wallet_activity import GetWalletActivitiesSorting
 
 
 class GetWalletActivitiesHandler:
@@ -15,5 +16,8 @@ class GetWalletActivitiesHandler:
         address,
         pagination: Pagination,
         filters: GetWalletActivitiesFilters,
+        sorting: GetWalletActivitiesSorting,
     ) -> WalletActivitiesPageDTO:
-        return await self._reader.get_wallet_activities(address=address, pagination=pagination)
+        return await self._reader.get_wallet_activities(
+            address=address, pagination=pagination, filters=filters, sorting=sorting
+        )

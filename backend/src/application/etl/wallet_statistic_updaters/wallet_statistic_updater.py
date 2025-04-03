@@ -22,7 +22,7 @@ from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemyWalletStatisticAllRepository,
     SQLAlchemyWalletTokenRepository,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal, engine
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker, engine
 
 logger = logging.getLogger("tasks.update_wallet_statistics")
 
@@ -34,7 +34,7 @@ async def receive_wallets_from_db(
     """Загрузка данных из БД и помещение в очередь"""
     logger.info(f"Начинаем получение кошельков из БД")
     t1 = datetime.now()
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         wallets: list[Wallet] = await SQLAlchemyWalletRepository(session).get_wallets_for_update_stats(count=count)
     t2 = datetime.now()
     logger.info(f"Получили {len(wallets)} кошельков из БД | Время: {t2 - t1}")
@@ -112,13 +112,13 @@ async def _fetch_related_data(
 ):
     # Загружаем токены для кошельков
     start = datetime.now()
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         wallet_tokens = await SQLAlchemyWalletTokenRepository(session).get_wallet_tokens_by_wallets_list(
             [wallet.id for wallet in wallets]
         )
     end = datetime.now()
     wt_count = len(wallet_tokens)
-    logger.debug(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
+    # logger.debug(f"Подгрузили токены {len(wallets)} кошельков из БД | Токенов: {wt_count} | Время: {end-start}")
 
     wallet_tokens_map = defaultdict(list)
     for wt in wallet_tokens:
@@ -216,7 +216,7 @@ async def _update_wallets_data(wallets):
 
 
 async def _update_wallet_stats_7d(stats, excluded_fields):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatistic7dRepository(session).bulk_update(
             stats,
             excluded_fields=excluded_fields,
@@ -225,7 +225,7 @@ async def _update_wallet_stats_7d(stats, excluded_fields):
 
 
 async def _update_wallet_stats_30d(stats, excluded_fields):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatistic30dRepository(session).bulk_update(
             stats,
             excluded_fields=excluded_fields,
@@ -234,7 +234,7 @@ async def _update_wallet_stats_30d(stats, excluded_fields):
 
 
 async def _update_wallet_stats_all(stats, excluded_fields):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         await SQLAlchemyWalletStatisticAllRepository(session).bulk_update(
             stats,
             excluded_fields=excluded_fields,
@@ -248,7 +248,7 @@ async def _update_wallets(wallets):
         wallet.last_stats_check = last_check
     for i in range(5):
         try:
-            async with AsyncSessionLocal() as session:
+            async with AsyncSessionMaker() as session:
                 await SQLAlchemyWalletRepository(session).bulk_update(
                     wallets,
                     fields=["last_stats_check", "is_bot", "is_scammer"],
@@ -372,10 +372,7 @@ async def update_single_wallet_statistics(
 ):
     global engine
 
-    logger.info(f"AsyncSessionLocal ID: {id(AsyncSessionLocal)}")
-    logger.info(f"Engine ID: {id(engine)}")
-
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         wallet = await SQLAlchemyWalletRepository(session).get_by_address(address)
         if not wallet:
             return

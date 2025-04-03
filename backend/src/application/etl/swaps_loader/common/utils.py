@@ -10,7 +10,7 @@ from src.infra.db.sqlalchemy.repositories.flipside import (
     SQLAlchemyFlipsideAccountRepositoryInterface,
     SQLAlchemyFlipsideConfigRepositoryInterface,
 )
-from src.infra.db.sqlalchemy.setup import AsyncSessionLocal
+from src.infra.db.sqlalchemy.setup import AsyncSessionMaker
 
 
 def split_time_range(start_time, end_time, parts):
@@ -34,13 +34,13 @@ def split_time_range(start_time, end_time, parts):
 
 
 async def get_flipside_account() -> FlipsideAccount:
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         repo = SQLAlchemyFlipsideAccountRepositoryInterface(session)
         return await repo.get_first_active()
 
 
 async def get_flipside_config() -> FlipsideConfig:
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         repo = SQLAlchemyFlipsideConfigRepositoryInterface(session)
         return await repo.get_first()
 
@@ -48,7 +48,7 @@ async def get_flipside_config() -> FlipsideConfig:
 async def set_flipside_account_inactive(
     flipside_account,
 ):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         repo = SQLAlchemyFlipsideAccountRepositoryInterface(session)
         await repo.set_flipside_account_inactive(flipside_account)
         await session.commit()
@@ -58,7 +58,7 @@ async def get_sol_prices(
     minute_from: datetime,
     minute_to: datetime,
 ):
-    async with AsyncSessionLocal() as session:
+    async with AsyncSessionMaker() as session:
         sol_token = await SQLAlchemyTokenRepository(session).get_by_address(SOL_ADDRESS)
         if not sol_token:
             raise ValueError(f"Токен WSOL не найден в БД!")
