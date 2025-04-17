@@ -119,4 +119,4 @@ class WalletTokenStatistic(models.Model):
 
         return WalletActivity.objects.filter(
             wallet=self.wallet, token=self.token
-        ).order_by("-block_id")
+        ).order_by("-block_id")[:100]
