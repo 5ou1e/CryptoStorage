@@ -1,5 +1,5 @@
 import math
-from typing import TypeVar, Optional, List, Generic
+from typing import Generic, List, Optional, TypeVar
 
 from fastapi import Query
 from pydantic import BaseModel, Field, field_validator

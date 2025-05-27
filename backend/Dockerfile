@@ -20,6 +20,3 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # Копируем весь код приложения в контейнер
 COPY . /app
-
-# Указываем команду по умолчанию (опционально)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

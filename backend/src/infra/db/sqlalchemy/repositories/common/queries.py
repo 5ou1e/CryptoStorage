@@ -1,21 +1,7 @@
 import textwrap
 from typing import Any, List
 
-from sqlalchemy import (
-    DECIMAL,
-    Boolean,
-    Date,
-    DateTime,
-    Float,
-    Integer,
-    String,
-    Uuid,
-    case,
-    cast,
-    extract,
-    func,
-    or_,
-)
+from sqlalchemy import DECIMAL, Boolean, Date, DateTime, Float, Integer, String, Uuid, case, cast, extract, func, or_
 from sqlalchemy.dialects.postgresql import insert
 
 from src.infra.db.sqlalchemy.models import WalletToken

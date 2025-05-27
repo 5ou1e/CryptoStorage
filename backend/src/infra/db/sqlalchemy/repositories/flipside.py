@@ -1,15 +1,13 @@
 from sqlalchemy import select, update
 
-from src.application.interfaces.repositories.flipside import (
+from src.application.common.interfaces.repositories.flipside import (
     FlipsideAccountRepositoryInterface,
     FlipsideConfigRepositoryInterface,
 )
 from src.domain.entities.flipside import FlipsideAccount as FlipsideAccountEntity
 from src.domain.entities.flipside import FlipsideConfig as FlipsideConfigEntity
 from src.infra.db.sqlalchemy.models import FlipsideAccount, FlipsideConfig
-from src.infra.db.sqlalchemy.repositories.generic_repository import (
-    SQLAlchemyGenericRepository,
-)
+from src.infra.db.sqlalchemy.repositories.generic_repository import SQLAlchemyGenericRepository
 
 
 class SQLAlchemyFlipsideAccountRepositoryInterface(

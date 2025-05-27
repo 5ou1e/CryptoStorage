@@ -13,6 +13,7 @@ from src.settings.logging import setup_logging
 
 class AppBuilder:
     """Создаем приложение FastAPI"""
+
     @staticmethod
     def create_app() -> FastAPI:
         app = FastAPI(

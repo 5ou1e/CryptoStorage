@@ -97,7 +97,17 @@ class WalletStatisticBuyPriceGt15kAll(AbstractWalletStatistic):
     pass
 
 
-@dataclass(slots=True)
+@dataclass(kw_only=True, slots=True)
+class WalletCopyable(AbstractWalletStatistic):
+    wallet_id: UUID
+
+
+@dataclass(kw_only=True, slots=True)
+class WalletFiltered(AbstractWalletStatistic):
+    wallet_id: UUID
+
+
+@dataclass(kw_only=True, slots=True)
 class WalletToken(BaseEntity, TimestampMixinEntity):
     id: Optional[UUID] = None
     wallet_id: Optional[UUID] = None

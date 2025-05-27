@@ -6,9 +6,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import class_mapper
 
-from src.application.interfaces.repositories.generic_repository import (
-    GenericRepositoryInterface,
-)
+from src.application.common.interfaces.repositories.generic_repository import GenericRepositoryInterface
 from src.domain.entities.base_entity import BaseEntity
 from src.infra.db.sqlalchemy.models import Base
 
@@ -30,18 +28,26 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
             return self.model_to_entity(instance)
         return None
 
-    async def get_first(self) -> Entity | None:
+    async def get_first(
+        self,
+        filters: Optional[dict] = None,
+        sorting: Optional[list] = None,
+        include: Optional[list] = None,
+    ) -> Entity | None:
         stmt = select(self.model_class).limit(1)
         result = await self._session.scalars(stmt)
         instance = result.first()
         if instance:
-            return self.model_to_entity(instance)
+            return self.model_to_entity(instance)  # noqa
         return None
 
     async def get_list(
         self,
-        limit: int = None,
-        offset: int = None,
+        filters: Optional[dict] = None,
+        sorting: Optional[list] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        include: Optional[list] = None,
     ) -> list[Entity]:
         query = select(self.model_class)
         if offset:
@@ -95,6 +101,29 @@ class SQLAlchemyGenericRepository(GenericRepositoryInterface[BaseEntity]):
         else:
             await connection.execute(stmt, values)
         return objects
+
+    async def create_or_update(
+        self,
+        objects: list[Entity],
+        batch_size: Optional[int] = None,
+    ) -> list[Entity]:
+        """Создает или обновляет все поля модели в случае конфликта по первичному ключу"""
+        if not objects:
+            return []
+
+        # Получаем имя primary key поля
+        mapper = inspect(self.model_class)
+        pk_column_names = [col.name for col in mapper.primary_key]
+
+        # Получаем все поля, кроме PK
+        update_fields = [col.name for col in mapper.columns if col.name not in pk_column_names]
+
+        return await self.bulk_create(
+            objects=objects,
+            batch_size=batch_size,
+            update_fields=update_fields,
+            on_conflict=pk_column_names,
+        )
 
     async def bulk_update(
         self,

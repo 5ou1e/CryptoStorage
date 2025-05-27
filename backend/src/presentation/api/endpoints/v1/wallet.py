@@ -3,12 +3,14 @@ from typing import Annotated
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Depends, Body, Query
+from fastapi import APIRouter, Body, Depends, Query
 
 from src.application.common.dto import Pagination
-from src.application.wallet.commands.refresh_wallet_stats import RefreshWalletStatsCommandHandler, \
-    RefreshWalletStatsResponse
-from src.application.wallet.dto import (
+from src.application.handlers.wallet.commands.refresh_wallet_stats import (
+    RefreshWalletStatsCommandHandler,
+    RefreshWalletStatsResponse,
+)
+from src.application.handlers.wallet.dto import (
     GetWalletActivitiesFilters,
     GetWalletsFilters,
     GetWalletTokensFilters,
@@ -18,16 +20,19 @@ from src.application.wallet.dto import (
     WalletsPageDTO,
     WalletTokensPageDTO,
 )
-from src.application.wallet.dto.wallet import GetWalletsSorting
-from src.application.wallet.dto.wallet_activity import GetWalletActivitiesSorting
-from src.application.wallet.dto.wallet_token import GetWalletTokensSorting
-from src.application.wallet.queries.get_refresh_wallet_stats_status import GetRefreshWalletStatsStatusHandler, \
-    GetRefreshWalletStatsStatusResponse
-from src.application.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
-from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
-from src.application.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
-from src.application.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
-from src.application.wallet.queries.get_wallets import GetWalletsHandler
+from src.application.handlers.wallet.dto.wallet import GetWalletsSorting
+from src.application.handlers.wallet.dto.wallet_activity import GetWalletActivitiesSorting
+from src.application.handlers.wallet.dto.wallet_token import GetWalletTokensSorting
+from src.application.handlers.wallet.queries.get_refresh_wallet_stats_status import (
+    GetRefreshWalletStatsStatusHandler,
+    GetRefreshWalletStatsStatusResponse,
+)
+from src.application.handlers.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
+from src.application.handlers.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
+from src.application.handlers.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
+from src.application.handlers.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
+from src.application.handlers.wallet.queries.get_wallets import GetWalletsHandler
+from src.infra.redis.cache_service import RedisCacheService
 from src.presentation.api.schemas.response import ApiResponse
 
 logger = logging.getLogger(__name__)
@@ -45,10 +50,7 @@ router = APIRouter(
     response_description="Детальная информация о кошельке.",
 )
 @inject
-async def get_wallet_by_address(
-    address: str,
-    handler: FromDishka[GetWalletByAddressHandler]
-) -> ApiResponse[WalletDTO]:
+async def get_wallet_by_address(address: str, handler: FromDishka[GetWalletByAddressHandler]) -> ApiResponse[WalletDTO]:
     result = await handler(address)
     return ApiResponse(result=result)
 
@@ -126,8 +128,15 @@ async def get_wallet_activities(
 async def get_wallet_related_wallets(
     address: str,
     handler: FromDishka[GetWalletRelatedWalletsHandler],
+    cache_service: FromDishka[RedisCacheService],
 ) -> ApiResponse[WalletRelatedWalletsDTO]:
-    result: WalletRelatedWalletsDTO = await handler(address)
+    key = f"get_wallet_related_wallets:{address}"
+    result = await cache_service.get(key)
+
+    if result is None:
+        result = await handler(address)
+        await cache_service.set(key, result.model_dump(mode="json"), expire=300)
+
     return ApiResponse(result=result)
 
 
@@ -157,4 +166,3 @@ async def get_wallet_refresh_stats_task_status(
 ) -> ApiResponse[GetRefreshWalletStatsStatusResponse]:
     result = await handler(task_id)
     return ApiResponse(result=result)
-

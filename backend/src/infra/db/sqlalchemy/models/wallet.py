@@ -22,12 +22,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infra.db.sqlalchemy.models.common import (
-    Base,
-    IntIDMixin,
-    TimestampsMixin,
-    UUIDIDMixin,
-)
+from src.infra.db.sqlalchemy.models.common import Base, IntIDMixin, TimestampsMixin, UUIDIDMixin
 
 
 class WalletFKPKMixin:
@@ -245,3 +240,15 @@ class TgSentWallet(Base, WalletFKPKMixin, TimestampsMixin):
     __tablename__ = "tg_sent_wallet"
 
     wallet = relationship("Wallet", backref="tg_sent")
+
+
+class WalletFiltered(Base, WalletFKPKMixin):
+    __tablename__ = "wallet_filtered"
+
+    wallet = relationship("Wallet", backref="wallet_filtered")
+
+
+class WalletCopyable(Base, WalletFKPKMixin):
+    __tablename__ = "wallet_copyable"
+
+    wallet = relationship("Wallet", backref="wallet_copyable")

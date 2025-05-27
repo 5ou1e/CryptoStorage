@@ -3,12 +3,10 @@ from typing import Any, Dict, Optional, Type, TypeVar
 from tortoise.expressions import F, Q
 from tortoise.models import Model
 
-from src.application.interfaces.repositories.user import UserRepositoryInterface
+from src.application.common.interfaces.repositories.user import UserRepositoryInterface
 from src.domain.entities.user import User as UserEntity
 from src.infra.db.tortoise.models import User
-from src.infra.db.tortoise.repositories.generic_repository import (
-    TortoiseGenericRepository,
-)
+from src.infra.db.tortoise.repositories.generic_repository import TortoiseGenericRepository
 
 ID = TypeVar("ID", bound=Any)
 

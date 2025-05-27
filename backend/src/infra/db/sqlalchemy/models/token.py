@@ -1,16 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import (
-    DECIMAL,
-    Boolean,
-    DateTime,
-    ForeignKey,
-    Index,
-    String,
-    Text,
-    UniqueConstraint,
-)
+from sqlalchemy import DECIMAL, Boolean, DateTime, ForeignKey, Index, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .common import Base, TimestampsMixin, UUIDIDMixin

@@ -3,11 +3,8 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from src.application.interfaces.repositories.token import (
-    TokenPriceRepositoryInterface,
-    TokenRepositoryInterface,
-)
-from src.application.token.exceptions import TokenNotFoundException
+from src.application.common.exceptions import TokenNotFoundException
+from src.application.common.interfaces.repositories.token import TokenPriceRepositoryInterface, TokenRepositoryInterface
 from src.domain.entities.token import Token as TokenEntity
 from src.domain.entities.token import TokenPrice as TokenPriceEntity
 from src.infra.db.sqlalchemy.models.token import Token, TokenPrice
@@ -40,7 +37,15 @@ class SQLAlchemyTokenRepository(
     async def bulk_update_all_metadata_fields(self, tokens: list[TokenEntity]) -> None:
         await self.bulk_update(
             tokens,
-            fields=["name", "symbol", "uri", "logo", "created_on", "is_metadata_parsed", "updated_at"],
+            fields=[
+                "name",
+                "symbol",
+                "uri",
+                "logo",
+                "created_on",
+                "is_metadata_parsed",
+                "updated_at",
+            ],
         )
 
 

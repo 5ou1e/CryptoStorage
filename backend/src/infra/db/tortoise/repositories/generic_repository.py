@@ -8,7 +8,7 @@ from tortoise.queryset import QuerySet
 from tortoise.transactions import in_transaction
 
 from src.application.common.dto import Pagination
-from src.application.interfaces.repositories import GenericRepositoryInterface
+from src.application.common.interfaces.repositories import GenericRepositoryInterface
 from src.domain.entities.base_entity import BaseEntity
 from src.infra.db import queries
 from src.infra.db.tortoise.repositories.utils import get_bulk_update_records_query
@@ -28,35 +28,31 @@ class TortoiseGenericRepository(GenericRepositoryInterface[BaseEntity]):
 
     async def get_first(
         self,
-        filter_by: Optional[dict] = None,
-        order_by: Optional[list] = None,
-        prefetch: Optional[list] = None,
-        select_related: Optional[list] = None,
+        filters: Optional[dict] = None,
+        sorting: Optional[list] = None,
+        include: Optional[list] = None,
     ) -> Entity | None:
         query = self._build_query(
-            filter_by=filter_by,
-            order_by=order_by,
-            prefetch=prefetch,
-            select_related=select_related,
+            filters=filters,
+            sorting=sorting,
+            prefetch=include,
         )
         return await query.first()
 
     async def get_list(
         self,
+        filters: Optional[dict] = None,
+        sorting: Optional[list] = None,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
-        filter_by: Optional[dict] = None,
-        order_by: Optional[list] = None,
-        prefetch: Optional[list] = None,
-        select_related: Optional[list] = None,
+        include: Optional[list] = None,
     ) -> list:
         query = self._build_query(
-            filter_by=filter_by,
-            order_by=order_by,
+            filters=filters,
+            sorting=sorting,
             limit=limit,
             offset=offset,
-            prefetch=prefetch,
-            select_related=select_related,
+            prefetch=include,
         )
         return await query.all()
 
@@ -131,19 +127,19 @@ class TortoiseGenericRepository(GenericRepositoryInterface[BaseEntity]):
     # noinspection PyMethodMayBeStatic
     def _build_query(
         self,
-        filter_by: Optional[dict] = None,
-        order_by: Optional[list] = None,
-        limit: int | None = None,
-        offset: int | None = None,
+        filters: Optional[dict] = None,
+        sorting: Optional[list] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
         prefetch: Optional[list] = None,
         select_related: Optional[list] = None,
     ):
         """Применяет фильтры и сортировку к запросу, если они указаны."""
         query = self.model_class.filter()
-        if filter_by:
-            query = query.filter(**filter_by)
-        if order_by:
-            query = query.order_by(*order_by)  # Применяем сортировку, если она указана
+        if filters:
+            query = query.filter(**filters)
+        if sorting:
+            query = query.order_by(*sorting)  # Применяем сортировку, если она указана
         # Добавить префетч
         if prefetch:
             query = query.prefetch_related(*prefetch)

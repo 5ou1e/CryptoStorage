@@ -2,16 +2,7 @@ import uuid
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import (
-    DECIMAL,
-    UUID,
-    BigInteger,
-    Boolean,
-    DateTime,
-    ForeignKey,
-    Index,
-    String,
-)
+from sqlalchemy import DECIMAL, UUID, BigInteger, Boolean, DateTime, ForeignKey, Index, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.infra.db.sqlalchemy.models.common import Base, TimestampsMixin, UUIDIDMixin

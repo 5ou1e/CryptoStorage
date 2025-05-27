@@ -1,4 +1,5 @@
 from dishka import AsyncContainer, make_async_container
+
 from src.settings.ioc.providers import AppProvider, GetWalletRelatedWalletsHandlerProvider
 
 

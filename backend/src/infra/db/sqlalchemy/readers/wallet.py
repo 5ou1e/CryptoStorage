@@ -1,32 +1,31 @@
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload, contains_eager
-
+from sqlalchemy.orm import contains_eager, joinedload
 
 from src.application.common.dto import Pagination, PaginationResult
-from src.application.interfaces.readers import WalletReaderInterface
-from src.application.wallet.dto import WalletDTO, WalletsPageDTO, GetWalletsFilters
-from src.application.wallet.dto.wallet import GetWalletsSorting
-from src.application.wallet.dto.wallet_activity import (
+from src.application.common.exceptions import WalletNotFoundException
+from src.application.common.interfaces.readers import WalletReaderInterface
+from src.application.handlers.wallet.dto import GetWalletsFilters, WalletDTO, WalletsPageDTO
+from src.application.handlers.wallet.dto.wallet import GetWalletsSorting
+from src.application.handlers.wallet.dto.wallet_activity import (
+    GetWalletActivitiesFilters,
+    GetWalletActivitiesSorting,
     WalletActivitiesPageDTO,
     WalletActivityDTO,
-    GetWalletActivitiesSorting,
-    GetWalletActivitiesFilters,
 )
-from src.application.wallet.dto.wallet_token import (
-    WalletTokenDTO,
-    WalletTokensPageDTO,
+from src.application.handlers.wallet.dto.wallet_token import (
     GetWalletTokensFilters,
     GetWalletTokensSorting,
+    WalletTokenDTO,
+    WalletTokensPageDTO,
 )
-from src.application.wallet.exceptions import WalletNotFoundException
 from src.infra.db.sqlalchemy.models import (
     Swap,
+    Token,
     Wallet,
-    WalletToken,
+    WalletStatistic7d,
     WalletStatistic30d,
     WalletStatisticAll,
-    WalletStatistic7d,
-    Token,
+    WalletToken,
 )
 from src.infra.db.sqlalchemy.readers.generic_reader import SQLAlchemyBaseReader
 
@@ -50,7 +49,7 @@ class SQLAlchemyWalletReader(SQLAlchemyBaseReader, WalletReaderInterface):
         self,
         pagination: Pagination,
         filters: GetWalletsFilters,
-        sorting: GetWalletsSorting
+        sorting: GetWalletsSorting,
     ) -> WalletsPageDTO:
         query = select(Wallet)
         query = (
@@ -58,7 +57,9 @@ class SQLAlchemyWalletReader(SQLAlchemyBaseReader, WalletReaderInterface):
             .join(WalletStatisticAll)
             .join(WalletStatistic7d)
             .options(
-                contains_eager(Wallet.stats_7d), contains_eager(Wallet.stats_30d), contains_eager(Wallet.stats_all)
+                contains_eager(Wallet.stats_7d),
+                contains_eager(Wallet.stats_30d),
+                contains_eager(Wallet.stats_all),
             )
         )
 
@@ -116,8 +117,7 @@ class SQLAlchemyWalletReader(SQLAlchemyBaseReader, WalletReaderInterface):
 
         query = select(WalletToken).where(WalletToken.wallet_id == wallet_id)
         query = (
-            query
-            .join(Token)
+            query.join(Token)
             # .join(Wallet)
             .options(
                 contains_eager(WalletToken.token),
@@ -126,7 +126,9 @@ class SQLAlchemyWalletReader(SQLAlchemyBaseReader, WalletReaderInterface):
         )
 
         limit, offset = pagination.limit_offset
-        query, count_query = self._apply_filters_sorting_limit_offset(query, WalletToken, filters, sorting, limit, offset)
+        query, count_query = self._apply_filters_sorting_limit_offset(
+            query, WalletToken, filters, sorting, limit, offset
+        )
 
         instances = await self._session.scalars(query)
         wallet_tokens = [WalletTokenDTO.from_orm(instance) for instance in instances]

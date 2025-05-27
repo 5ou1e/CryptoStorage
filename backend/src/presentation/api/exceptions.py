@@ -8,9 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 from starlette import status
 
-from src.application.exceptions import ApplicationException
-from src.application.token.exceptions import TokenNotFoundException
-from src.application.wallet.exceptions import WalletNotFoundException
+from src.application.common.exceptions import ApplicationException, TokenNotFoundException, WalletNotFoundException
 from src.presentation.api.schemas.response import ApiResponse
 
 

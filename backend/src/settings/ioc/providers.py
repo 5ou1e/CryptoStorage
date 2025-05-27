@@ -3,28 +3,28 @@ from typing import AsyncGenerator, AsyncIterable
 from dishka import Provider, Scope, provide
 from fastapi_users.authentication import JWTStrategy
 from fastapi_users.password import PasswordHelperProtocol
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from src.application.wallet.commands.refresh_wallet_stats import RefreshWalletStatsCommandHandler
-from src.application.wallet.queries.get_refresh_wallet_stats_status import GetRefreshWalletStatsStatusHandler
-from src.settings import config
-from src.application.interfaces.readers import TokenReaderInterface, WalletReaderInterface
-from src.application.interfaces.repositories import (
+from src.application.common.interfaces.readers import TokenReaderInterface, WalletReaderInterface
+from src.application.common.interfaces.repositories import (
     SwapRepositoryInterface,
     TokenRepositoryInterface,
     UserRepositoryInterface,
     WalletRepositoryInterface,
     WalletTokenRepositoryInterface,
 )
-from src.application.interfaces.uow import UnitOfWorkInterface
-from src.application.token.queries.get_token_by_address import GetTokenByAddressHandler
-from src.application.token.queries.get_tokens import GetTokensHandler
-from src.application.user.service import UserService
-from src.application.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
-from src.application.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
-from src.application.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
-from src.application.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
-from src.application.wallet.queries.get_wallets import GetWalletsHandler
+from src.application.common.interfaces.uow import UnitOfWorkInterface
+from src.application.handlers.token.queries.get_token_by_address import GetTokenByAddressHandler
+from src.application.handlers.token.queries.get_tokens import GetTokensHandler
+from src.application.handlers.user.service import UserService
+from src.application.handlers.wallet.commands.refresh_wallet_stats import RefreshWalletStatsCommandHandler
+from src.application.handlers.wallet.queries.get_refresh_wallet_stats_status import GetRefreshWalletStatsStatusHandler
+from src.application.handlers.wallet.queries.get_wallet_activities import GetWalletActivitiesHandler
+from src.application.handlers.wallet.queries.get_wallet_by_address import GetWalletByAddressHandler
+from src.application.handlers.wallet.queries.get_wallet_related_wallets import GetWalletRelatedWalletsHandler
+from src.application.handlers.wallet.queries.get_wallet_tokens import GetWalletTokensHandler
+from src.application.handlers.wallet.queries.get_wallets import GetWalletsHandler
 from src.infra.db.sqlalchemy.readers import SQLAlchemyTokenReader, SQLAlchemyWalletReader
 from src.infra.db.sqlalchemy.repositories import (
     SQLAlchemySwapRepository,
@@ -41,6 +41,8 @@ from src.infra.db.tortoise.repositories import (
     TortoiseWalletTokenRepository,
 )
 from src.infra.providers.password_hasher_argon import ArgonPasswordHasher
+from src.infra.redis.cache_service import RedisCacheService
+from src.settings import config
 
 
 class AppProvider(Provider):
@@ -54,13 +56,17 @@ class AppProvider(Provider):
         return AsyncSessionMaker
 
     @provide(scope=Scope.REQUEST, provides=AsyncSession)
-    async def provide_session(
-        self, sessionmaker: async_sessionmaker[AsyncSession]
-    ) -> AsyncIterable[AsyncSession]:
+    async def provide_session(self, sessionmaker: async_sessionmaker[AsyncSession]) -> AsyncIterable[AsyncSession]:
         async with sessionmaker() as session:
             yield session
 
     uow = provide(SQLAlchemyUnitOfWork, provides=UnitOfWorkInterface)
+
+    @provide(scope=Scope.APP)
+    def get_redis(self) -> Redis:
+        return Redis.from_url(config.redis.url, decode_responses=True)
+
+    redis_cache_service = provide(RedisCacheService, scope=Scope.APP)
 
     # Auth
     @provide(scope=Scope.APP)
@@ -109,4 +115,3 @@ class GetWalletRelatedWalletsHandlerProvider(Provider):
     tortoise_wallet_token_repository = provide(TortoiseWalletTokenRepository, provides=WalletTokenRepositoryInterface)
 
     get_wallet_related_wallets_handler = provide(GetWalletRelatedWalletsHandler)
-

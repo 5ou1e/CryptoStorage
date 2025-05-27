@@ -5,13 +5,9 @@ from dishka import FromDishka
 from dishka.integrations.fastapi import inject
 from fastapi import Depends
 from fastapi_users import FastAPIUsers
-from fastapi_users.authentication import (
-    AuthenticationBackend,
-    BearerTransport,
-    JWTStrategy,
-)
+from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
 
-from src.application.user.service import UserService
+from src.application.handlers.user.service import UserService
 from src.domain.entities.user import User
 
 bearer_transport = BearerTransport(tokenUrl="v1/auth/jwt/login")

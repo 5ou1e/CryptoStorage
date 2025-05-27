@@ -5,9 +5,9 @@ from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Depends
 
 from src.application.common.dto import Pagination
-from src.application.token.dto import GetTokensFilters, TokenDTO, TokensPageDTO
-from src.application.token.queries.get_token_by_address import GetTokenByAddressHandler
-from src.application.token.queries.get_tokens import GetTokensHandler
+from src.application.handlers.token.dto import GetTokensFilters, TokenDTO, TokensPageDTO
+from src.application.handlers.token.queries.get_token_by_address import GetTokenByAddressHandler
+from src.application.handlers.token.queries.get_tokens import GetTokensHandler
 from src.presentation.api.schemas.response import ApiResponse
 
 router = APIRouter(

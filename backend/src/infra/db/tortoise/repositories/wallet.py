@@ -5,7 +5,7 @@ from uuid import UUID
 
 from tortoise.functions import Count
 
-from src.application.interfaces.repositories.wallet import (
+from src.application.common.interfaces.repositories.wallet import (
     WalletRepositoryInterface,
     WalletStatistic7dRepositoryInterface,
     WalletStatistic30dRepositoryInterface,
@@ -95,14 +95,17 @@ class TortoiseWalletTokenRepository(
     model_class = WalletToken
     entity_class = WalletTokenEntity
 
+    async def get_wallet_tokens_by_wallets_list(self, wallet_ids: list[UUID]):
+        raise NotImplementedError
+
+    async def get_wallet_tokens_by_wallets_list_for_buygt15k_statistic(self, wallet_ids: list[UUID]):
+        raise NotImplementedError
+
     async def bulk_update_or_create_wallet_token_with_merge(
         self,
         objects: list[WalletToken],
         batch_size: Optional[int] = None,
     ) -> list[WalletToken]:
-        raise NotImplementedError
-
-    async def get_wallet_tokens_by_wallet_for_buygt15k_statistic(self, wallet_id: UUID):
         raise NotImplementedError
 
 

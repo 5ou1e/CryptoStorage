@@ -1,7 +1,4 @@
-from src.application.interfaces.repositories.token import (
-    TokenPriceRepositoryInterface,
-    TokenRepositoryInterface,
-)
+from src.application.common.interfaces.repositories.token import TokenPriceRepositoryInterface, TokenRepositoryInterface
 from src.domain.entities.token import Token as TokenEntity
 from src.domain.entities.token import TokenPrice as TokenPriceEntity
 from src.infra.db.tortoise.models.token import Token, TokenPrice

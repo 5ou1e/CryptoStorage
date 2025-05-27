@@ -27,10 +27,10 @@ GET_WALLETS_FOR_UPDATE_STATS = textwrap.dedent(
 
 # Создает функцию coun_estimate для подсчета примерного кол-ва строк для запросов с фильтрами
 CREATE_FUNC_COUNT_ESTIMATE = """
-    CREATE OR REPLACE FUNCTION count_estimate(query text) RETURNS integer AS $$
+    CREATE OR REPLACE FUNCTION count_estimate(query text) RETURNS bigint AS $$
     DECLARE
       rec   record;
-      rows  integer;
+      rows  bigint;
     BEGIN
       FOR rec IN EXECUTE 'EXPLAIN ' || query LOOP
         rows := substring(rec."QUERY PLAN" FROM ' rows=([[:digit:]]+)');

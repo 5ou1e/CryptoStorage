@@ -1,12 +1,8 @@
 from fastapi import APIRouter
 
-from src.presentation.api.endpoints.default import docs_router, root_router
 from src.presentation.api.endpoints.auth import router as auth_router
-from src.presentation.api.endpoints.test import router as test_router
-from src.presentation.api.endpoints.v1 import (
-    token_router,
-    wallet_router,
-)
+from src.presentation.api.endpoints.default import docs_router, root_router
+from src.presentation.api.endpoints.v1 import token_router, wallet_router
 from src.settings import config
 
 
@@ -31,7 +27,6 @@ def setup_routers(app) -> None:
 
     api_router.include_router(docs_router)
     api_router.include_router(auth_router)
-    api_router.include_router(test_router)
     api_router.include_router(v1_router)
 
     app.include_router(root_router)

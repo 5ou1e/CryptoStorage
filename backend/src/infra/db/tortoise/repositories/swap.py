@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from src.application.interfaces.repositories.swap import SwapRepositoryInterface
+from src.application.common.interfaces.repositories.swap import SwapRepositoryInterface
 from src.domain.entities.swap import Swap as SwapEntity
 from src.infra.db.tortoise.models.swap import Swap
 

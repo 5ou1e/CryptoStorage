@@ -5,7 +5,7 @@ from uuid import UUID
 from sqlalchemy import and_, select, text
 from sqlalchemy.orm import selectinload
 
-from src.application.interfaces.repositories.wallet import (
+from src.application.common.interfaces.repositories.wallet import (
     WalletRepositoryInterface,
     WalletStatistic7dRepositoryInterface,
     WalletStatistic30dRepositoryInterface,
@@ -16,6 +16,8 @@ from src.application.interfaces.repositories.wallet import (
     WalletTokenRepositoryInterface,
 )
 from src.domain.entities.wallet import Wallet as WalletEntity
+from src.domain.entities.wallet import WalletCopyable as WalletCopyableEntity
+from src.domain.entities.wallet import WalletFiltered as WalletFilteredEntity
 from src.domain.entities.wallet import WalletStatistic7d as WalletStatistic7dEntity
 from src.domain.entities.wallet import WalletStatistic30d as WalletStatistic30dEntity
 from src.domain.entities.wallet import WalletStatisticAll as WalletStatisticAllEntity
@@ -35,6 +37,7 @@ from src.infra.db.sqlalchemy.models import (
     WalletToken,
 )
 
+from ..models.wallet import WalletCopyable, WalletFiltered
 from .common.queries import get_bulk_update_or_create_wallet_token_with_merge_stmt
 from .generic_repository import SQLAlchemyGenericRepository
 
@@ -89,6 +92,16 @@ class SQLAlchemyWalletStatisticBuyPriceGt15kAllRepository(
     entity_class = WalletStatisticBuyPriceGt15kAllEntity
 
 
+class SQLAlchemyWalletCopyableRepository(SQLAlchemyGenericRepository):
+    model_class = WalletCopyable
+    entity_class = WalletCopyableEntity
+
+
+class SQLAlchemyWalletFilteredRepository(SQLAlchemyGenericRepository):
+    model_class = WalletFiltered
+    entity_class = WalletFilteredEntity
+
+
 class SQLAlchemyWalletTokenRepository(
     SQLAlchemyGenericRepository,
     WalletTokenRepositoryInterface,
@@ -103,9 +116,11 @@ class SQLAlchemyWalletTokenRepository(
         result = await connection.execute(query)
         return [self.entity_class(**row) for row in result.mappings().all()]
 
-    async def get_wallet_tokens_by_wallet_for_buygt15k_statistic(self, wallet_id: UUID) -> list[WalletTokenEntity]:
+    async def get_wallet_tokens_by_wallets_list_for_buygt15k_statistic(
+        self, wallet_ids: list[UUID]
+    ) -> list[WalletTokenEntity]:
         query = select(self.model_class).where(
-            WalletToken.wallet_id == wallet_id,
+            self.model_class.wallet_id.in_([id_ for id_ in wallet_ids]),
             self.model_class.first_buy_price_usd >= 0.000008,
             self.model_class.total_buy_amount_usd >= 100,
         )

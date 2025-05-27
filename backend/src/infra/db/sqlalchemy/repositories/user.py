@@ -2,13 +2,11 @@ from typing import Any, Dict, Optional, Type
 
 from sqlalchemy import func, select
 
-from src.application.interfaces.repositories.user import UserRepositoryInterface
+from src.application.common.interfaces.repositories.user import UserRepositoryInterface
 from src.domain.entities.user import User as UserEntity
 from src.infra.db.sqlalchemy.models import User
 from src.infra.db.sqlalchemy.models.common import Base
-from src.infra.db.sqlalchemy.repositories.generic_repository import (
-    SQLAlchemyGenericRepository,
-)
+from src.infra.db.sqlalchemy.repositories.generic_repository import SQLAlchemyGenericRepository
 
 
 class SQLAlchemyUserRepository(

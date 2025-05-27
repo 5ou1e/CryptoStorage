@@ -1,6 +1,7 @@
 import uvicorn
-from src.presentation.api.builder import AppBuilder
+
 from src.infra.celery.setup import app as celery_app
+from src.presentation.api.builder import AppBuilder
 
 app = AppBuilder.create_app()
 

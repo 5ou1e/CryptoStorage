@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -51,6 +53,10 @@ class CeleryConfig(BaseModel):
     tasks: CeleryTasksConfig = CeleryTasksConfig()
 
 
+class RedisConfig(BaseModel):
+    url: str
+
+
 class SolanaConfig(BaseModel):
     token_address: str
     rpc_node_url: str
@@ -70,6 +76,20 @@ class ApiConfig(BaseModel):
     v1: ApiV1Config = ApiV1Config()
 
 
+class LogsConfig(BaseModel):
+    root_dir: str
+
+
+class SwapsLoaderConfig(BaseModel):
+    # Swaps loader
+    extractor_parallel_workers: int = 12
+    extractor_period_interval_minutes: int = 60
+    process_interval_seconds: int = 3600
+    persistent_mode: bool
+    config_period_start_time: datetime
+    config_period_end_time: datetime
+
+
 class Config(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=False,
@@ -82,8 +102,11 @@ class Config(BaseSettings):
     db: DatabaseConfig
     cors: CORSConfig
     celery: CeleryConfig
+    redis: RedisConfig
     solana: SolanaConfig
     telegram: TelegramConfig
+    logs: LogsConfig
+    swaps_loader: SwapsLoaderConfig
 
 
 config: Config = Config()

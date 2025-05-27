@@ -1,9 +1,9 @@
 from sqlalchemy import select
 
 from src.application.common.dto import Pagination, PaginationResult
-from src.application.interfaces.readers import TokenReaderInterface
-from src.application.token.dto import TokenDTO, TokensPageDTO
-from src.application.token.exceptions import TokenNotFoundException
+from src.application.common.exceptions import TokenNotFoundException
+from src.application.common.interfaces.readers import TokenReaderInterface
+from src.application.handlers.token.dto import TokenDTO, TokensPageDTO
 from src.infra.db.sqlalchemy.models import Token
 from src.infra.db.sqlalchemy.readers.generic_reader import SQLAlchemyBaseReader
 

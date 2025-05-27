@@ -13,7 +13,7 @@ def setup_tasks_on_startup(sender, **kwargs):
     #
     # update_wallet_statistics_buy_price_gt_15k_task.apply_async(task_name="Обновление статистик кошельков Price gt 15k")
     #
-    # update_wallet_statistics_copytraders_task.apply_async(task_name="Обновление статистик кошельков copy-traders")
+    update_wallet_statistics_copyable_task.apply_async(task_name="Обновление статистик кошельков copy-traders")
 
     # parse_tokens_metadata_task.apply_async(task_name="Сбор метаданных токенов")
     #
