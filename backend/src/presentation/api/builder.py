@@ -7,7 +7,7 @@ from src.presentation.api.exceptions import setup_exception_handlers
 from src.presentation.api.middlewares import setup_middlewares
 from src.presentation.api.routers import setup_routers
 from src.settings import config
-from src.settings.ioc.setup import create_async_container
+from src.settings.di.setup import create_async_container
 from src.settings.logging import setup_logging
 
 
