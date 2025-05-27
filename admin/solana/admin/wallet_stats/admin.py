@@ -1,9 +1,8 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-
 from solana.admin.common.base_admin_model import BaseAdminModel
 from solana.models import (WalletStatistic7d, WalletStatistic30d,
                            WalletStatisticAll)
+from unfold.admin import ModelAdmin
 
 
 # @admin.register(WalletStatistic7d)

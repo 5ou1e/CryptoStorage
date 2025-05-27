@@ -62,4 +62,5 @@ class Config(BaseSettings):
     backend: BackendConfig = BackendConfig()
     admin: AdminConfig = AdminConfig()
 
+
 config = Config()

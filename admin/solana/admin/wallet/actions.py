@@ -3,7 +3,6 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from unfold.decorators import action
-
 from users.models import UserWallet
 
 

@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.utils.timezone import now
-
 from users.models import UserWallet
 from utils.number_utils import formatted_number as f_n
 from utils.time_utils import format_duration as f_d

@@ -8,3 +8,5 @@ venv/
 .idea/
 frontend/
 tests/
+*.log
+*static/

@@ -2,12 +2,11 @@ from django.contrib import admin
 from django.templatetags.static import static
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
+from solana.models import Token, TokenPrice
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import FieldTextFilter
 from unfold.decorators import display
 from unfold.sections import TableSection, TemplateSection
-
-from solana.models import Token, TokenPrice
 
 from ..common.base_admin_model import BaseAdminModel
 from ..common.misc import LargeTablePaginator

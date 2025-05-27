@@ -175,7 +175,7 @@ LANGUAGE_CODE = "ru"  # Установите русский как основн�
 LANGUAGES = [
     ("en", "English"),
     ("ru", "Russian"),
-    ('th', 'Thai'),
+    ("th", "Thai"),
 ]
 
 LOCALE_PATHS = [

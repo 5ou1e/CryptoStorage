@@ -74,6 +74,18 @@ class Wallet(WalletBase):
         verbose_name_plural = "кошельки"
 
 
+class WalletFilteredBase(models.Model):
+    wallet = models.OneToOneField(
+        "WalletBase",
+        related_name="wallet_filtered",
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+
+    class Meta:
+        db_table = "wallet_filtered"
+
+
 class WalletBuyPriceGt15k(WalletBase):
     """Прокси-модель таблицы кошельков со статой по токенам с покупкой от 15к+"""
 
@@ -86,3 +98,27 @@ class WalletBuyPriceGt15k(WalletBase):
         proxy = True
         verbose_name = "кошелек (Buy price gt 15k)"
         verbose_name_plural = "кошельки (Buy price gt 15k)"
+
+
+class WalletCopyableBase(models.Model):
+    wallet = models.OneToOneField(
+        "WalletBase",
+        related_name="wallet_copyable",
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+
+    class Meta:
+        db_table = "wallet_copyable"
+
+
+class WalletCopyable(WalletBase):
+    """Прокси-модель таблицы копируемых кошельков"""
+
+    def get_stats_url(self):
+        return reverse("admin:solana_walletcopyable_changelist") + f"{self.address}/"
+
+    class Meta:
+        proxy = True
+        verbose_name = "кошелек (Копируемые)"
+        verbose_name_plural = "кошельки (Копируемые)"

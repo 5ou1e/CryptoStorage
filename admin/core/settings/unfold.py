@@ -1,19 +1,18 @@
-from django.templatetags.static import static
-from django.utils.functional import lazy
-from django.utils.translation import gettext_lazy as _
-
-
-from .config import config
-
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from django.http import HttpRequest
+from django.templatetags.static import static
 from django.urls import reverse_lazy
+from django.utils.functional import lazy
+from django.utils.translation import gettext_lazy as _
+
+from .config import config
 
 
 def get_wallets_changelist_url():
     from solana.admin import WalletFilterType
+
     is_blacklisted = WalletFilterType.IS_BLACKLISTED
     is_bot = WalletFilterType.IS_BOT
     is_scammer = WalletFilterType.IS_SCAMMER
@@ -189,6 +188,14 @@ UNFOLD = {
                             "solana.view_walletbuypricegt15k"
                         ),
                     },
+                    {
+                        "title": _("Кошельки (Копируемые)"),
+                        "icon": "account_balance_wallet",
+                        "link": reverse_lazy("admin:solana_walletcopyable_changelist"),
+                        "permission": lambda request: request.user.has_perm(
+                            "solana.view_walletcopyable"
+                        ),
+                    },
                 ],
             },
             {
@@ -226,6 +233,7 @@ UNFOLD = {
 
 def tabs_callback(request: HttpRequest) -> list[dict[str, Any]]:
     from solana.admin.wallet.filters import WalletFilterType
+
     is_favorite = WalletFilterType.IS_FAVORITE
     is_watch_later = WalletFilterType.IS_WATCH_LATER
     is_blacklisted = WalletFilterType.IS_BLACKLISTED

@@ -1,9 +1,8 @@
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from solana.admin.common.misc import LargeTablePaginator
 from unfold.admin import ModelAdmin
 from unfold.decorators import action
-
-from solana.admin.common.misc import LargeTablePaginator
 
 
 class BaseAdminModel(ModelAdmin):

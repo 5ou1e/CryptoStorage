@@ -1,9 +1,8 @@
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+from solana.models import WalletActivity
 from unfold.decorators import display
 from unfold.sections import TableSection
-
-from solana.models import WalletActivity
 from utils.number_utils import formatted_number
 from utils.time_utils import format_datetime
 

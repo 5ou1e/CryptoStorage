@@ -1,6 +1,5 @@
-from unfold.admin import TabularInline
-
 from solana.models import WalletTokenStatistic
+from unfold.admin import TabularInline
 
 from ..common.misc import LimitModelFormset
 

@@ -1,7 +1,6 @@
-from unfold.admin import StackedInline, TabularInline
-
 from solana.models import (WalletStatistic7d, WalletStatistic30d,
                            WalletStatisticAll, WalletTokenStatistic)
+from unfold.admin import StackedInline, TabularInline
 
 from ..common.misc import LimitModelFormset
 

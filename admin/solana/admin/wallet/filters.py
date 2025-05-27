@@ -2,10 +2,9 @@ from collections import defaultdict
 from enum import StrEnum
 
 from django.utils.translation import gettext_lazy as _
+from solana.models import Token, WalletTokenStatistic
 from unfold.contrib.filters.admin import (DropdownFilter, RangeNumericFilter,
                                           TextFilter)
-
-from solana.models import Token, WalletTokenStatistic
 from users.models import UserWallet
 
 

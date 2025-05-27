@@ -1,8 +1,7 @@
 from django.core.validators import EMPTY_VALUES
 from django.db.models import Subquery
-from unfold.contrib.filters.admin import TextFilter
-
 from solana.models import Token, Wallet
+from unfold.contrib.filters.admin import TextFilter
 
 
 class WalletAddressFilter(TextFilter):

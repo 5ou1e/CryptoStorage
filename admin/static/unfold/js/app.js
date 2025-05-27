@@ -78,9 +78,9 @@ const filterForm = () => {
   }
 
   filterForm.addEventListener("formdata", (event) => {
-    for (const [key, value] of event.formData.entries()) {
+    Array.from(event.formData.entries()).forEach(([key, value]) => {
       if (value === "") event.formData.delete(key);
-    }
+    });
   });
 };
 
@@ -306,7 +306,7 @@ const renderCharts = () => {
       new Chart(ctx, {
         type: type || "bar",
         data: parsedData,
-        options: options ? parsedOptions : DEFAULT_CHART_OPTIONS,
+        options: options ? JSON.parse(options) : DEFAULT_CHART_OPTIONS,
       })
     );
   }

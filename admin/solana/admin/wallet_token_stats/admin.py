@@ -1,7 +1,6 @@
 from django.contrib import admin
-from unfold.contrib.filters.admin import FieldTextFilter, RangeNumericFilter
-
 from solana.models import WalletTokenStatistic
+from unfold.contrib.filters.admin import FieldTextFilter, RangeNumericFilter
 
 from ..common.base_admin_model import BaseAdminModel
 from ..common.filters import TokenAddressFilter, WalletAddressFilter

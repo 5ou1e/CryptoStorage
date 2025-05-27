@@ -1,3 +1,5 @@
+from core import settings
+from core.settings.config import config
 from django.contrib.admin.options import IncorrectLookupParameters
 from django.contrib.admin.sites import AdminSite
 from django.contrib.admin.views.decorators import staff_member_required
@@ -5,15 +7,13 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
-from unfold.views import UnfoldModelAdminViewMixin
-
-from core import settings
 from solana.admin.wallet_token_stats.admin import \
     WalletTokenStatisticForWalletStatsPageAdmin
 from solana.models import Wallet, WalletTokenStatistic
+from unfold.views import UnfoldModelAdminViewMixin
 
 from .services import get_wallet_statistics_data
-from core.settings.config import config
+
 
 class WalletStatisticView(UnfoldModelAdminViewMixin, TemplateView):
     title = "Статистика кошелька"
@@ -60,13 +60,25 @@ class WalletStatisticView(UnfoldModelAdminViewMixin, TemplateView):
                 # "actions_on_top": True,
                 "wallet": wallet_data,
                 "admin_base_url": config.admin.base_url,
-                "backend_base_url": config.backend.base_url
+                "backend_base_url": config.backend.base_url,
             }
         )
         return context
 
 
 class WalletStatisticBuyPriceGt15kView(WalletStatisticView):
+    def get_wallet_tokens_queryset(self, wallet):
+        return WalletTokenStatistic.objects.filter(
+            wallet=wallet,
+            first_buy_price_usd__gte=0.000008,
+            total_buy_amount_usd__gte=100,
+        )
+
+    def get_wallet_data(self, user, wallet):
+        return get_wallet_statistics_data(user, wallet, use_buy_price_gt_20k_stats=True)
+
+
+class WalletCopyableView(WalletStatisticView):
     def get_wallet_tokens_queryset(self, wallet):
         return WalletTokenStatistic.objects.filter(
             wallet=wallet,

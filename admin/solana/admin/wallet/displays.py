@@ -2,9 +2,8 @@ from django.template.loader import render_to_string
 from django.utils.html import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from unfold.decorators import display
-
 from solana.models import Wallet
+from unfold.decorators import display
 from utils.number_utils import formatted_number, round_to_first_non_zero
 from utils.time_utils import format_duration
 
