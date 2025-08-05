@@ -1,4 +1,6 @@
-import datetime
+import logging
+from datetime import datetime, timedelta
+from flipside import Flipside
 
 from src.domain.constants import SOL_ADDRESS
 
@@ -31,3 +33,18 @@ def sql_get_swaps(
         LIMIT {limit} OFFSET {offset};
     """
     return query
+
+#
+# logging.basicConfig(level=logging.DEBUG)
+# flipside = Flipside(
+#     "17ac4677-856d-4a86-9c94-36b4e637393c",
+#     "https://api-v2.flipsidecrypto.xyz",
+# )
+# query = sql_get_swaps(
+#     datetime.now() - timedelta(days=2),
+#     datetime.now(),
+#     blacklisted_tokens=set(),
+#     offset=0,
+#     limit=100,
+# )
+# flipside.query(query)

@@ -1,4 +1,6 @@
-from sqlalchemy.ext.asyncio import async_sessionmaker
+from typing import AsyncIterable
+
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine as sa_create_async_engine
 
 from src.settings import config

@@ -6,11 +6,12 @@ services:
   db:
     image: "postgres:16-alpine"
     shm_size: 4g
-    container_name: postgres
+    container_name: postgres-cryptostorage
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - crypto_storage.postgres.data:/var/lib/postgresql/data
+      - D:/pg_tblspc:/var/lib/postgresql/tblspc
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
     environment:
       POSTGRES_DB: ${POSTGRES_NAME}
