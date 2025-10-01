@@ -113,6 +113,22 @@ TASK_CONFIGS = {
             },
         },
     },
+    "swaps_loader_delays_alerter_task": {
+        "loggers": ["src"],  # включаем логирование для всех модулей проекта
+        "handlers": {
+            "file": {
+                "class": "logging.FileHandler",
+                "filename": f"{LOGS_ROOT_DIR}/swaps_loader_delays_alerter_task.log",
+                "level": "INFO",
+                "formatter": "detailed",
+            },
+            "console": {
+                "class": "logging.StreamHandler",
+                "level": "INFO",
+            },
+        },
+    },
+
 }
 
 
