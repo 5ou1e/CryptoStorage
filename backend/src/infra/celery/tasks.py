@@ -46,10 +46,10 @@ def task_logger(task_func):
 @task_logger
 def collect_sol_prices_task():
     # Задача сбора цен Solana
+    from src.application.processes.sol_prices_collector import main
+
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(collect_prices_async())
-    c = config.celery.tasks.collect_sol_prices_task_interval
-    collect_sol_prices_task.apply_async(countdown=c)
+    loop.run_until_complete(main())
 
 
 @shared_task(bind=True, ignore_result=False)
@@ -111,3 +111,29 @@ def update_wallet_statistics_copyable_task(
     loop.run_until_complete(update_wallet_statistics_copyable_async())
     countdown = 86400
     update_wallet_statistics_copyable_task.apply_async(countdown=countdown)
+
+
+@shared_task(bind=True, ignore_result=False)
+@task_logger
+def swaps_loader_bitquery_process_task(
+    self,
+):
+    """Сбор транзакций с Bitquery"""
+
+    from src.application.processes.swaps_loader_bitquery.process import main
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+
+
+@shared_task(bind=True, ignore_result=False)
+@task_logger
+def swaps_loader_delays_alerter_task(
+    self,
+):
+    """Сбор транзакций с Bitquery"""
+
+    from src.application.processes.swaps_loader_delays_alerter import main
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

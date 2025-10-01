@@ -1,6 +1,11 @@
 import logging
 import warnings
 
+import pytz
+
+from src.application.processes.swaps_loader_bitquery.config import API_KEYS
+from src.application.processes.swaps_loader_bitquery.extractor import BitqueryError
+
 warnings.filterwarnings(
     "ignore",
     message=".*pydantic.error_wrappers:ValidationError.*",
@@ -13,29 +18,52 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from functools import partial
 
-from flipside.errors.query_run_errors import QueryRunCancelledError, QueryRunExecutionError
 from pydantic.error_wrappers import ValidationError
 
-from src.application.processes.swaps_loader import config, extractor, loader, transformer
-from src.application.processes.swaps_loader.common import utils
-from src.application.processes.swaps_loader.common.logger import root_logger as logger
-from src.application.processes.swaps_loader.extractor import FlipsideClientException
+from src.application.processes.swaps_loader_bitquery import config, extractor, loader, transformer
+from src.application.processes.swaps_loader_bitquery.common import utils
+from src.application.processes.swaps_loader_bitquery.common.logger import root_logger as logger
+
+
+current_api_key_index = 0
+
+
+def get_next_api_key():
+    global current_api_key_index
+    try:
+        if current_api_key_index + 1 > len(API_KEYS) - 1:
+            current_api_key_index = 0
+        else:
+            current_api_key_index += 1
+        res = API_KEYS[current_api_key_index]
+        return res
+    except Exception:
+        return None
+
+
+def get_current_api_key():
+    global current_api_key_index
+    try:
+        res = API_KEYS[current_api_key_index]
+        return res
+    except Exception:
+        return None
 
 
 async def extract_process(
-    extracted_data_queue: Queue,
-    loader_signals_queue: Queue,
-    period_start: datetime,
-    period_end: datetime,
+        extracted_data_queue: Queue,
+        loader_signals_queue: Queue,
+        period_start: datetime,
+        period_end: datetime,
 ):
+    api_key = get_current_api_key()
+    if not api_key:
+        raise ValueError(f"Нету доступных api ключей bitquery")
+
     current_time = period_start
     while current_time < period_end:
         load_next = await loader_signals_queue.get()
         logger.info("Получили сигнал NEXT")
-        flipside_account = await utils.get_flipside_account()
-        if not flipside_account:
-            logger.error(f"Нету активных аккаунтов FlipsideCrypto в БД")
-            break
 
         next_time = min(
             current_time + timedelta(minutes=config.EXTRACTOR_PERIOD_INTERVAL_MINUTES),
@@ -52,7 +80,7 @@ async def extract_process(
         try:
             logger.info(f"Начинаем сбор свапов за {current_time} - {next_time}")
             start = datetime.now()
-            extracted_data = await extract_data_for_period(current_time, next_time, flipside_account.api_key)
+            extracted_data = await extract_data_for_period(current_time, next_time, api_key)
             total_count = len(extracted_data)
             end = datetime.now()
             logger.info(
@@ -73,48 +101,50 @@ async def extract_process(
                 ]
             )
             current_time = next_time
-        except (
-            QueryRunExecutionError,
-            QueryRunCancelledError,
-            FlipsideClientException,
-        ) as e:
-            await utils.set_flipside_account_inactive(flipside_account)
-            logger.error(f"Ошибка Flipside: {e}")
-            logger.info(f"Меняем учетку Flipside")
+        except BitqueryError as e:
+            if "Payment Required" in str(e):
+                api_key = get_next_api_key()
+                if not api_key:
+                    continue
+                    # raise ValueError(f"Нету доступных api ключей bitquery") from e
+
+            logger.error(f"Ошибка запроса к Bitquery: {e}")
             await loader_signals_queue.put("EXTRACT NEXT")
+            await asyncio.sleep(60)
             continue
+        except Exception as e:
+            logger.exception(e)
+            raise
 
     await extracted_data_queue.put(None)
     logger.info(f"Сборщик свапов завершил работу")
 
 
 async def extract_data_for_period(
-    start_time: datetime,
-    end_time: datetime,
-    flipside_api_key,
+        start_time: datetime,
+        end_time: datetime,
+        api_key,
 ) -> list[dict]:
     workers_count = config.EXTRACTOR_PARALLEL_WORKERS
     intervals = utils.split_time_range(start_time, end_time, workers_count)
     swaps = []
-    try:
-        loop = asyncio.get_running_loop()
-        with ThreadPoolExecutor(max_workers=workers_count) as executor:
-            # Создаем задачи для каждого интервала
-            tasks = [
-                loop.run_in_executor(
-                    executor,
-                    partial(
-                        extractor.fetch_data_for_period,
-                        start,
-                        end,
-                        flipside_api_key,
-                    ),
-                )
-                for start, end in intervals
-            ]
-            results = await asyncio.gather(*tasks)
-    except ValidationError as e:
-        raise FlipsideClientException(f"Flipside Error {e}") from e
+
+    loop = asyncio.get_running_loop()
+    with ThreadPoolExecutor(max_workers=workers_count) as executor:
+        # Создаем задачи для каждого интервала
+        tasks = [
+            loop.run_in_executor(
+                executor,
+                partial(
+                    extractor.fetch_data_for_period,
+                    start,
+                    end,
+                    api_key,
+                ),
+            )
+            for start, end in intervals
+        ]
+        results = await asyncio.gather(*tasks)
 
     for _swaps in results:
         swaps.extend(_swaps)
@@ -123,10 +153,9 @@ async def extract_data_for_period(
 
 
 async def transform_process(
-    extracted_data_queue: Queue,
-    transformed_data_queue: Queue,
+        extracted_data_queue: Queue,
+        transformed_data_queue: Queue,
 ):
-
     while True:
         data = await extracted_data_queue.get()
         if data is not None:
@@ -135,7 +164,7 @@ async def transform_process(
             start = datetime.now()
             objects_to_load = await asyncio.to_thread(transformer.transform_data, swaps, sol_prices)
             end = datetime.now()
-            logger.info(f"Время преобразования: {end-start}")
+            logger.info(f"Время преобразования: {end - start}")
             await transformed_data_queue.put([objects_to_load, period_start, period_end])
         else:
             break
@@ -144,8 +173,8 @@ async def transform_process(
 
 
 async def load_process(
-    transformed_data_queue: Queue,
-    loader_signals_queue: Queue,
+        transformed_data_queue: Queue,
+        loader_signals_queue: Queue,
 ):
     while True:
         data = await transformed_data_queue.get()
@@ -157,7 +186,7 @@ async def load_process(
             await loader.load_data_to_db(*objects_to_load, period_end)
             end = datetime.now()
             logger.info(f"Данные импортированы за {period_start} - {period_end}")
-            logger.info(f"Время импорта: {end-start}")
+            logger.info(f"Время импорта: {end - start}")
         else:
             break
     logger.info(f"Загрузчик завершил работу!")
@@ -165,6 +194,11 @@ async def load_process(
 
 async def process():
     start_time, end_time = await config.get_period_to_process()
+
+    if start_time <= datetime.now(pytz.UTC) - timedelta(hours=8):
+        raise ValueError(
+            f"Невозможно начать сбор данных, т.к время начала более 8 часов назад (realtime-db)")
+
     logger.info(f"Запущен процесс для периода c {start_time} до {end_time}")
 
     extracted_data_queue = Queue()

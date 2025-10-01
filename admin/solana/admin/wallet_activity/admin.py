@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from solana.models import WalletActivity
+
 from unfold.contrib.filters.admin import FieldTextFilter
 from unfold.decorators import display
 
 from ..common.base_admin_model import BaseAdminModel
 from ..common.filters import TokenAddressFilter, WalletAddressFilter
+from ...models import WalletActivity
 
 
 @admin.register(WalletActivity)
@@ -52,4 +53,4 @@ class WalletActivityAdmin(BaseAdminModel):
         ordering="-token__address",
     )
     def token_address_display(self, obj):
-        return obj.wallet.address
+        return obj.token.address

@@ -64,3 +64,15 @@ async def get_sol_prices(
         )
         prices_dict = {price.minute: price.price_usd for price in prices}
         return prices_dict
+
+
+def is_base_address(address: str) -> bool:
+    """Проверяет является ли адрес токена базовым - SOL/WSOL"""
+
+    base_addresses = {
+        "11111111111111111111111111111111",  # SOL (hex/shortened)
+        "So11111111111111111111111111111111111111111",  # SOL
+        "So11111111111111111111111111111111111111112"  # WSOL
+    }
+
+    return address in base_addresses

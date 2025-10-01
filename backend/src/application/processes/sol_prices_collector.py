@@ -19,35 +19,38 @@ BINANCE_API_KLINES_URL = "https://api.binance.com/api/v3/klines"
 
 
 async def collect_prices_async():
-    token = await get_sol_token()
-    if not token:
-        raise ValueError("Токен WSOL не найден в БД!")
-    start_time, end_time = await get_start_end_time(token)
-    if not end_time > start_time:
-        return
-    symbol = "SOLUSDT"
-    interval = "1m"
-    current_time = start_time
-    all_candles = []
-    while current_time < end_time:
-        next_time = min(current_time + timedelta(minutes=1000), end_time)  # Максимальный диапазон за запрос
-        logger.info(f"Собираем цены с {current_time} до {next_time}...")
-        try:
-            candles = fetch_candles(
-                symbol,
-                interval,
-                current_time,
-                next_time,
-            )
-            all_candles.extend(candles)
-            logger.debug(f"Получили цены за период {current_time} - {next_time}")
-        except Exception as e:
-            logger.error(f"Ошибка при получении цен: {e}")
-        current_time = next_time
-        await asyncio.sleep(0.1)  # Минимальная пауза для API Binance
-    prices_to_load = await transform_data(all_candles, token)
-    await load_prices_to_db(prices_to_load)
-    logger.info(f"Цены успешно собраны за период с {start_time} до {end_time}!")
+    try:
+        token = await get_sol_token()
+        if not token:
+            raise ValueError("Токен WSOL не найден в БД!")
+        start_time, end_time = await get_start_end_time(token)
+        if not end_time > start_time:
+            return
+        symbol = "SOLUSDT"
+        interval = "1m"
+        current_time = start_time
+        all_candles = []
+        while current_time < end_time:
+            next_time = min(current_time + timedelta(minutes=1000), end_time)  # Максимальный диапазон за запрос
+            logger.info(f"Собираем цены с {current_time} до {next_time}...")
+            try:
+                candles = fetch_candles(
+                    symbol,
+                    interval,
+                    current_time,
+                    next_time,
+                )
+                all_candles.extend(candles)
+                logger.debug(f"Получили цены за период {current_time} - {next_time}")
+            except Exception as e:
+                logger.error(f"Ошибка при получении цен: {e}")
+            current_time = next_time
+            await asyncio.sleep(0.1)  # Минимальная пауза для API Binance
+        prices_to_load = await transform_data(all_candles, token)
+        await load_prices_to_db(prices_to_load)
+        logger.info(f"Цены успешно собраны за период с {start_time} до {end_time}!")
+    except Exception as e:
+        logger.exception(e)
 
 
 async def get_start_end_time(token):
@@ -117,10 +120,16 @@ async def load_prices_to_db(prices: list[TokenPrice]):
         await session.commit()
 
 
+async def main():
+    while True:
+        await collect_prices_async()
+        await asyncio.sleep(60)
+
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG,
         format="%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",  # Формат даты
     )
-    asyncio.run(collect_prices_async())
+
+    asyncio.run(main())

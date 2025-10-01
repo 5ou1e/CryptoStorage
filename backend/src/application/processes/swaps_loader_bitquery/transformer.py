@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -10,28 +11,80 @@ from src.domain.constants import OKX_WALLET_ADDRESS, SOL_ADDRESS
 from src.domain.entities.swap import Swap, SwapEventType
 from src.domain.entities.token import Token
 from src.domain.entities.wallet import Wallet, WalletStatistic7d, WalletStatistic30d, WalletStatisticAll, WalletToken
+from src.settings import config
 
 from .common import calculations
+from .common.utils import is_base_address
+from .config import BLACKLISTED_TOKENS
 
 logger = logging.getLogger(__name__)
 
 
 def transform_data(swaps, sol_prices):
-    converted_swaps = []
-    for swap in swaps:
-        conv = {}
+    mapped_swaps = defaultdict(list)
 
+    for swap in swaps:
+        mapped_swaps[swap["Transaction"]["Signature"]].append(swap)
+
+    # В случае если есть свап Jupiter (Общий) внутри свапов одной транзакции, берем только его
+    all_swaps = []
+    for tx_id, swaps in mapped_swaps.items():
+        is_jup = False
+
+        for swap in swaps:
+            if swap["Instruction"]["Program"]["Name"] == "jupiter":
+                is_jup = True
+                all_swaps.append(swap)
+
+        if not is_jup:
+            all_swaps.extend(swaps)
+
+    converted_swaps = []
+
+    for swap in all_swaps:
+
+        # Меняем адреса соланы на WSOL
+        swap_from_mint = swap["Trade"]["Sell"]["Currency"]["MintAddress"]
+        if is_base_address(swap_from_mint):
+            swap_from_mint = SOL_ADDRESS
+
+        swap_to_mint = swap["Trade"]["Buy"]["Currency"]["MintAddress"]
+        if is_base_address(swap_to_mint):
+            swap_to_mint = SOL_ADDRESS
+
+        conv = {}
+        # print(json.dumps(swap, indent=3))
         conv["tx_id"] = swap["Transaction"]["Signature"]
-        conv["block_id"] = swap["Block"]["Slot"]
+        conv["block_id"] = int(swap["Block"]["Slot"])
         conv["block_timestamp"] = swap["Block"]["Time"]
 
         conv["swapper"] = swap["Transaction"]["Signer"]
-        conv["swap_from_mint"] = swap["Sell"]["Currency"]["MintAddress"]
-        conv["swap_from_amount"] = swap["Sell"]["Amount"]
-        conv["swap_to_mint"] = swap["Buy"]["Currency"]["MintAddress"]
-        conv["swap_to_amount"] = swap["Buy"]["Amount"]
+        conv["swap_from_mint"] = swap_from_mint
+        conv["swap_from_amount"] = swap["Trade"]["Sell"]["Amount"]
+        conv["swap_to_mint"] = swap_to_mint
+        conv["swap_to_amount"] = swap["Trade"]["Buy"]["Amount"]
 
         converted_swaps.append(conv)
+
+    filtered_swaps = []
+    for swap in converted_swaps:
+        # Если нету SOL в одной из сторон
+        if not (is_base_address(swap["swap_from_mint"])
+                or is_base_address(swap["swap_to_mint"])):
+            continue
+        # Если обе стороны SOL
+        if (is_base_address(swap["swap_from_mint"])
+                and is_base_address(swap["swap_to_mint"])):
+            continue
+
+        # Если токен в блеклисте
+        if (swap["swap_to_mint"] in BLACKLISTED_TOKENS
+                or swap["swap_from_mint"] in BLACKLISTED_TOKENS):
+            continue
+
+        filtered_swaps.append(swap)
+
+    swaps = filtered_swaps
 
     populate_swaps_data(swaps)
     wallets, tokens, activities, wallet_tokens = builds_objects(swaps, sol_prices)
@@ -41,6 +94,7 @@ def transform_data(swaps, sol_prices):
 
 def populate_swaps_data(swaps: list):
     """Дополняет данные свапов дополнительной информацией"""
+
     swaps_map = defaultdict(list)
     for swap in swaps:
         tx_id = swap["tx_id"]
@@ -76,6 +130,7 @@ def builds_objects(
     sol_prices: dict,
 ) -> Tuple[List[Wallet], List[Token], List[Swap], List[WalletToken]]:
     """Извлечение и создание обьектов кошельков, токенов и активностей из полученных swaps"""
+
     activities_list = []
     wallets = {}
     tokens = {}

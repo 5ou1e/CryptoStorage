@@ -17,16 +17,36 @@ def get_dex_trades(
   Solana {
     DEXTrades(
       limit: {count: %d, offset: %d}
-      orderBy: {ascending: Transaction_Signature}
+      orderBy: [
+        {ascending: Block_Time}
+        {ascending: Block_Slot}
+        {ascending: Transaction_Index}
+        {ascending: Instruction_Index}
+        {ascending: Trade_Index}
+      ]
       where: {
         Block: {
           Time: {
-            after: "%s"
+            since: "%s"
             before: "%s"
           }
         }
+        Transaction: {
+            Result: {Success: true}
+        }
+        Instruction: {
+          Program: {
+            Address: {not: "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK"}
+        }
+        }
       }
     ) {
+      Instruction {
+        Program {
+          Address
+          Name
+        }
+      }
       Trade {
         Buy {
           Amount
